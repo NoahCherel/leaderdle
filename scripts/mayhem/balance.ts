@@ -11,8 +11,8 @@ const RUNS = Number(process.argv[2] ?? 4000);
 const leaders: Leader[] = JSON.parse(readFileSync('public/data/leaders.json', 'utf8')).leaders;
 const { ratings } = JSON.parse(readFileSync('public/data/mayhem.json', 'utf8'));
 const known = new Set(leaders.map((l) => l.id));
-const data: MayhemData = { leaders, ratings, cells: buildCells(leaders, ratings) };
 for (const id of Object.keys(ratings)) if (!known.has(id)) delete ratings[id];
+const data: MayhemData = { leaders, ratings, cells: buildCells(leaders, ratings) };
 
 type Strategy = (run: MayhemRun, rand: () => number) => [string, number];
 const free = (run: MayhemRun) => run.team.flatMap((t, i) => (t ? [] : [i]));

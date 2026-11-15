@@ -112,7 +112,7 @@ test('Leader Mayhem: without a network on first opening, it says so and can retr
   await page.route(/\/data\/mayhem\.json$/, (route) => (down ? route.abort('internetdisconnected') : route.fallback()));
   await page.clock.install({ time: DAY_128 });
   await page.goto('/mayhem');
-  await expect(page.getByText('The ratings could not be loaded.')).toBeVisible();
+  await expect(page.getByText('Leader Mayhem could not be loaded.')).toBeVisible();
   down = false;
   await page.getByRole('button', { name: 'Try again' }).click();
   await expect(page.getByRole('button', { name: 'Form a government' })).toBeVisible();
@@ -140,3 +140,26 @@ for (const theme of ['dark', 'light'] as const) {
     await check();
   });
 }
+
+test('Leader Mayhem: a saved government naming a leader who left the list is set aside, not a blank page', async ({ page }) => {
+  await useSampleData(page);
+  await page.clock.install({ time: DAY_128 });
+  await page.addInitScript(() => {
+    if (localStorage.getItem('leaderdle')) return;
+    const run = { seed: 1, draws: 3, cell: { country: 'Germany', decade: 2000 }, team: ['gone', 'tha', null, null, null], years: [1990, 1980, null, null, null], rerolls: { country: false, decade: false }, matches: [], done: false };
+    localStorage.setItem('leaderdle', JSON.stringify({ v: 3, settings: { dark: false, cb: false, reduce: true }, consent: 'no', helpSeen: { classic: true }, stats: {}, streak: { n: 0, last: 0 }, days: {}, mayhem: { run, stats: { played: 0, titles: 0 } } }));
+  });
+  await page.goto('/mayhem');
+  await expect(page.getByText('it cannot go on')).toBeVisible();
+  await page.getByRole('button', { name: 'Form a new government' }).click();
+  await expect(page.getByText('Pick 1 of 5')).toBeVisible();
+});
+
+test('Leader Mayhem: after a pick, the keyboard focus moves to the new draw', async ({ page }) => {
+  await openAt(page, '/mayhem?seed=5');
+  await page.getByRole('button', { name: 'Form a government' }).click();
+  await page.getByRole('group', { name: 'Leaders in office' }).getByRole('button').first().click();
+  await page.getByRole('button', { name: /^Give / }).first().click();
+  await expect(page.getByText('Pick 2 of 5')).toBeVisible();
+  await expect(page.getByRole('group', { name: 'Leaders in office' }).getByRole('button').first()).toBeFocused();
+});

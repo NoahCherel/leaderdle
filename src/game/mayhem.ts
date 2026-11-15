@@ -1,6 +1,7 @@
 /**
  * Leader Mayhem: draft a government of five leaders, one per portfolio, from country-and-decade
- * draws, then send it through a three-round tournament. Ratings are hidden until the end.
+ * draws, then send it through a three-round tournament. Ratings are private: players only see
+ * who wins each duel.
  * Everything random comes from the run's seed, so a run can be replayed and tested.
  */
 import { pickOne, rng, shuffle } from './rng.ts';
@@ -200,6 +201,18 @@ export function playNext(run: MayhemRun, data: MayhemData): MayhemRun {
   const result = playMatch(onPortfolio(team, data.ratings), onPortfolio(opp, data.ratings), rand);
   const matches = [...run.matches, { opponent: opp, ...result }];
   return { ...run, draws: run.draws + 1, matches, done: !result.won || matches.length === ROUNDS.length };
+}
+
+/**
+ * Whether a saved run can go on with the data loaded now. An update of the leader list can drop a
+ * leader it names, or the draw it is waiting on; such a run is set aside rather than shown broken.
+ */
+export function resumable(run: MayhemRun, data: MayhemData): boolean {
+  const known = new Set(data.leaders.map((l) => l.id));
+  const named = [...run.team, ...run.matches.flatMap((m) => m.opponent)].filter((id): id is string => id !== null);
+  if (!named.every((id) => known.has(id))) return false;
+  const drafting = run.team.includes(null);
+  return !drafting || offered(run, data).length > 0;
 }
 
 export function runOutcome(run: MayhemRun): Outcome {

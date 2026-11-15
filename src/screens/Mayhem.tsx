@@ -15,6 +15,7 @@ import {
   offered,
   pick,
   playNext,
+  resumable,
   reroll,
   rerollTargets,
   runOutcome,
@@ -73,7 +74,7 @@ export function Mayhem() {
       ) : (
         <div className={`card ${s.hintOffer}`}>
           <span>
-            <strong>The ratings could not be loaded.</strong> {load.kind === 'offline' ? 'Check your connection.' : 'Please come back a little later.'} Your daily games are not affected.
+            <strong>Leader Mayhem could not be loaded.</strong> {load.kind === 'offline' ? 'Check your connection.' : 'Please come back a little later.'} Your daily games are not affected.
           </span>
           <button type="button" className="btn" onClick={() => setAttempt((a) => a + 1)}>
             Try again
@@ -99,6 +100,13 @@ function Game({ data }: { data: MayhemData }) {
 
   // Draft: the leader chosen in the draw, waiting for a portfolio.
   const [chosen, setChosen] = useState<string | null>(null);
+  const offerRef = useRef<HTMLDivElement>(null);
+  const placed = useRef(false);
+  useEffect(() => {
+    if (!placed.current) return;
+    placed.current = false;
+    offerRef.current?.querySelector('button')?.focus();
+  }, [run?.draws]);
   useEffect(() => setChosen(null), [run?.cell?.country, run?.cell?.decade, run?.seed]);
 
   // Tournament: duels of the match played in this session show one by one.
@@ -123,6 +131,17 @@ function Game({ data }: { data: MayhemData }) {
       });
     }, DUEL_MS);
   };
+
+  if (run && !resumable(run, data)) {
+    return (
+      <>
+        <p className={s.mNote}>Our list of leaders was updated since this government was formed, so it cannot go on. Start a new one: it only takes a minute.</p>
+        <button type="button" className="btn btn--lg" style={{ alignSelf: 'flex-start' }} onClick={start}>
+          Form a new government
+        </button>
+      </>
+    );
+  }
 
   if (!run) {
     return (
@@ -201,7 +220,7 @@ function Game({ data }: { data: MayhemData }) {
               <span className={s.rerollNote}>One of each per government.</span>
             </div>
           </section>
-          <div role="group" aria-label="Leaders in office" className={s.offer}>
+          <div ref={offerRef} role="group" aria-label="Leaders in office" className={s.offer}>
             {options.map((id) => {
               const l = byId(id);
               return (
@@ -229,7 +248,10 @@ function Game({ data }: { data: MayhemData }) {
                     <strong>{byId(id).name}</strong> <span className="num muted">{yy(run.years[i] ?? null)}</span>
                   </span>
                 ) : pickable ? (
-                  <button type="button" className={`btn btn--outline ${s.slotBtn}`} onClick={() => save(pick(run, chosen!, i, data))}>
+                  <button type="button" className={`btn btn--outline ${s.slotBtn}`} onClick={() => {
+                      placed.current = true;
+                      save(pick(run, chosen!, i, data));
+                    }}>
                     Give {PORTFOLIO_NAMES[p]} to {byId(chosen!).name}
                   </button>
                 ) : (

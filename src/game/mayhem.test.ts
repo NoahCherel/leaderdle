@@ -8,6 +8,7 @@ import {
   pick,
   playMatch,
   playNext,
+  resumable,
   reroll,
   runOutcome,
   shownYear,
@@ -279,5 +280,31 @@ describe('teamTotal', () => {
   it('adds each leader’s rating on the portfolio they hold', () => {
     expect(teamTotal(['a1', 'a1', 'a1', 'a1', 'a1'], RATINGS)).toBe(3 + 9 + 8 + 7 + 8);
     expect(teamTotal(['b1', 'a1', 'a1', 'a1', 'a1'], RATINGS)).toBe(8 + 9 + 8 + 7 + 8);
+  });
+});
+
+describe('resumable', () => {
+  it('accepts a run in progress and a finished run made with the current data', () => {
+    const run = newRun(4, DATA);
+    expect(resumable(run, DATA)).toBe(true);
+    let done = fill(run);
+    while (!done.done) done = playNext(done, DATA);
+    expect(resumable(done, DATA)).toBe(true);
+  });
+  it('refuses a run naming a leader who is no longer in the list', () => {
+    const run = pick(newRun(4, DATA), cell(newRun(4, DATA).cell!.country, newRun(4, DATA).cell!.decade)!.leaders[0]!, 0, DATA);
+    const id = run.team[0]!;
+    const fewer: MayhemData = { ...DATA, leaders: LEADERS.filter((l) => l.id !== id) };
+    expect(resumable(run, fewer)).toBe(false);
+  });
+  it('refuses a finished run whose rival is no longer in the list', () => {
+    let run = fill(newRun(6, DATA));
+    run = playNext(run, DATA);
+    const rival = run.matches[0]!.opponent[0]!;
+    expect(resumable(run, { ...DATA, leaders: LEADERS.filter((l) => l.id !== rival) })).toBe(false);
+  });
+  it('refuses a draft stuck on a draw that offers nobody any more', () => {
+    const run = { ...newRun(4, DATA), cell: { country: 'Atlantis', decade: 1950 } };
+    expect(resumable(run, DATA)).toBe(false);
   });
 });
