@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { DAY_128 } from '../e2e/helpers';
+import { DAY_128, useSampleData } from '../e2e/helpers';
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page, context }) => {
+  await useSampleData(context);
   await page.clock.install({ time: DAY_128 });
 });
 

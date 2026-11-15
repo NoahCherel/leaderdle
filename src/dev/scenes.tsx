@@ -6,6 +6,7 @@
 import { App } from '../app/App';
 import { AppProvider, type SceneOverrides } from '../app/context';
 import { LeaderFileSchema, type DayPuzzle } from '../data/schema';
+import sampleLeaders from './sample-leaders.json';
 import type { Leader } from '../game/types';
 import { ErrorScreen } from '../screens/Pages';
 import { initialState, reducer, type Action, type GameState } from '../store/state';
@@ -89,7 +90,8 @@ export async function renderScene(params: URLSearchParams) {
   window.history.replaceState(null, '', scene.path + window.location.search);
   if (scene.error) return <ErrorScreen kind={scene.error} />;
 
-  const file = LeaderFileSchema.parse(await (await fetch('/data/leaders.json')).json());
+  // The prototype's 17 leaders plus Schröder and Scholz, so scenes match the design captures.
+  const file = LeaderFileSchema.parse(sampleLeaders);
   let state: GameState = {
     ...initialState(),
     settings,

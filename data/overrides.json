@@ -1,0 +1,119 @@
+{
+  "_readme": "Hand corrections applied on top of Wikidata by scripts/leaders/build.ts. Keys are Wikidata ids. Every entry here is a choice to check before launch (see data/README.md).",
+  "preferCountries": [
+    "Q145",
+    "Q15180",
+    "Q28513"
+  ],
+  "mergeCountries": {
+    "Q756617": {
+      "into": "Q35",
+      "flag": true
+    },
+    "Q174193": {
+      "into": "Q145",
+      "flag": true
+    },
+    "Q209065": {
+      "into": "Q41"
+    },
+    "Q45670": {
+      "into": "Q45"
+    },
+    "Q1078602": {
+      "into": "Q837"
+    },
+    "Q30747910": {
+      "into": "Q889"
+    },
+    "Q41304": {
+      "into": "Q183"
+    },
+    "Q1206012": {
+      "into": "Q183"
+    },
+    "Q43287": {
+      "into": "Q183"
+    },
+    "Q2305208": {
+      "into": "Q159"
+    }
+  },
+  "countryInfo": {
+    "Q35": {
+      "label": "Denmark",
+      "iso2": "DK",
+      "iso3": "DNK",
+      "continent": "Europe"
+    }
+  },
+  "continents": {
+    "Q159": "Europe",
+    "Q15180": "Europe",
+    "Q34266": "Europe",
+    "Q43": "Asia",
+    "Q232": "Asia",
+    "Q12560": "Asia",
+    "Q444912": "Europe",
+    "Q6412669": "Africa"
+  },
+  "countryCodes": {
+    "Q15180": "SUN",
+    "Q12560": "OTT",
+    "Q34266": "RUS",
+    "Q28513": "AUH",
+    "Q600018": "HUN",
+    "Q171150": "HUN",
+    "Q16410": "HUN",
+    "Q940741": "HUN",
+    "Q444912": "ROU",
+    "Q1775277": "IND",
+    "Q69808": "FRA",
+    "Q28233": "KOR",
+    "Q580188": "YEM",
+    "Q427941": "AFG",
+    "Q243610": "UKR",
+    "Q1508143": "UKR",
+    "Q133356": "UKR",
+    "Q30623": "MCK",
+    "Q153128": "HRV",
+    "Q6412669": "TUN"
+  },
+  "countryNames": {},
+  "excludeCountries": [
+    "Q124003554",
+    "Q16761250",
+    "Q114334914",
+    "Q114327408",
+    "Q211853",
+    "Q244165",
+    "Q154195",
+    "Q690821",
+    "Q11061992"
+  ],
+  "excludeOffices": [],
+  "exclude": [],
+  "include": [],
+  "names": {},
+  "aliases": {
+    "Q8007": [
+      "FDR"
+    ],
+    "Q9696": [
+      "JFK"
+    ],
+    "Q9682": [
+      "Queen Elizabeth",
+      "Queen Elizabeth II",
+      "Elizabeth the Second"
+    ]
+  },
+  "countries": {},
+  "roles": {},
+  "blurbs": {},
+  "answerable": {
+    "add": [],
+    "remove": []
+  },
+  "countryOfOffice": {}
+}

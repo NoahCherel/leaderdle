@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
-import { closeHelp, DAY_128, guess, openAt } from './helpers';
+import { closeHelp, DAY_128, guess, openAt, useSampleData } from './helpers';
 
 test('first visit: home invites to play Classic, help opens on first game visit', async ({ page }) => {
   await openAt(page, '/');
@@ -138,7 +138,8 @@ test('a game started before midnight stays on its day until reload', async ({ pa
 
 test('offline on first load shows the offline screen', async ({ page }) => {
   await page.route(/\/data\/.*\.json$/, (route) => route.abort('internetdisconnected'));
-  await openAt(page, '/');
+  await page.clock.install({ time: DAY_128 });
+  await page.goto('/');
   await expect(page.getByRole('heading', { name: 'You’re offline' })).toBeVisible();
 });
 
@@ -183,6 +184,7 @@ test('unknown pages show the 404 screen', async ({ page }) => {
 for (const [name, path] of [['home', '/'], ['classic', '/classic'], ['timeline', '/timeline'], ['privacy', '/privacy']] as const) {
   for (const theme of ['dark', 'light'] as const) {
     test(`axe: ${name} (${theme}) has no violations`, async ({ page }) => {
+      await useSampleData(page);
       await page.clock.install({ time: DAY_128 });
       await page.addInitScript((light) => {
         localStorage.setItem('leaderdle', JSON.stringify({ v: 2, settings: { light, cb: false, reduce: true }, consent: 'no', helpSeen: { classic: true, succession: true, timeline: true }, stats: {}, streak: { n: 0, last: 0 }, days: {} }));

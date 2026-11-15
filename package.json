@@ -13,7 +13,9 @@
     "shoot": "node scripts/shoot.mjs",
     "typecheck": "tsc --noEmit",
     "e2e:build": "playwright test -c playwright.build.config.ts",
-    "serve": "node scripts/static-server.mjs"
+    "serve": "node scripts/static-server.mjs",
+    "data:fetch": "node scripts/leaders/fetch.mjs",
+    "data:leaders": "node scripts/leaders/build.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

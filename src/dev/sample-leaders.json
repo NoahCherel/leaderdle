@@ -1,0 +1,310 @@
+{
+ "version": 1,
+ "note": "Prototype sample data, replaced by the Wikidata build (scripts/leaders). Only lky, tha, man, mer, ard were verified in the brief.",
+ "leaders": [
+  {
+   "id": "lky",
+   "name": "Lee Kuan Yew",
+   "aliases": [],
+   "country": "Singapore",
+   "countryCode": "SGP",
+   "iso2": "sg",
+   "continent": "Asia",
+   "role": "gov",
+   "tookOffice": 1959,
+   "yearsInOffice": 31,
+   "ageAtStart": 35,
+   "terms": [
+    {
+     "start": "1959-06-05",
+     "end": "1990-11-28"
+    }
+   ],
+   "blurb": "Prime Minister of Singapore from 1959 to 1990."
+  },
+  {
+   "id": "tha",
+   "name": "Margaret Thatcher",
+   "aliases": [],
+   "country": "United Kingdom",
+   "countryCode": "GBR",
+   "iso2": "gb",
+   "continent": "Europe",
+   "role": "gov",
+   "tookOffice": 1979,
+   "yearsInOffice": 11,
+   "ageAtStart": 53,
+   "terms": [
+    {
+     "start": "1979-05-04",
+     "end": "1990-11-28"
+    }
+   ],
+   "blurb": "Prime Minister of the United Kingdom from 1979 to 1990."
+  },
+  {
+   "id": "man",
+   "name": "Nelson Mandela",
+   "aliases": [],
+   "country": "South Africa",
+   "countryCode": "ZAF",
+   "iso2": "za",
+   "continent": "Africa",
+   "role": "both",
+   "tookOffice": 1994,
+   "yearsInOffice": 5,
+   "ageAtStart": 75,
+   "terms": [
+    {
+     "start": "1994-05-10",
+     "end": "1999-06-14"
+    }
+   ],
+   "blurb": "President of South Africa from 1994 to 1999."
+  },
+  {
+   "id": "mer",
+   "name": "Angela Merkel",
+   "aliases": [],
+   "country": "Germany",
+   "countryCode": "DEU",
+   "iso2": "de",
+   "continent": "Europe",
+   "role": "gov",
+   "tookOffice": 2005,
+   "yearsInOffice": 16,
+   "ageAtStart": 51,
+   "terms": [
+    {
+     "start": "2005-11-22",
+     "end": "2021-12-08"
+    }
+   ],
+   "blurb": "Chancellor of Germany from 2005 to 2021."
+  },
+  {
+   "id": "ard",
+   "name": "Jacinda Ardern",
+   "aliases": [],
+   "country": "New Zealand",
+   "countryCode": "NZL",
+   "iso2": "nz",
+   "continent": "Oceania",
+   "role": "gov",
+   "tookOffice": 2017,
+   "yearsInOffice": 5,
+   "ageAtStart": 37,
+   "terms": [
+    {
+     "start": "2017-10-26",
+     "end": "2023-01-25"
+    }
+   ],
+   "blurb": "Prime Minister of New Zealand from 2017 to 2023."
+  },
+  {
+   "id": "chu",
+   "name": "Winston Churchill",
+   "aliases": [],
+   "country": "United Kingdom",
+   "countryCode": "GBR",
+   "iso2": "gb",
+   "continent": "Europe",
+   "role": "gov",
+   "tookOffice": 1940,
+   "yearsInOffice": 8,
+   "ageAtStart": 65
+  },
+  {
+   "id": "fdr",
+   "name": "Franklin D. Roosevelt",
+   "aliases": [
+    "FDR",
+    "Franklin Delano Roosevelt"
+   ],
+   "country": "United States",
+   "countryCode": "USA",
+   "iso2": "us",
+   "continent": "North America",
+   "role": "both",
+   "tookOffice": 1933,
+   "yearsInOffice": 12,
+   "ageAtStart": 51
+  },
+  {
+   "id": "jfk",
+   "name": "John F. Kennedy",
+   "aliases": [
+    "JFK",
+    "John Fitzgerald Kennedy"
+   ],
+   "country": "United States",
+   "countryCode": "USA",
+   "iso2": "us",
+   "continent": "North America",
+   "role": "both",
+   "tookOffice": 1961,
+   "yearsInOffice": 2,
+   "ageAtStart": 43
+  },
+  {
+   "id": "rea",
+   "name": "Ronald Reagan",
+   "aliases": [],
+   "country": "United States",
+   "countryCode": "USA",
+   "iso2": "us",
+   "continent": "North America",
+   "role": "both",
+   "tookOffice": 1981,
+   "yearsInOffice": 8,
+   "ageAtStart": 69
+  },
+  {
+   "id": "oba",
+   "name": "Barack Obama",
+   "aliases": [],
+   "country": "United States",
+   "countryCode": "USA",
+   "iso2": "us",
+   "continent": "North America",
+   "role": "both",
+   "tookOffice": 2009,
+   "yearsInOffice": 8,
+   "ageAtStart": 47
+  },
+  {
+   "id": "neh",
+   "name": "Jawaharlal Nehru",
+   "aliases": [],
+   "country": "India",
+   "countryCode": "IND",
+   "iso2": "in",
+   "continent": "Asia",
+   "role": "gov",
+   "tookOffice": 1947,
+   "yearsInOffice": 16,
+   "ageAtStart": 57
+  },
+  {
+   "id": "gan",
+   "name": "Indira Gandhi",
+   "aliases": [],
+   "country": "India",
+   "countryCode": "IND",
+   "iso2": "in",
+   "continent": "Asia",
+   "role": "gov",
+   "tookOffice": 1966,
+   "yearsInOffice": 15,
+   "ageAtStart": 48
+  },
+  {
+   "id": "mei",
+   "name": "Golda Meir",
+   "aliases": [],
+   "country": "Israel",
+   "countryCode": "ISR",
+   "iso2": "il",
+   "continent": "Asia",
+   "role": "gov",
+   "tookOffice": 1969,
+   "yearsInOffice": 5,
+   "ageAtStart": 70
+  },
+  {
+   "id": "koh",
+   "name": "Helmut Kohl",
+   "aliases": [],
+   "country": "Germany",
+   "countryCode": "DEU",
+   "iso2": "de",
+   "continent": "Europe",
+   "role": "gov",
+   "tookOffice": 1982,
+   "yearsInOffice": 16,
+   "ageAtStart": 52
+  },
+  {
+   "id": "bla",
+   "name": "Tony Blair",
+   "aliases": [],
+   "country": "United Kingdom",
+   "countryCode": "GBR",
+   "iso2": "gb",
+   "continent": "Europe",
+   "role": "gov",
+   "tookOffice": 1997,
+   "yearsInOffice": 10,
+   "ageAtStart": 43
+  },
+  {
+   "id": "eli",
+   "name": "Elizabeth II",
+   "aliases": [
+    "Queen Elizabeth",
+    "Queen Elizabeth II",
+    "Elizabeth the Second"
+   ],
+   "country": "United Kingdom",
+   "countryCode": "GBR",
+   "iso2": "gb",
+   "continent": "Europe",
+   "role": "state",
+   "tookOffice": 1952,
+   "yearsInOffice": 70,
+   "ageAtStart": 25
+  },
+  {
+   "id": "cla",
+   "name": "Helen Clark",
+   "aliases": [],
+   "country": "New Zealand",
+   "countryCode": "NZL",
+   "iso2": "nz",
+   "continent": "Oceania",
+   "role": "gov",
+   "tookOffice": 1999,
+   "yearsInOffice": 8,
+   "ageAtStart": 49
+  },
+  {
+   "id": "sch",
+   "name": "Gerhard Schröder",
+   "aliases": [],
+   "country": "Germany",
+   "countryCode": "DEU",
+   "iso2": "de",
+   "continent": "Europe",
+   "role": "gov",
+   "tookOffice": 1998,
+   "yearsInOffice": 7,
+   "ageAtStart": 54,
+   "terms": [
+    {
+     "start": "1998-10-27",
+     "end": "2005-11-22"
+    }
+   ]
+  },
+  {
+   "id": "olz",
+   "name": "Olaf Scholz",
+   "aliases": [],
+   "country": "Germany",
+   "countryCode": "DEU",
+   "iso2": "de",
+   "continent": "Europe",
+   "role": "gov",
+   "tookOffice": 2021,
+   "yearsInOffice": 3,
+   "ageAtStart": 63,
+   "terms": [
+    {
+     "start": "2021-12-08",
+     "end": "2025-05-06"
+    }
+   ]
+  }
+ ]
+}
