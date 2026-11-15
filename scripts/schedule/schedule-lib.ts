@@ -150,6 +150,7 @@ export function extendSchedule(
     const usedLet = recent(n, opts.lettersGap, (d) => [d.letters.answer]);
     const taken = [classic, succession.before, succession.answer, succession.after];
     const letters = f.letters ?? shuffle(answerable, rand).find((l) => words[l.id] && !usedLet.has(l.id) && !usedCross.has(l.id) && !taken.includes(l.id))?.id;
+    if (f.letters && !words[f.letters]) throw new Error(`day ${n}: forced Letters answer ${f.letters} has no word in data/letters.json`);
     if (!letters || !words[letters]) throw fail('Letters');
 
     // Timeline: five cards, none of today's other leaders.

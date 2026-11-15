@@ -24,7 +24,7 @@ const TRIES: Record<Mode, string> = { classic: '8 tries', letters: '6 tries', su
 const dateline = (d: Date) => d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
 export function Home() {
-  const { status, state, n, openModal, byId } = useApp();
+  const { status, state, n, openModal, leaders } = useApp();
   const count = useCountdown();
   const done = MODES.filter((m) => status[m].done).length;
   const allDone = done === MODES.length;
@@ -34,7 +34,9 @@ export function Home() {
   const streak = currentStreak(state.streak, n);
   const played = MODES.reduce((sum, m) => sum + state.stats[m].played, 0);
   const wins = MODES.reduce((sum, m) => sum + state.stats[m].wins, 0);
-  const yesterday = state.days[n - 1]?.puzzle.classic.answer;
+  // A stored day can name a leader who has left the list since: then the line is simply not shown.
+  const yesterdayId = state.days[n - 1]?.puzzle.classic.answer;
+  const yesterday = yesterdayId ? leaders.find((l) => l.id === yesterdayId) : undefined;
 
   return (
     <div className={s.layout}>
@@ -113,7 +115,7 @@ export function Home() {
           <strong className={s.count}>{count}</strong>
           {yesterday && (
             <p className={s.small}>
-              Yesterday's Classic was <strong>{byId(yesterday).name}</strong>.
+              Yesterday's Classic was <strong>{yesterday.name}</strong>.
             </p>
           )}
         </section>

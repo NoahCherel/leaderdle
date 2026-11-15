@@ -14,8 +14,9 @@ import s from './game.module.css';
 /** Two columns on desktop (game + 300 × 600 ad), one column below 1000 px. */
 export function GameLayout({ mode, children }: { mode: Mode; children: ReactNode }) {
   const { state, dispatch, openModal, frozen } = useApp();
-  // The rules open by themselves once, on the very first game. Each game states its own rule on the page.
-  const seen = Object.keys(state.helpSeen).length > 0;
+  // The rules open by themselves on the very first game only: each game states its own rule on the page.
+  // Classic is the exception, its tile colors need the legend, so it always opens once.
+  const seen = mode === 'classic' ? !!state.helpSeen.classic : Object.keys(state.helpSeen).length > 0;
   useEffect(() => {
     if (seen || frozen) return;
     dispatch({ type: 'helpSeen', mode });

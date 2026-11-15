@@ -30,7 +30,7 @@ export function Letters() {
   const guesses = day.letters;
   const slots = word.replace(/ /g, '').length;
   const words = word.split(' ').length;
-  const still = frozen || state.settings.reduce;
+  const still = frozen || state.settings.reduce || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const [typed, setTyped] = useState<string[]>([]);
   const [shake, setShake] = useState(0);
@@ -71,6 +71,8 @@ export function Letters() {
     setNote('');
     if (!still) {
       setRevealing(true);
+      // A guess entered while the previous row is turning restarts the wait for its own row.
+      window.clearTimeout(timer.current);
       timer.current = window.setTimeout(() => setRevealing(false), slots * STEP + TURN);
     }
   }, [open, typed, slots, dispatch, n, word, markFresh, guesses.length, still]);
@@ -85,7 +87,7 @@ export function Letters() {
       if (tag === 'INPUT' || tag === 'TEXTAREA') return;
       if (/^[a-zA-Z]$/.test(e.key)) press(e.key.toUpperCase());
       else if (e.key === 'Backspace') back();
-      else if (e.key === 'Enter' && tag !== 'BUTTON' && tag !== 'A') enter();
+      else if (e.key === 'Enter' && !e.repeat && tag !== 'BUTTON' && tag !== 'A') enter();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -118,7 +120,7 @@ export function Letters() {
         </Result>
       )}
       <ResumedBanner mode="letters" />
-      {!st.done && (
+      {!showResult && (
         <p className={s.brief}>
           Spell the name of today's leader: <strong>{slots} letters</strong>
           {words > 1 ? ', ' + words + ' words' : ''}. Type anything, there is no list.
@@ -160,7 +162,7 @@ export function Letters() {
       <p role="status" className={s.lnote}>
         {note || (last && !revealing && !st.done ? `${last.filter((c) => c === 'correct').length} in the right place, ${last.filter((c) => c === 'present').length} elsewhere in the name.` : '')}
       </p>
-      {!st.done && (
+      {!showResult && (
         <div className={s.keys} role="group" aria-label="Keyboard">
           {KEYS.map((row, r) => (
             <div key={row} className={s.krow}>

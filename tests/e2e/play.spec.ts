@@ -324,3 +324,29 @@ test('Letters: clues unlock after two and four misses, a loss shows the name', a
   await expect(page.getByRole('heading', { name: 'Not this time' })).toBeVisible();
   await expect(page.getByText('Out of guesses. The name was OBAMA.')).toBeVisible();
 });
+
+test('Classic still explains its tiles to a player who started with another game', async ({ page }) => {
+  await openAt(page, '/letters');
+  await closeHelp(page);
+  await page.getByRole('link', { name: 'Succession', exact: true }).click();
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await page.getByRole('link', { name: 'Classic', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'How to play Classic' })).toBeVisible();
+});
+
+test('Letters: a winning guess typed while the previous row is still turning waits for its own tiles', async ({ page }) => {
+  await openAt(page, '/letters');
+  await closeHelp(page);
+  await page.keyboard.type('about');
+  await page.keyboard.press('Enter');
+  // The first row needs 5 x 110 + 380 = 930 ms. The second guess goes in 600 ms later.
+  await page.clock.runFor(600);
+  await page.keyboard.type('obama');
+  await page.keyboard.press('Enter');
+  await page.clock.runFor(500);
+  // 1100 ms after the first Enter, its timer has fired, but the winning row is only half turned.
+  await expect(page.getByRole('heading', { name: 'You got it!' })).toHaveCount(0);
+  await expect(page.getByRole('group', { name: 'Keyboard' })).toBeVisible();
+  await page.clock.runFor(600);
+  await expect(page.getByRole('heading', { name: 'You got it!' })).toBeVisible();
+});

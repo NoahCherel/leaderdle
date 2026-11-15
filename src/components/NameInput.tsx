@@ -12,8 +12,6 @@ interface Props {
   tried: readonly string[];
   search: (q: string) => Leader[];
   onSubmit: (id: string) => void;
-  /** Mode color for the Guess button. */
-  color?: string;
   help?: string;
   initialQuery?: string;
   initialOpen?: boolean;
