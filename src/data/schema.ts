@@ -18,7 +18,7 @@ export const LeaderSchema = z.object({
   continent: z.enum(['Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania']),
   role: z.enum(['state', 'gov', 'both']),
   tookOffice: z.number().int().min(1800).max(2100),
-  ageAtStart: z.number().int().min(10).max(110),
+  ageAtStart: z.number().int().min(0).max(110),
   yearsInOffice: z.number().int().min(0).max(100),
   terms: z.array(TermSchema).optional(),
   wiki: z.string().url().optional(),
