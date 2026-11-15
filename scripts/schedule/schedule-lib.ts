@@ -3,6 +3,7 @@
 import type { DayPuzzle } from '../../src/data/schema.ts';
 import type { Leader } from '../../src/game/types.ts';
 import type { OfficeOut } from '../leaders/build-lib.ts';
+import { rng, shuffle } from '../../src/game/rng.ts';
 
 export interface ScheduleOptions {
   seed: number;
@@ -33,26 +34,6 @@ type Succession = DayPuzzle['succession'];
 const DAY = 86_400_000;
 const t = (iso: string) => Date.parse(`${iso}T00:00:00Z`);
 const span = (start: string, end: string | null) => `${start.slice(0, 4)} – ${end ? end.slice(0, 4) : 'present'}`;
-
-/** Small seeded PRNG (mulberry32). */
-function rng(seed: number) {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let x = Math.imul(a ^ (a >>> 15), 1 | a);
-    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
-    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-function shuffle<T>(list: readonly T[], rand: () => number): T[] {
-  const out = list.slice();
-  for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(rand() * (i + 1));
-    [out[i], out[j]] = [out[j]!, out[i]!];
-  }
-  return out;
-}
 
 /**
  * Every "before → answer → after" triple available: consecutive holders of one office,

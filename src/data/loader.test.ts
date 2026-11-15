@@ -1,4 +1,4 @@
-import { loadGame } from './loader';
+import { loadGame, loadMayhem } from './loader';
 import { initialState, reducer } from '../store/state';
 import { SAMPLE_LEADERS } from '../game/fixtures';
 import type { DayPuzzle } from './schema';
@@ -71,5 +71,29 @@ describe('loadGame', () => {
     const r = await loadGame(128, saved, f);
     expect(r.ok).toBe(true);
     expect(f).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('loadMayhem', () => {
+  const ratings = { mer: [6, 3, 8, 7, 9], koh: [5, 3, 7, 8, 9], gone: [5, 5, 5, 5, 5] };
+
+  it('loads the ratings, drops leaders who are not in the list, and builds the draws', async () => {
+    const f = fakeFetch({ '/data/mayhem.json': () => json({ version: 1, ratings }) });
+    const r = await loadMayhem(SAMPLE_LEADERS, f);
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    expect(Object.keys(r.data.ratings).sort()).toEqual(['koh', 'mer']);
+    expect(r.data.cells.find((c) => c.country === 'Germany' && c.decade === 1990)?.leaders).toEqual(['koh']);
+  });
+  it('reports bad data: a rating out of range, or not five of them', async () => {
+    for (const bad of [{ mer: [6, 3, 8, 7, 11] }, { mer: [6, 3, 8, 7] }, { mer: [6, 3, 8, 7, 2.5] }]) {
+      const f = fakeFetch({ '/data/mayhem.json': () => json({ version: 1, ratings: bad }) });
+      expect(await loadMayhem(SAMPLE_LEADERS, f)).toEqual({ ok: false, kind: 'data' });
+    }
+  });
+  it('reports a missing file as bad data and a network failure as offline', async () => {
+    expect(await loadMayhem(SAMPLE_LEADERS, fakeFetch({}))).toEqual({ ok: false, kind: 'data' });
+    const down = vi.fn(() => Promise.reject(new TypeError('Failed to fetch'))) as unknown as typeof fetch;
+    expect(await loadMayhem(SAMPLE_LEADERS, down)).toEqual({ ok: false, kind: 'offline' });
   });
 });

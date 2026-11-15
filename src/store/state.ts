@@ -1,6 +1,7 @@
 import type { DayPuzzle } from '../data/schema';
 import { emptyStats, recordResult, recordStreak, type ModeStats, type Streak } from '../game/stats';
 import { fitsWord } from '../game/letters';
+import { runOutcome, type MayhemRun } from '../game/mayhem';
 import { classicStatus, lettersStatus, successionStatus, timelineStatus } from '../game/status';
 import { checkOrder } from '../game/timeline';
 import { MAX, MODES, type Mode } from '../game/types';
@@ -25,6 +26,12 @@ export interface DayRecord {
   checked?: string[];
 }
 
+/** Leader Mayhem: a bonus outside the daily games, their stats and the day streak. */
+export interface MayhemState {
+  run: MayhemRun | null;
+  stats: { played: number; titles: number; best: number };
+}
+
 export interface GameState {
   v: 3;
   settings: Settings;
@@ -34,6 +41,7 @@ export interface GameState {
   streak: Streak;
   /** Keyed by puzzle number. */
   days: Record<number, DayRecord>;
+  mayhem: MayhemState;
 }
 
 export type Action =
@@ -46,6 +54,8 @@ export type Action =
   | { type: 'setting'; key: keyof Settings; value: boolean }
   | { type: 'consent'; value: 'yes' | 'no' }
   | { type: 'helpSeen'; mode: Mode }
+  /** Saves the Mayhem run after each step. `total` is the team's rating total, known once the run is done. */
+  | { type: 'mayhem'; run: MayhemRun | null; total?: number }
   | { type: 'clear' }
   /** Another tab saved: take its state, keeping today's puzzle loaded. */
   | { type: 'replace'; state: GameState; puzzle: DayPuzzle };
@@ -57,6 +67,8 @@ const freshDay = (puzzle: DayPuzzle): DayRecord => ({ puzzle, classic: [], hint:
 
 const freshStats = ():Record<Mode, ModeStats> => ({ classic: emptyStats(), letters: emptyStats(), succession: emptyStats(), timeline: emptyStats() });
 
+const freshMayhem = (): MayhemState => ({ run: null, stats: { played: 0, titles: 0, best: 0 } });
+
 export const initialState = (): GameState => ({
   v: 3,
   settings: { dark: false, cb: false, reduce: false },
@@ -65,6 +77,7 @@ export const initialState = (): GameState => ({
   stats: freshStats(),
   streak: { n: 0, last: 0 },
   days: {},
+  mayhem: freshMayhem(),
 });
 
 export function dayStatus(day: DayRecord) {
@@ -138,6 +151,20 @@ export function reducer(state: GameState, action: Action): GameState {
       if (!day || day.checks.length >= MAX.timeline || dayStatus(day).timeline.done) return state;
       if (day.checked?.join() === day.order.join()) return state;
       return withDay(state, action.n, { checks: [...day.checks, checkOrder(day.order, day.puzzle.timeline.order)], checked: [...day.order] });
+    }
+    case 'mayhem': {
+      const { run } = action;
+      const before = state.mayhem.run;
+      // A finished run is counted when it first arrives done, never again on a later save.
+      const finishedNow = !!run?.done && !(before?.done && before.seed === run.seed);
+      const stats = finishedNow
+        ? {
+            played: state.mayhem.stats.played + 1,
+            titles: state.mayhem.stats.titles + (runOutcome(run!) === 'champion' ? 1 : 0),
+            best: Math.max(state.mayhem.stats.best, action.total ?? 0),
+          }
+        : state.mayhem.stats;
+      return { ...state, mayhem: { run, stats } };
     }
     case 'setting':
       return { ...state, settings: { ...state.settings, [action.key]: action.value } };

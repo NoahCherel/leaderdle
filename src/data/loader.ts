@@ -1,6 +1,7 @@
 import type { Leader } from '../game/types';
 import type { GameState } from '../store/state';
-import { DayPuzzleSchema, LeaderFileSchema, type DayPuzzle } from './schema';
+import { buildCells, type MayhemData, type Ratings } from '../game/mayhem';
+import { DayPuzzleSchema, LeaderFileSchema, MayhemFileSchema, type DayPuzzle } from './schema';
 
 export type LoadResult = { ok: true; leaders: Leader[]; puzzle: DayPuzzle } | { ok: false; kind: 'offline' | 'data' };
 
@@ -42,12 +43,30 @@ export async function loadGame(n: number, saved: GameState, fetchImpl: typeof fe
     }
 
     const ids = new Set(leaders.map((l) => l.id));
-    const used = [puzzle.classic.answer, puzzle.succession.before, puzzle.succession.answer, puzzle.succession.after, ...puzzle.timeline.order];
+    const used = [puzzle.classic.answer, puzzle.letters.answer, puzzle.succession.before, puzzle.succession.answer, puzzle.succession.after, ...puzzle.timeline.order];
     if (!used.every((id) => ids.has(id))) return { ok: false, kind: 'data' };
 
     return { ok: true, leaders, puzzle };
   } catch (err) {
     if (err instanceof DataError) return { ok: false, kind: 'data' };
     return { ok: false, kind: 'offline' };
+  }
+}
+
+export type MayhemResult = { ok: true; data: MayhemData } | { ok: false; kind: 'offline' | 'data' };
+
+/**
+ * Loads the Leader Mayhem ratings, only when the mode is opened. Ratings for leaders who are
+ * not in the leader list are dropped, so the two files can be updated one after the other.
+ */
+export async function loadMayhem(leaders: Leader[], fetchImpl: typeof fetch = fetch): Promise<MayhemResult> {
+  try {
+    const parsed = MayhemFileSchema.safeParse(await getJson(`${BASE}/data/mayhem.json`, fetchImpl));
+    if (!parsed.success) return { ok: false, kind: 'data' };
+    const known = new Set(leaders.map((l) => l.id));
+    const ratings: Ratings = Object.fromEntries(Object.entries(parsed.data.ratings).filter(([id]) => known.has(id)));
+    return { ok: true, data: { leaders, ratings, cells: buildCells(leaders, ratings) } };
+  } catch (err) {
+    return { ok: false, kind: err instanceof DataError ? 'data' : 'offline' };
   }
 }

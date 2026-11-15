@@ -44,7 +44,7 @@ export function createStorage(backend: Backend | null): Store {
         const data: unknown = JSON.parse(raw);
         if (!valid(data)) return initialState();
         const base = initialState();
-        return { ...base, ...data, settings: { ...base.settings, ...data.settings }, stats: { ...base.stats, ...data.stats } };
+        return { ...base, ...data, settings: { ...base.settings, ...data.settings }, stats: { ...base.stats, ...data.stats }, mayhem: { ...base.mayhem, ...data.mayhem } };
       } catch {
         return initialState();
       }

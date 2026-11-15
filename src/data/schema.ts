@@ -31,6 +31,12 @@ export const LeaderFileSchema = z.object({
   leaders: z.array(LeaderSchema),
 });
 
+/** Leader Mayhem ratings: leader id → five whole numbers from 1 to 10 (education, war, economy, domestic, foreign). */
+export const MayhemFileSchema = z.object({
+  version: z.number().int(),
+  ratings: z.record(z.array(z.number().int().min(1).max(10)).length(5)),
+});
+
 const five = z.array(z.string()).length(5);
 
 export const DayPuzzleSchema = z.object({

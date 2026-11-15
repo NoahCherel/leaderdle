@@ -1,5 +1,6 @@
 import { initialState, reducer, type GameState } from './state';
 import type { DayPuzzle } from '../data/schema';
+import type { MayhemRun } from '../game/mayhem';
 
 const puzzle: DayPuzzle = {
   n: 128,
@@ -11,6 +12,7 @@ const puzzle: DayPuzzle = {
 
 const started = (): GameState => reducer(initialState(), { type: 'start', puzzle });
 const run = (s: GameState, ...actions: Parameters<typeof reducer>[1][]) => actions.reduce(reducer, s);
+const run2 = run;
 const guess = (mode: 'classic' | 'succession', id: string) => ({ type: 'guess' as const, n: 128, mode, id });
 
 describe('start', () => {
@@ -137,5 +139,41 @@ describe('settings and data', () => {
     expect(s.settings.cb).toBe(true);
     expect(s.consent).toBe('no');
     expect(s.helpSeen.classic).toBe(true);
+  });
+});
+
+describe('Leader Mayhem', () => {
+  const run = (seed: number, done: boolean, wins = 0): MayhemRun => ({
+    seed, draws: 9, cell: null, team: ['a', 'b', 'c', 'd', 'e'], years: [1, 2, 3, 4, 5], rerolls: { country: false, decade: false }, done,
+    matches: Array.from({ length: Math.min(3, wins + (wins < 3 ? 1 : 0)) }, (_, i) => ({ opponent: ['v', 'w', 'x', 'y', 'z'], duels: [true, true, true, false, false], won: i < wins })),
+  });
+  const save = (r: MayhemRun | null, total = 0) => ({ type: 'mayhem' as const, run: r, total });
+
+  it('keeps the run in progress', () => {
+    const s = reducer(started(), save(run(1, false)));
+    expect(s.mayhem.run?.seed).toBe(1);
+    expect(s.mayhem.stats).toEqual({ played: 0, titles: 0, best: 0 });
+  });
+  it('counts a finished run once, with titles and the best team total', () => {
+    let s = run2(started(), save(run(1, true, 3), 38), save(run(1, true, 3), 38));
+    expect(s.mayhem.stats).toEqual({ played: 1, titles: 1, best: 38 });
+    s = run2(s, save(run(2, false)), save(run(2, true, 1), 31));
+    expect(s.mayhem.stats).toEqual({ played: 2, titles: 1, best: 38 });
+  });
+  it('leaves the daily games, their stats and the day streak alone', () => {
+    const before = started();
+    const s = reducer(before, save(run(1, true, 3), 40));
+    expect(s.days).toBe(before.days);
+    expect(s.stats).toBe(before.stats);
+    expect(s.streak).toBe(before.streak);
+  });
+  it('is erased by Clear my data', () => {
+    const s = run2(started(), save(run(1, true, 3), 40), { type: 'clear' });
+    expect(s.mayhem).toEqual({ run: null, stats: { played: 0, titles: 0, best: 0 } });
+  });
+  it('a new run can replace a finished one', () => {
+    const s = run2(started(), save(run(1, true, 0), 20), save(null));
+    expect(s.mayhem.run).toBeNull();
+    expect(s.mayhem.stats.played).toBe(1);
   });
 });
