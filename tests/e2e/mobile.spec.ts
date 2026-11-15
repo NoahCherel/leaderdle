@@ -99,3 +99,22 @@ test('Letters on a phone: the whole board and keyboard fit the screen width, key
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
 });
+
+test('a 320 px screen: the five game tabs fit, and no page scrolls sideways', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await openAt(page, '/mayhem');
+  const tabs = page.getByRole('navigation', { name: 'Game modes' }).getByRole('link');
+  await expect(tabs).toHaveCount(5);
+  for (const tab of await tabs.all()) {
+    const box = (await tab.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(320);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  // The other game pages share the layout and its ad slot.
+  for (const path of ['/classic', '/letters', '/succession', '/timeline', '/']) {
+    await page.goto(path);
+    await expect(page.locator('main')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth), path).toBeLessThanOrEqual(320);
+  }
+});
