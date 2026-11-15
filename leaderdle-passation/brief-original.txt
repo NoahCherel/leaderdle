@@ -1,0 +1,251 @@
+Leaderdle — Brief design UI/UX
+14 nov. 2026 · @Noah
+1. Mission
+Tu conçois toute l'interface de Leaderdle, un jeu web quotidien en anglais où l'on devine un dirigeant politique : chef d'État ou de gouvernement, du monde entier, de 1900 à aujourd'hui. Travaille en trois étapes et arrête-toi après chacune pour validation (section 10).
+• Public : anglophones habitués aux jeux de type Wordle, amateurs d'histoire et de géopolitique, étudiants.
+• Usage : une visite par jour, environ 3 minutes, surtout sur téléphone, souvent ouverte depuis un lien partagé par un ami.
+• Format : un jeu principal, Classic, et deux défis bonus, Succession et Timeline. Chacun a un seul puzzle par jour, identique pour tous les joueurs, avec une réponse différente dans chaque mode.
+• Difficulté : la réponse du jour est toujours un dirigeant connu du grand public. Les dirigeants plus obscurs peuvent être proposés comme essais, jamais comme réponse.
+• Ce qui fait revenir : la série de jours consécutifs, le résultat à partager, et l'envie de réussir les trois modes du jour.
+• Adresse : leaderdle.com.
+2. Principes produit
+Ces règles priment sur toute idée graphique.
+• Neutralité politique. Tous les dirigeants reçoivent le même traitement visuel, qu'ils soient admirés ou détestés. Aucun indice d'orientation (gauche, droite, régime). Aucune couleur ne doit évoquer un parti ou un camp.
+• Aucune image de personne réelle. Pas de photo, de portrait, de silhouette ni de caricature. Un dirigeant est représenté par son nom, son pays, sa fonction et ses dates. Les drapeaux de pays sont autorisés.
+• Ludique pour le joueur, sobre pour le sujet. La liste contient des dictateurs et des criminels de guerre. Les animations de victoire fêtent le joueur (« You got it! »), jamais le dirigeant. Pas d'humour sur les personnes.
+• Sans compte. Progression, séries et statistiques restent dans le navigateur. Aucun écran d'inscription ou de connexion.
+• Mobile d'abord. Chaque écran est conçu pour 360 px de large, puis étendu à la tablette et au bureau.
+• Interface en anglais. Tous les textes d'interface sont rédigés en anglais, courts et chaleureux. Ce brief est en français pour relecture.
+• Un essai par jour. Un puzzle terminé ne se rejoue pas. Le suivant arrive à minuit, heure locale du joueur.
+3. Direction visuelle
+Le style est coloré et ludique : on doit avoir envie de jouer avant même de comprendre le sujet. L'esprit est celui d'un jeu de société moderne, pas d'un site d'actualité ni d'un manuel d'histoire.
+• Fond et texte. Fond crème chaud (#FFF7EA), texte encre presque noire (#1F1B2E). Pas de blanc pur, pas de gris froid.
+• Une couleur par mode. Classic en violet (#6C4CF1), Succession en turquoise (#12B5A6), Timeline en corail (#FF6B4A). Chaque couleur est reprise sur la carte du mode, son en-tête et son résultat partagé.
+• Couleurs de réponse. Réservées au jeu : vert (#2DBE6C) pour juste, jaune (#F5B921) pour proche, gris chaud (#D9D5CC) pour faux. Jamais de rouge pour une erreur, et jamais d'opposition rouge contre bleu.
+• Ces valeurs sont un point de départ. Ajuste-les pour le contraste, et propose une seconde palette dans la piste B (section 10).
+• Typographie. Une police de titre ronde et grasse, avec du caractère, pour le logo et les titres. Une police sans empattement très lisible pour l'interface. Chiffres à largeur fixe dans les tuiles.
+• Formes. Coins bien arrondis, cartes épaisses avec ombre décalée façon autocollant, boutons qui s'enfoncent au clic. Icônes simples au trait épais.
+• Animations. Tuiles qui se retournent une à une, léger rebond sur une bonne réponse, confettis à la victoire, secousse douce sur une saisie invalide. Moins de 400 ms par tuile, et une version sans mouvement.
+• Logo. Un mot-symbole « Leaderdle », une version courte pour l'icône du site, et une image d'aperçu pour les liens partagés.
+• Pas de mascotte. La personnalité vient des tuiles, des couleurs et du ton des textes.
+• Thèmes. Clair par défaut, sombre disponible, avec les mêmes couleurs de mode ajustées.
+4. Structure et navigation
+L'accueil est le tableau de bord du jour : Classic y domine, les deux bonus l'accompagnent.
+• Accueil. Une grande carte Classic en haut, puis deux cartes plus petites pour Succession et Timeline. Chaque carte montre son état : à jouer, en cours, réussi (avec le score) ou raté. Au-dessus : la série en cours et le numéro du jour. En dessous : le compte à rebours avant les prochains puzzles.
+• Ordre de jeu. Les trois modes sont accessibles dès l'arrivée. L'interface pousse Classic en premier, sans rien verrouiller.
+• En-tête (présent partout). Logo qui ramène à l'accueil, série en cours, puis trois boutons : aide, statistiques, réglages.
+• Écran de jeu. Un par mode. Trois pastilles colorées permettent de passer d'un mode à l'autre sans revenir à l'accueil.
+• Fin de partie. Le résultat s'affiche sur l'écran du mode, avec un bouton vers le mode suivant non joué.
+• Aide. Une fenêtre par mode, avec un exemple illustré. Elle s'ouvre seule à la première visite du mode.
+• Statistiques. Une fenêtre avec un onglet par mode.
+• Réglages. Thème clair ou sombre, mode daltonien, animations réduites, effacer mes données.
+• Pages de pied de page. About, How we pick and describe leaders (règles de données et de neutralité), Privacy, Report an error.
+Pas d'archive ni de mode illimité au lancement. Prévoir seulement que l'accueil puisse accueillir une quatrième carte plus tard.
+5. Modes de jeu
+Trois modes au lancement : Classic est le jeu principal, Succession et Timeline sont deux bonus courts. Tous reposent sur des faits vérifiables (pays, fonction, dates), sans citation ni jugement.
+Mode
+Rôle
+But
+Essais
+Geste principal
+Classic
+Principal
+Trouver le dirigeant grâce aux attributs comparés
+8
+Saisir un nom
+Succession
+Bonus
+Trouver qui a gouverné entre deux dirigeants
+5
+Saisir un nom
+Timeline
+Bonus
+Classer 5 dirigeants par date d'arrivée au pouvoir
+3 validations
+Glisser des cartes
+Classic
+Le joueur saisit un nom dans un champ avec suggestions. Chaque suggestion affiche le nom, le pays et les années de mandat, pour distinguer les homonymes. Chaque essai ajoute une ligne de cinq tuiles, sous le nom proposé.
+Tuile
+Vert
+Jaune
+Flèche
+Country
+Même pays
+Même continent
+Aucune
+Role
+Même fonction
+Une fonction en commun
+Aucune
+Took office
+Même année
+Écart de 10 ans au plus
+Earlier ou later
+Years in office
+Même durée
+Écart de 2 ans au plus
+Fewer ou more
+Age at start
+Même âge
+Écart de 5 ans au plus
+Younger ou older
+• Role prend trois valeurs : Head of state, Head of government, Both.
+• Plusieurs mandats séparés : Took office indique la première prise de fonction, Years in office le total cumulé.
+• Dirigeant encore en poste : la durée est comptée jusqu'à aujourd'hui, avec une étiquette « In office ».
+• Ordre d'affichage : les essais les plus récents apparaissent en haut, juste sous le champ de saisie. Les en-têtes de colonnes restent visibles.
+• Largeur mobile : les cinq tuiles tiennent sur une ligne à 360 px, le nom proposé au-dessus de la ligne.
+• Indice facultatif : après cinq essais ratés, un bouton « Reveal initials » apparaît. L'utiliser ne coûte pas d'essai, mais ajoute une ampoule au résultat partagé.
+Succession
+• L'écran montre trois cases en ligne : le prédécesseur, une case mystère, le successeur. Les deux noms connus sont affichés, sans pays ni dates.
+• Le joueur propose un nom, avec le même champ de saisie que Classic.
+• Chaque erreur révèle une aide, dans cet ordre : les années, la fonction, le continent, le pays.
+• À la victoire, la case mystère se retourne et la chaîne complète s'affiche avec ses dates.
+Timeline
+• Cinq cartes de dirigeants (nom et pays) arrivent en désordre. Le joueur les range de la prise de fonction la plus ancienne à la plus récente, puis valide.
+• Après chaque validation, les cartes bien placées se verrouillent en vert. Trois validations au maximum.
+• Le glisser-déposer doit être confortable au pouce. Prévoir aussi des boutons monter et descendre sur chaque carte.
+• À la fin, les années apparaissent sur une frise.
+6. Écrans et états à concevoir
+Chaque mode doit être dessiné dans tous ses états, pas seulement en cours de partie.
+• Première visite. Accueil sans série ni score, avec une phrase qui explique le jeu et un appel clair à commencer par Classic.
+• Avant le premier essai. Écran de mode vide, avec une invitation à saisir un premier nom.
+• En cours. Essais affichés, compteur d'essais restants, champ de saisie actif.
+• Saisie. Liste de suggestions ouverte, aucun résultat trouvé, nom déjà proposé, clavier mobile ouvert sans masquer le dernier essai.
+• Victoire. Animation, score, fiche du dirigeant, bouton de partage, bouton vers le mode suivant.
+• Défaite. Même mise en page, ton encourageant, réponse révélée.
+• Déjà joué aujourd'hui. Le résultat reste consultable, avec le compte à rebours.
+• Journée complète. Les trois modes terminés : écran de synthèse et partage groupé.
+• Partie reprise. Retour sur un mode commencé plus tôt dans la journée.
+• Erreurs. Hors ligne, données du jour indisponibles, page introuvable.
+Fiche du dirigeant (fin de partie)
+Une carte factuelle : nom, pays avec drapeau, fonction, dates de mandat, une phrase neutre de contexte et un lien vers Wikipedia. Un lien discret « Report an error » l'accompagne.
+7. Séries, statistiques et partage
+La série et le partage sont les deux moteurs de retour : ils doivent être visibles sans être envahissants.
+• Série. Elle compte les jours consécutifs où Classic a été terminé, gagné ou perdu. Elle s'affiche dans l'en-tête avec une petite flamme ou un symbole équivalent. Les bonus ne la modifient pas.
+• Journée parfaite. Un badge distinct récompense les trois modes réussis le même jour.
+• Statistiques par mode. Parties jouées, taux de réussite, série de victoires en cours, meilleure série, répartition des scores en barres.
+• Stockage local. Une mention courte précise que les statistiques sont enregistrées sur cet appareil uniquement.
+• Partage d'un mode. Un bouton copie un texte sans divulguer la réponse : nom du jeu, numéro du jour, mode, score, grille d'emojis, lien. Une bulle confirme la copie. Sur mobile, ouvrir la feuille de partage du téléphone.
+• Partage de la journée. Un texte unique résume les trois modes sur une ligne.
+• Compte à rebours. Visible sur l'accueil et sur chaque écran de fin de partie.
+Textes partagés, un par mode puis celui de la journée :
+Leaderdle #128 · Classic 4/8
+🟨⬜⬆️⬇️🟨
+🟩⬜⬆️🟨⬇️
+🟩🟩🟨🟩⬆️
+🟩🟩🟩🟩🟩
+leaderdle.com
+Leaderdle #128 · Succession 2/5
+⬜🟩
+leaderdle.com
+Leaderdle #128 · Timeline 2/3
+🟩⬜🟩⬜🟩
+🟩🟩🟩🟩🟩
+leaderdle.com
+Leaderdle #128
+Classic 4/8 · Succession 2/5 · Timeline 2/3
+leaderdle.com
+8. Publicités discrètes
+La publicité ne doit jamais se trouver entre le joueur et son prochain essai.
+Emplacements autorisés
+• Mobile : un bloc de 320 × 100 px sous la zone de jeu, atteint en faisant défiler, et un bloc de 300 × 250 px sur l'écran de fin de partie, sous le bouton de partage.
+• Bureau : une colonne de 300 × 600 px à droite de la zone de jeu, et le même bloc de fin de partie.
+• Accueil : un bloc de 300 × 250 px sous les trois cartes de mode.
+Interdits
+• Publicité plein écran, fenêtre surgissante, vidéo à lecture automatique, son.
+• Publicité avant de pouvoir jouer, ou entre le champ de saisie et les essais.
+• Bandeau fixe qui recouvre le clavier ou le champ de saisie.
+• Tout bloc qui décale la page en se chargeant : chaque emplacement a une taille réservée dès l'affichage.
+À dessiner aussi
+• L'étiquette « Advertisement » et l'état vide de chaque emplacement.
+• Le bandeau de consentement aux cookies, compact, avec refus aussi simple que l'acceptation.
+Les annonces politiques seront exclues côté régie, pour rester cohérent avec la neutralité du jeu.
+9. Accessibilité et responsive
+Le jeu doit rester jouable sans distinguer les couleurs, sans souris et sur un petit écran.
+• Couleur jamais seule. Chaque état de tuile porte aussi une icône ou un motif. Un mode daltonien remplace le vert et le jaune par une paire bleu et orange.
+• Contraste. Niveau AA au minimum pour tous les textes, y compris sur les tuiles colorées et en thème sombre.
+• Clavier. Tout le jeu est faisable au clavier : saisie, choix d'une suggestion, validation, réorganisation des cartes de Timeline. Le focus est toujours visible.
+• Lecteurs d'écran. Chaque tuile a un libellé complet, par exemple « Took office: 1979, target is later ».
+• Tactile. Zones cliquables de 44 px au minimum.
+• Noms. La recherche ignore les accents et accepte les variantes d'écriture. Les noms longs passent sur deux lignes sans casser la mise en page.
+• Largeurs à dessiner. 360 px (téléphone), 768 px (tablette), 1280 px (bureau).
+• Animations réduites. Une version sans mouvement de chaque animation.
+10. Livrables, en trois étapes
+Livre une étape à la fois et attends la validation avant de passer à la suivante.
+Étape 1 : deux pistes visuelles
+• Deux pistes distinctes, A et B, chacune montrée sur l'accueil et sur l'écran Classic en cours de partie, en mobile (360 px).
+• La piste A suit la palette de la section 3. La piste B propose une autre palette et une autre police de titre, dans le même esprit.
+• Pour chaque piste : le mot-symbole, la tuile dans ses trois états, et l'écran de victoire avec la fiche du dirigeant.
+Étape 2 : Classic complet
+• Tous les états de la section 6 pour Classic, en mobile et en bureau.
+• La bibliothèque de composants : couleurs, typographie, tuile, ligne d'essai, champ de saisie avec suggestions, carte de mode, fenêtre, bulle de confirmation, boutons, emplacement publicitaire, fiche du dirigeant.
+• L'accueil, l'aide, les statistiques et les réglages.
+• Un prototype cliquable : première visite, partie de Classic, victoire, partage.
+Étape 3 : bonus et finitions
+• Succession et Timeline dans tous leurs états, en mobile et en bureau.
+• L'écran de journée complète et le partage groupé.
+• Le thème sombre et le mode daltonien pour l'accueil et les trois modes.
+• Les pages de pied de page, le bandeau de consentement et les écrans d'erreur.
+• L'icône du site et l'image d'aperçu pour les liens partagés.
+À chaque étape, tous les textes d'interface sont rédigés en anglais, et les maquettes n'utilisent que les données de la section 11.
+11. Données d'exemple pour les maquettes
+Utilise uniquement ces cinq dirigeants dans les maquettes : leurs faits ont été vérifiés, n'en invente aucun autre.
+Name
+Country
+Role
+Took office
+Years in office
+Age at start
+Lee Kuan Yew
+Singapore
+Head of government
+1959
+31
+35
+Margaret Thatcher
+United Kingdom
+Head of government
+1979
+11
+53
+Nelson Mandela
+South Africa
+Both
+1994
+5
+75
+Angela Merkel
+Germany
+Head of government
+2005
+16
+51
+Jacinda Ardern
+New Zealand
+Head of government
+2017
+5
+37
+• Classic : la réponse de la maquette est Angela Merkel, les quatre autres servent d'essais.
+• Succession : Gerhard Schröder, case mystère, Olaf Scholz. La réponse est Angela Merkel, chancelière de 2005 à 2021.
+• Timeline : les cinq dirigeants du tableau, à ranger de 1959 à 2017.
+12. Ce que Leaderdle reprend des jeux de référence
+Ces cinq jeux expliquent les choix de ce brief. Reprends leurs mécanismes, pas leur apparence.
+Jeu
+Ce qui fonctionne
+Ce que Leaderdle reprend
+Wordle
+Un puzzle par jour, le même pour tous, trois minutes, une grille d'emojis sans divulguer la réponse, aucun compte
+Tout : c'est le socle du jeu
+Poeltl
+8 essais, des colonnes d'attributs, un jaune défini par un écart chiffré, des flèches, un indice facultatif
+Les tuiles de Classic, les seuils du jaune, l'indice des initiales
+Actorle
+8 essais, et chaque erreur révèle une information de plus
+Aucun essai raté n'est perdu : Succession dévoile une aide à chaque erreur
+LoLdle
+Plusieurs défis par jour, tous résolus en saisissant un nom
+Le même champ de saisie dans Classic et Succession, une réponse différente par mode
+Worldle
+Un jeu principal, puis des manches bonus, et un nouveau puzzle à minuit heure locale
+Un jeu principal et deux bonus, minuit heure locale, une archive plus tard

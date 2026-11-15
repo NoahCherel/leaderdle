@@ -1,0 +1,257 @@
+{
+ "note": "verified=true: the five leaders checked in the original brief. verified=false: added from memory for the prototype, to be checked against a source before launch.",
+ "leaders": [
+  {
+   "id": "lky",
+   "name": "Lee Kuan Yew",
+   "aliases": [],
+   "country": "Singapore",
+   "countryCode": "SGP",
+   "continent": "Asia",
+   "role": "Head of government",
+   "tookOffice": 1959,
+   "yearsInOffice": 31,
+   "ageAtStart": 35,
+   "verified": true
+  },
+  {
+   "id": "tha",
+   "name": "Margaret Thatcher",
+   "aliases": [],
+   "country": "United Kingdom",
+   "countryCode": "GBR",
+   "continent": "Europe",
+   "role": "Head of government",
+   "tookOffice": 1979,
+   "yearsInOffice": 11,
+   "ageAtStart": 53,
+   "verified": true
+  },
+  {
+   "id": "man",
+   "name": "Nelson Mandela",
+   "aliases": [],
+   "country": "South Africa",
+   "countryCode": "ZAF",
+   "continent": "Africa",
+   "role": "Both",
+   "tookOffice": 1994,
+   "yearsInOffice": 5,
+   "ageAtStart": 75,
+   "verified": true
+  },
+  {
+   "id": "mer",
+   "name": "Angela Merkel",
+   "aliases": [],
+   "country": "Germany",
+   "countryCode": "DEU",
+   "continent": "Europe",
+   "role": "Head of government",
+   "tookOffice": 2005,
+   "yearsInOffice": 16,
+   "ageAtStart": 51,
+   "verified": true
+  },
+  {
+   "id": "ard",
+   "name": "Jacinda Ardern",
+   "aliases": [],
+   "country": "New Zealand",
+   "countryCode": "NZL",
+   "continent": "Oceania",
+   "role": "Head of government",
+   "tookOffice": 2017,
+   "yearsInOffice": 5,
+   "ageAtStart": 37,
+   "verified": true
+  },
+  {
+   "id": "chu",
+   "name": "Winston Churchill",
+   "aliases": [],
+   "country": "United Kingdom",
+   "countryCode": "GBR",
+   "continent": "Europe",
+   "role": "Head of government",
+   "tookOffice": 1940,
+   "yearsInOffice": 8,
+   "ageAtStart": 65,
+   "verified": false
+  },
+  {
+   "id": "fdr",
+   "name": "Franklin D. Roosevelt",
+   "aliases": [
+    "fdr franklin delano roosevelt"
+   ],
+   "country": "United States",
+   "countryCode": "USA",
+   "continent": "North America",
+   "role": "Both",
+   "tookOffice": 1933,
+   "yearsInOffice": 12,
+   "ageAtStart": 51,
+   "verified": false
+  },
+  {
+   "id": "jfk",
+   "name": "John F. Kennedy",
+   "aliases": [
+    "jfk john fitzgerald kennedy"
+   ],
+   "country": "United States",
+   "countryCode": "USA",
+   "continent": "North America",
+   "role": "Both",
+   "tookOffice": 1961,
+   "yearsInOffice": 2,
+   "ageAtStart": 43,
+   "verified": false
+  },
+  {
+   "id": "rea",
+   "name": "Ronald Reagan",
+   "aliases": [],
+   "country": "United States",
+   "countryCode": "USA",
+   "continent": "North America",
+   "role": "Both",
+   "tookOffice": 1981,
+   "yearsInOffice": 8,
+   "ageAtStart": 69,
+   "verified": false
+  },
+  {
+   "id": "oba",
+   "name": "Barack Obama",
+   "aliases": [],
+   "country": "United States",
+   "countryCode": "USA",
+   "continent": "North America",
+   "role": "Both",
+   "tookOffice": 2009,
+   "yearsInOffice": 8,
+   "ageAtStart": 47,
+   "verified": false
+  },
+  {
+   "id": "neh",
+   "name": "Jawaharlal Nehru",
+   "aliases": [],
+   "country": "India",
+   "countryCode": "IND",
+   "continent": "Asia",
+   "role": "Head of government",
+   "tookOffice": 1947,
+   "yearsInOffice": 16,
+   "ageAtStart": 57,
+   "verified": false
+  },
+  {
+   "id": "gan",
+   "name": "Indira Gandhi",
+   "aliases": [],
+   "country": "India",
+   "countryCode": "IND",
+   "continent": "Asia",
+   "role": "Head of government",
+   "tookOffice": 1966,
+   "yearsInOffice": 15,
+   "ageAtStart": 48,
+   "verified": false
+  },
+  {
+   "id": "mei",
+   "name": "Golda Meir",
+   "aliases": [],
+   "country": "Israel",
+   "countryCode": "ISR",
+   "continent": "Asia",
+   "role": "Head of government",
+   "tookOffice": 1969,
+   "yearsInOffice": 5,
+   "ageAtStart": 70,
+   "verified": false
+  },
+  {
+   "id": "koh",
+   "name": "Helmut Kohl",
+   "aliases": [],
+   "country": "Germany",
+   "countryCode": "DEU",
+   "continent": "Europe",
+   "role": "Head of government",
+   "tookOffice": 1982,
+   "yearsInOffice": 16,
+   "ageAtStart": 52,
+   "verified": false
+  },
+  {
+   "id": "bla",
+   "name": "Tony Blair",
+   "aliases": [],
+   "country": "United Kingdom",
+   "countryCode": "GBR",
+   "continent": "Europe",
+   "role": "Head of government",
+   "tookOffice": 1997,
+   "yearsInOffice": 10,
+   "ageAtStart": 43,
+   "verified": false
+  },
+  {
+   "id": "eli",
+   "name": "Elizabeth II",
+   "aliases": [
+    "queen elizabeth 2 elizabeth the second"
+   ],
+   "country": "United Kingdom",
+   "countryCode": "GBR",
+   "continent": "Europe",
+   "role": "Head of state",
+   "tookOffice": 1952,
+   "yearsInOffice": 70,
+   "ageAtStart": 25,
+   "verified": false
+  },
+  {
+   "id": "cla",
+   "name": "Helen Clark",
+   "aliases": [],
+   "country": "New Zealand",
+   "countryCode": "NZL",
+   "continent": "Oceania",
+   "role": "Head of government",
+   "tookOffice": 1999,
+   "yearsInOffice": 8,
+   "ageAtStart": 49,
+   "verified": false
+  }
+ ],
+ "samplePuzzles": {
+  "classic": {
+   "answer": "mer"
+  },
+  "succession": {
+   "before": "Gerhard Schröder",
+   "answer": "mer",
+   "after": "Olaf Scholz",
+   "clues": [
+    "Years: 2005 – 2021",
+    "Role: Head of government",
+    "Continent: Europe",
+    "Country: Germany"
+   ]
+  },
+  "timeline": {
+   "order": [
+    "lky",
+    "tha",
+    "man",
+    "mer",
+    "ard"
+   ]
+  }
+ }
+}

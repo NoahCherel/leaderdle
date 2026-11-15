@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Leaderdle, playable prototype</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+body{margin:0;background:#1C1A2B}
+.th-dark{--ground:#1C1A2B;--surf:#2A2740;--text:#FFF4DE;--muted:#B9B3CC;--line:#0A0912;--ink:#14121F;--paper:#FFF4DE;--m1:#9B87FF;--m2:#3DD6C3;--m3:#FF9D5C;--g:#4ADE80;--y:#FFD23F;--x:#454160;--xt:#FFF4DE;--focus:#FFD23F;--veil:rgba(10,9,18,0.78)}
+.th-light{--ground:#FBF3E4;--surf:#FFFDF8;--text:#1C1A2B;--muted:#5B5670;--line:#1C1A2B;--ink:#14121F;--paper:#FFFDF8;--m1:#9B87FF;--m2:#3DD6C3;--m3:#FF9D5C;--g:#4ADE80;--y:#FFD23F;--x:#D9D3E6;--xt:#1C1A2B;--focus:#5A3FE0;--veil:rgba(28,26,43,0.6)}
+.cb{--g:#6CB6FF;--y:#FF9A3D}
+a{color:inherit}a:hover{color:inherit}
+button,input,textarea{font-family:inherit}
+button:not(:disabled):active{transform:translate(2px,2px)}
+button:disabled{opacity:0.45;cursor:default}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+input::placeholder,textarea::placeholder{color:var(--muted);opacity:1}
+@keyframes lflip{0%{transform:rotateX(90deg);opacity:0}100%{transform:rotateX(0);opacity:1}}
+@keyframes lshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes lfall{0%{transform:translateY(-30px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(150px) rotate(220deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div class="{{rootCls}}" style="margin-top: {{rootShift}}; min-height: 100vh; box-sizing: border-box; background: var(--ground); color: var(--text); font-family: 'DM Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.45">
+<header style="display: flex; align-items: center; gap: 4px; max-width: 1120px; margin: 0 auto; height: 68px; padding: 0 12px; box-sizing: border-box">
+<button onClick="{{goHome}}" aria-label="Leaderdle home" style="display: flex; align-items: center; gap: 4px; height: 44px; padding: 0 6px 0 0; background: transparent; border: 0; color: var(--text); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: {{logoSize}}; cursor: pointer">Leader<span style="display: inline-block; padding: 0 7px; background: var(--m1); color: var(--ink); border: 2px solid var(--line); border-radius: 10px; box-shadow: 3px 3px 0 var(--line); transform: rotate(-4deg)">dle</span></button>
+<div style="flex-grow: 1"></div>
+<div role="img" aria-label="{{streakAria}}" style="display: flex; align-items: center; gap: 5px; height: 34px; padding: 0 12px 0 9px; background: var(--surf); border: solid 2px var(--line); border-radius: 999px; font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="#FFD23F" stroke="#0A0912" stroke-width="2.5" stroke-linejoin="round"><path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3 0-6 1-9z"/></svg>{{streak}}</div>
+<button onClick="{{openHelp}}" aria-label="How to play" style="width: 44px; height: 44px; padding: 0; background: transparent; border: 0; color: var(--text); cursor: pointer"><svg width="24" height="24" stroke-width="2.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7"/><path d="M12 17h.01"/></svg></button>
+<button onClick="{{openStats}}" aria-label="Statistics" style="width: 44px; height: 44px; padding: 0; background: transparent; border: 0; color: var(--text); cursor: pointer"><svg width="24" height="24" stroke-width="2.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11M12 20V4M19 20v-6"/></svg></button>
+<button onClick="{{openSettings}}" aria-label="Settings" style="width: 44px; height: 44px; padding: 0; background: transparent; border: 0; color: var(--text); cursor: pointer"><svg width="24" height="24" stroke-width="2.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></button>
+</header>
+
+<sc-if value="{{isHome}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-wrap: wrap; gap: 32px; max-width: 1120px; margin: 0 auto; padding: 16px 16px 40px; box-sizing: border-box">
+<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+<h1 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 40px">Today's puzzles</h1>
+<span style="padding: 3px 12px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 999px; font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums">#128</span>
+</div>
+<p style="margin: 0; font-size: 17px; color: var(--muted)">Guess the world leader from five clues. Same puzzle for everyone, new ones at midnight.</p>
+</div>
+<sc-if value="{{allDone}}" hint-placeholder-val="{{false}}">
+<section aria-label="Day complete" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 18px 22px; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<div><strong style="font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-size: 22px">Day complete!</strong><br><span style="color: var(--muted)">All three puzzles are done. Come back after midnight.</span></div>
+<button onClick="{{goSummary}}" style="height: 48px; padding: 0 22px; background: var(--g); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">See today's summary</button>
+</section>
+</sc-if>
+<section aria-label="Classic" style="display: flex; flex-direction: column; gap: 14px; padding: 28px; box-sizing: border-box; background: var(--m1); color: var(--ink); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase">Main game</span>
+<span style="padding: 2px 10px; background: var(--ink); color: var(--paper); border-radius: 999px; font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; font-size: 14px; padding: 3px 12px">{{classicState}}</span>
+</div>
+<h2 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 52px">Classic</h2>
+<p style="margin: 0; font-size: 17px">Name a leader. Five tiles tell you how close you are. You get 8 tries.</p>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; max-width: 460px"><span style="display: flex; align-items: center; justify-content: center; height: 52px; background: var(--ink); color: var(--paper); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 26px">?</span><span style="display: flex; align-items: center; justify-content: center; height: 52px; background: var(--ink); color: var(--paper); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 26px">?</span><span style="display: flex; align-items: center; justify-content: center; height: 52px; background: var(--ink); color: var(--paper); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 26px">?</span><span style="display: flex; align-items: center; justify-content: center; height: 52px; background: var(--ink); color: var(--paper); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 26px">?</span><span style="display: flex; align-items: center; justify-content: center; height: 52px; background: var(--ink); color: var(--paper); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 26px">?</span></div>
+<p style="margin: 0; font-weight: 700; font-size: 14px">Country · Role · Took office · Years in office · Age at start</p>
+<button onClick="{{goClassic}}" style="align-self: flex-start; height: 56px; padding: 0 32px; background: var(--paper); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer; font-size: 20px; border-radius: 14px; box-shadow: 4px 4px 0 var(--line)">{{classicCta}}</button>
+</section>
+<div style="display: flex; flex-wrap: wrap; gap: 20px">
+<section aria-label="Succession" style="flex: 1 1 240px; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 20px; box-sizing: border-box; background: var(--m2); color: var(--ink); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase">Bonus</span><span style="padding: 2px 10px; background: var(--ink); color: var(--paper); border-radius: 999px; font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums">{{sucState}}</span></div>
+<h2 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 26px">Succession</h2>
+<p style="margin: 0">Who governed in between? 5 tries.</p>
+<div aria-hidden="true" style="display: flex; align-items: center; gap: 8px"><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px"></span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--ink); color: var(--paper); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">?</span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px"></span></div>
+<button onClick="{{goSuc}}" style="align-self: flex-start; height: 48px; padding: 0 24px; background: var(--paper); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">{{sucCta}}</button>
+</section>
+<section aria-label="Timeline" style="flex: 1 1 240px; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 20px; box-sizing: border-box; background: var(--m3); color: var(--ink); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase">Bonus</span><span style="padding: 2px 10px; background: var(--ink); color: var(--paper); border-radius: 999px; font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums">{{timState}}</span></div>
+<h2 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 26px">Timeline</h2>
+<p style="margin: 0">Put 5 leaders in order. 3 checks.</p>
+<div aria-hidden="true" style="display: flex; align-items: center; gap: 8px"><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">3</span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">1</span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">5</span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">2</span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">4</span></div>
+<button onClick="{{goTim}}" style="align-self: flex-start; height: 48px; padding: 0 24px; background: var(--paper); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">{{timCta}}</button>
+</section>
+</div>
+<section aria-label="How it works" style="display: flex; flex-direction: column; gap: 14px; padding: 22px; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap"><h2 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 24px">How it works</h2><button onClick="{{openHelp}}" style="height: 44px; padding: 0 16px; background: transparent; color: var(--text); border: solid 2px var(--text); border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer">Full rules</button></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 16px">
+<div style="display: flex; align-items: flex-start; gap: 12px"><span aria-hidden="true" style="flex: none; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; box-sizing: border-box; background: var(--g); color: var(--ink); border: 2px solid var(--line); border-radius: 10px; box-shadow: 2px 2px 0 var(--line)"><svg width="20" height="20" stroke-width="4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span><strong>Correct</strong><br><span style="color: var(--muted)">An exact match with the answer.</span></span></div><div style="display: flex; align-items: flex-start; gap: 12px"><span aria-hidden="true" style="flex: none; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; box-sizing: border-box; background: var(--y); color: var(--ink); border: 2px solid var(--line); border-radius: 10px; box-shadow: 2px 2px 0 var(--line)"><svg width="20" height="20" stroke-width="4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9c2.5-2.5 4.5-2.5 7 0s4.5 2.5 7 0M5 15c2.5-2.5 4.5-2.5 7 0s4.5 2.5 7 0"/></svg></span><span><strong>Close</strong><br><span style="color: var(--muted)">Same continent, a shared role, or a near miss.</span></span></div><div style="display: flex; align-items: flex-start; gap: 12px"><span aria-hidden="true" style="flex: none; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; box-sizing: border-box; background: var(--x); color: var(--xt); border: 2px solid var(--line); border-radius: 10px; box-shadow: 2px 2px 0 var(--line)"><svg width="20" height="20" stroke-width="4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span><span><strong>No match</strong><br><span style="color: var(--muted)">Arrows point toward the answer.</span></span></div>
+</div>
+</section>
+<footer style="display: flex; flex-wrap: wrap; gap: 0 8px; font-size: 14px">
+<sc-for list="{{footLinks}}" as="f" hint-placeholder-count="4"><button onClick="{{f.go}}" style="height: 44px; padding: 0 8px; background: transparent; border: 0; color: var(--text); font-size: 14px; text-decoration: underline; cursor: pointer">{{f.label}}</button></sc-for>
+</footer>
+</main>
+<aside style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<section aria-label="Today" style="display: flex; flex-direction: column; gap: 8px; padding: 20px; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<h2 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 22px">Today</h2>
+<div style="display: flex; align-items: center; gap: 10px; min-height: 32px"><span aria-hidden="true" style="flex: none; width: 14px; height: 14px; border-radius: 50%; background: var(--m1); border: solid 2px var(--line)"></span><strong style="flex-grow: 1">Classic</strong><span style="font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums">{{classicState}}</span></div><div style="display: flex; align-items: center; gap: 10px; min-height: 32px"><span aria-hidden="true" style="flex: none; width: 14px; height: 14px; border-radius: 50%; background: var(--m2); border: solid 2px var(--line)"></span><strong style="flex-grow: 1">Succession</strong><span style="font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums">{{sucState}}</span></div><div style="display: flex; align-items: center; gap: 10px; min-height: 32px"><span aria-hidden="true" style="flex: none; width: 14px; height: 14px; border-radius: 50%; background: var(--m3); border: solid 2px var(--line)"></span><strong style="flex-grow: 1">Timeline</strong><span style="font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums">{{timState}}</span></div>
+<p style="margin: 0; font-size: 13px; color: var(--muted)">{{perfectLine}}</p>
+</section>
+<section aria-label="Your stats" style="display: flex; flex-direction: column; gap: 12px; padding: 20px; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<h2 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 22px">Your Classic stats</h2>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px"><div style="display: flex; flex-direction: column"><strong style="font-size: 26px; font-variant-numeric: tabular-nums">{{stPlayed}}</strong><span style="font-size: 13px; color: var(--muted)">Played</span></div><div style="display: flex; flex-direction: column"><strong style="font-size: 26px; font-variant-numeric: tabular-nums">{{stWin}}</strong><span style="font-size: 13px; color: var(--muted)">Win rate</span></div><div style="display: flex; flex-direction: column"><strong style="font-size: 26px; font-variant-numeric: tabular-nums">{{streak}}</strong><span style="font-size: 13px; color: var(--muted)">Day streak</span></div><div style="display: flex; flex-direction: column"><strong style="font-size: 26px; font-variant-numeric: tabular-nums">{{stBest}}</strong><span style="font-size: 13px; color: var(--muted)">Best win streak</span></div></div>
+<button onClick="{{openStats}}" style="height: 44px; background: transparent; color: var(--text); border: solid 2px var(--text); border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer">See all stats</button>
+</section>
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 16px 20px; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<span style="font-weight: 500">Next puzzles in</span>
+<span style="font-weight: 700; font-size: 30px; font-variant-numeric: tabular-nums">{{countdown}}</span>
+</div>
+<div role="complementary" aria-label="Advertisement" style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted)">Advertisement</span>
+<div style="width: 300px; max-width: 100%; height: 250px; box-sizing: border-box; border: dashed 2px var(--muted); border-radius: 8px; color: var(--muted); font-size: 13px; display: flex; align-items: center; justify-content: center">Ad space · 300 × 250</div>
+</div>
+</aside>
+</div>
+</sc-if>
+
+<sc-if value="{{isGame}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-wrap: wrap; gap: 40px; max-width: 1120px; margin: 0 auto; padding: 16px 16px 40px; box-sizing: border-box">
+<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<nav aria-label="Game modes" style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{pills}}" as="p" hint-placeholder-count="3"><button onClick="{{p.go}}" aria-current="{{p.cur}}" style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 20px; background: {{p.bg}}; color: {{p.fg}}; border: 2px solid var(--line); border-radius: 999px; box-shadow: {{p.sh}}; font-weight: 700; font-size: 15px; cursor: pointer"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 50%; background: {{p.dot}}; border: solid 2px var(--line)"></span>{{p.label}}</button></sc-for>
+</nav>
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<h1 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 36px">{{modeName}} <span style="font-size: 20px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums">#128</span></h1>
+<span aria-live="polite" style="font-weight: 700; font-size: 16px; font-variant-numeric: tabular-nums">{{leftLabel}}</span>
+</div>
+
+<sc-if value="{{done}}" hint-placeholder-val="{{false}}">
+<section aria-label="Result" style="display: flex; flex-direction: column; gap: 20px">
+<div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 0; text-align: center; overflow: hidden">
+<div aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none">
+<sc-for list="{{confetti}}" as="c" hint-placeholder-count="0"><span style="position: absolute; top: {{c.top}}; left: {{c.left}}; width: 10px; height: 14px; background: {{c.bg}}; border-radius: 3px; opacity: {{c.op}}; animation: {{c.anim}}; animation-delay: {{c.delay}}"></span></sc-for>
+</div>
+<h2 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 48px; position: relative">{{heroTitle}}</h2>
+<p style="margin: 0; font-weight: 700; font-size: 18px; font-variant-numeric: tabular-nums">{{scoreLine}}</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px">
+<sc-if value="{{showLeader}}" hint-placeholder-val="{{false}}">
+<section aria-label="Today's leader" style="flex: 3 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 22px; box-sizing: border-box; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted)">Today's leader</span>
+<div style="display: flex; align-items: center; gap: 12px">
+<div role="img" aria-label="Flag of Germany" style="display: flex; flex-direction: column; flex: none; width: 48px; height: 32px; box-sizing: border-box; overflow: hidden; border: solid 2px var(--line); border-radius: 5px"><span style="flex: 1; background: #000000"></span><span style="flex: 1; background: #DD0000"></span><span style="flex: 1; background: #FFCE00"></span></div>
+<h3 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 30px">Angela Merkel</h3>
+</div>
+<dl style="display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 6px 10px; margin: 0">
+<dt style="color: var(--muted)">Country</dt><dd style="margin: 0; font-weight: 700">Germany</dd>
+<dt style="color: var(--muted)">Role</dt><dd style="margin: 0; font-weight: 700">Head of government</dd>
+<dt style="color: var(--muted)">In office</dt><dd style="margin: 0; font-weight: 700; font-variant-numeric: tabular-nums">2005 – 2021 · 16 years</dd>
+<dt style="color: var(--muted)">Age at start</dt><dd style="margin: 0; font-weight: 700; font-variant-numeric: tabular-nums">51</dd>
+</dl>
+<p style="margin: 0">Chancellor of Germany from 2005 to 2021.</p>
+<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px">
+<a href="https://en.wikipedia.org/wiki/Angela_Merkel" style="display: flex; align-items: center; height: 44px; font-weight: 700">Read more on Wikipedia</a>
+<button onClick="{{goReport}}" style="height: 44px; padding: 0; background: transparent; border: 0; color: var(--muted); font-size: 13px; text-decoration: underline; cursor: pointer">Report an error</button>
+</div>
+</section>
+</sc-if>
+<sc-if value="{{isTim}}" hint-placeholder-val="{{false}}">
+<section aria-label="The right order" style="flex: 3 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 14px; padding: 22px; box-sizing: border-box; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted)">The right order</span>
+<ol style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(96px, 100%), 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none">
+<sc-for list="{{frise}}" as="f" hint-placeholder-count="5"><li style="display: flex; flex-direction: column; gap: 4px; padding-top: 10px; border-top: solid 4px var(--m3)"><strong style="font-size: 24px; font-variant-numeric: tabular-nums">{{f.year}}</strong><span style="font-weight: 700">{{f.name}}</span><span style="font-size: 13px; color: var(--muted)">{{f.country}}</span></li></sc-for>
+</ol>
+<button onClick="{{goReport}}" style="align-self: flex-start; height: 44px; padding: 0; background: transparent; border: 0; color: var(--muted); font-size: 13px; text-decoration: underline; cursor: pointer">Report an error</button>
+</section>
+</sc-if>
+<section aria-label="Share" style="flex: 2 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px; border: dashed 2px var(--muted); border-radius: 20px; font-weight: 700; font-variant-numeric: tabular-nums">
+<span style="display: flex; align-items: center; gap: 6px">{{shareTitle}}<sc-if value="{{hintBulb}}" hint-placeholder-val="{{false}}"><svg role="img" aria-label="Initials hint used" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg></sc-if></span>
+<div role="img" aria-label="Result grid without spoilers" style="display: flex; flex-direction: column; gap: 4px">
+<sc-for list="{{grid}}" as="line" hint-placeholder-count="2">
+<div style="display: flex; gap: 4px; justify-content: center">
+<sc-for list="{{line.cells}}" as="cell" hint-placeholder-count="5"><span style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: {{cell.bg}}; color: var(--xt); border-radius: 5px; font-size: 15px; line-height: 1">{{cell.ch}}</span></sc-for>
+</div>
+</sc-for>
+</div>
+<span style="font-weight: 500; color: var(--muted)">leaderdle.com</span>
+</div>
+<button onClick="{{share}}" style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 56px; background: {{mc}}; color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer; font-size: 20px; border-radius: 14px; box-shadow: 4px 4px 0 var(--line)"><svg width="22" height="22" stroke-width="2.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5M5 13v6h14v-6"/></svg>Share result</button>
+<sc-if value="{{hasNext}}" hint-placeholder-val="{{false}}"><button onClick="{{goNext}}" style="height: 52px; background: {{nextBg}}; color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">{{nextLabel}}</button></sc-if>
+<sc-if value="{{allDone}}" hint-placeholder-val="{{false}}"><button onClick="{{goSummary}}" style="height: 52px; background: var(--g); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">See today's summary</button></sc-if>
+<p style="margin: 0; text-align: center">Next {{modeName}} in <strong style="font-variant-numeric: tabular-nums">{{countdown}}</strong></p>
+</section>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{hasBanner}}" hint-placeholder-val="{{false}}"><p role="status" style="margin: 0; padding: 12px 16px; background: var(--surf); border: solid 2px var(--text); border-radius: 12px; font-weight: 700">Welcome back! Your game is right where you left it.</p></sc-if>
+
+<sc-if value="{{isSuc}}" hint-placeholder-val="{{false}}">
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: stretch">
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 96px; padding: 10px 6px; box-sizing: border-box; text-align: center; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line); border-radius: 16px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted)">Before</span><strong style="font-size: 16px; line-height: 1.2">Gerhard Schröder</strong><span style="font-size: 13px; font-variant-numeric: tabular-nums">{{sucBefore}}</span></div>
+<div aria-live="polite" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 96px; padding: 10px 6px; box-sizing: border-box; text-align: center; background: {{sucMidBg}}; color: var(--ink); border: 2px solid var(--line); border-radius: 16px; box-shadow: 5px 5px 0 var(--line); animation: {{sucMidAnim}}"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase">In between</span><strong style="font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-size: {{sucMidSize}}; line-height: 1.1">{{sucMid}}</strong><span style="font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums">{{sucMidSub}}</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 96px; padding: 10px 6px; box-sizing: border-box; text-align: center; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line); border-radius: 16px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted)">After</span><strong style="font-size: 16px; line-height: 1.2">Olaf Scholz</strong><span style="font-size: 13px; font-variant-numeric: tabular-nums">{{sucAfter}}</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{showInput}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="guess" style="font-weight: 700; font-size: 14px">{{inputLabel}}</label>
+<div style="position: relative; display: flex; flex-wrap: wrap; gap: 10px; scroll-margin-top: 40px; animation: {{shakeAnim}}">
+<input id="guess" type="text" autocomplete="off" role="combobox" aria-expanded="{{open}}" aria-controls="guess-list" placeholder="Type a name" value="{{q}}" onChange="{{onQ}}" onFocus="{{onFocus}}" onBlur="{{onBlur}}" onKeyDown="{{onKey}}" style="flex: 1 1 0; min-width: 0; height: 52px; box-sizing: border-box; padding: 0 16px; background: var(--surf); color: var(--text); border: solid 2px var(--text); border-radius: 12px; font-size: 17px">
+<button onClick="{{guessBtn}}" style="height: 52px; padding: 0 28px; background: {{mc}}; color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">Guess</button>
+<sc-if value="{{open}}" hint-placeholder-val="{{false}}">
+<div id="guess-list" role="listbox" aria-label="Suggestions" style="position: {{listPos}}; flex: 1 0 100%; box-sizing: border-box; z-index: 5; top: 58px; left: 0; right: 0; max-height: 330px; overflow-y: auto; display: flex; flex-direction: column; padding: 6px; background: var(--surf); border: 2px solid var(--line); border-radius: 14px; box-shadow: 5px 5px 0 var(--line)">
+<sc-for list="{{suggestions}}" as="s" hint-placeholder-count="0">
+<button role="option" disabled="{{s.done}}" onMouseDown="{{s.pick}}" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 4px 12px; background: {{s.bg}}; color: {{s.fg}}; border: 0; border-radius: 9px; text-align: left; font-size: 16px; cursor: pointer"><span style="display: flex; flex-direction: column"><strong>{{s.name}}</strong><span style="font-size: 13px; font-variant-numeric: tabular-nums">{{s.sub}}</span></span><span style="font-size: 13px; font-weight: 700">{{s.note}}</span></button>
+</sc-for>
+<sc-if value="{{noMatch}}" hint-placeholder-val="{{false}}"><p style="margin: 0; padding: 12px">No leader found. Check the spelling?</p></sc-if>
+</div>
+</sc-if>
+</div>
+<p role="status" style="margin: 0; min-height: 20px; font-size: 13px; color: var(--muted)">{{inputMsg}}</p>
+</div>
+</sc-if>
+
+<sc-if value="{{showHintBtn}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; padding: 14px 18px; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line); border-radius: 16px">
+<span style="flex: 1 1 240px"><strong>Stuck?</strong> Reveal the leader's initials. It doesn't cost a guess, but it adds a light bulb to your shared result.</span>
+<button onClick="{{revealHint}}" style="display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 20px; background: var(--y); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer"><svg width="20" height="20" stroke-width="2.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>Reveal initials</button>
+</div>
+</sc-if>
+<sc-if value="{{hintShown}}" hint-placeholder-val="{{false}}">
+<p role="status" style="display: flex; align-items: center; gap: 10px; margin: 0; padding: 12px 16px; background: var(--y); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-size: 16px"><svg width="22" height="22" stroke-width="2.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span>Initials: <strong style="font-size: 20px; letter-spacing: 1px">A. M.</strong></span></p>
+</sc-if>
+<sc-if value="{{isClassic}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<sc-if value="{{hasGuesses}}" hint-placeholder-val="{{false}}">
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; align-items: end; text-align: center; font-size: 13px; font-weight: 700; line-height: 1.15; color: var(--muted)">
+<span>Country</span>
+<span>Role</span>
+<span>Took office</span>
+<span>Years in office</span>
+<span>Age at start</span>
+</div>
+</sc-if>
+<sc-if value="{{noGuesses}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 36px 20px; border: dashed 2px var(--muted); border-radius: 20px; text-align: center">
+<strong style="font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-size: 22px">Your guesses will show up here</strong>
+<span style="color: var(--muted)">Start with any leader you know. Every guess gives you five clues.</span>
+</div>
+</sc-if>
+<sc-for list="{{rows}}" as="row" hint-placeholder-count="0">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: baseline; gap: 8px"><strong style="font-size: 16px">{{row.name}}</strong><span style="font-size: 13px; color: var(--muted)">{{row.country}}</span></div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{row.tiles}}" as="t" hint-placeholder-count="5">
+<div role="img" aria-label="{{t.aria}}" style="position: relative; min-height: 68px; box-sizing: border-box; padding: 6px 4px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2px 6px; text-align: center; background: {{t.bg}}; color: {{t.fg}}; border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-weight: 700; font-size: {{t.size}}; line-height: 1.2; font-variant-numeric: tabular-nums; animation: {{t.anim}}; animation-delay: {{t.delay}}">
+<span>{{t.val}}</span>
+<sc-if value="{{t.up}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" stroke-width="3.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></sc-if>
+<sc-if value="{{t.down}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" stroke-width="3.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></sc-if>
+<sc-if value="{{t.ok}}" hint-placeholder-val="{{false}}"><span style="position: absolute; top: -8px; right: -7px; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; box-sizing: border-box; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 50%"><svg width="12" height="12" stroke-width="4.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></sc-if>
+<sc-if value="{{t.near}}" hint-placeholder-val="{{false}}"><span style="position: absolute; top: -8px; right: -7px; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; box-sizing: border-box; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 50%"><svg width="12" height="12" stroke-width="4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9c2.5-2.5 4.5-2.5 7 0s4.5 2.5 7 0M5 15c2.5-2.5 4.5-2.5 7 0s4.5 2.5 7 0"/></svg></span></sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isSuc}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<strong>Clues</strong>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 10px">
+<sc-for list="{{hints}}" as="h" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: 2px; min-height: 64px; box-sizing: border-box; padding: 10px 12px; background: {{h.bg}}; color: {{h.fg}}; border: {{h.border}}; border-radius: 12px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase">{{h.label}}</span><strong style="font-variant-numeric: tabular-nums">{{h.value}}</strong></div></sc-for>
+</div>
+</div>
+<sc-if value="{{hasMisses}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<strong>Not the one</strong>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{sucMisses}}" as="m" hint-placeholder-count="0"><span style="display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; background: var(--x); color: var(--xt); border: solid 2px var(--line); border-radius: 999px; font-weight: 700; font-size: 14px"><svg width="14" height="14" stroke-width="4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>{{m.name}}</span></sc-for>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{isTim}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<sc-if value="{{tPlaying}}" hint-placeholder-val="{{false}}"><p style="margin: 0">Put these five leaders in order, from the earliest to take office to the most recent. Drag the cards or use the arrows.</p></sc-if>
+<ol style="display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none">
+<sc-for list="{{tCards}}" as="c" hint-placeholder-count="5">
+<li draggable="{{c.free}}" onDragStart="{{c.dragStart}}" onDragOver="{{c.dragOver}}" onDrop="{{c.drop}}" style="display: flex; align-items: center; gap: 12px; min-height: 64px; box-sizing: border-box; padding: 8px 10px 8px 14px; background: {{c.bg}}; color: {{c.fg}}; border: 2px solid var(--line); border-radius: 14px; box-shadow: 3px 3px 0 var(--line); cursor: {{c.cursor}}">
+<span style="flex: none; width: 28px; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums">{{c.pos}}</span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column"><strong style="font-size: 16px">{{c.name}}</strong><span style="font-size: 13px">{{c.country}}</span></span>
+<sc-if value="{{c.locked}}" hint-placeholder-val="{{false}}"><span style="display: flex; align-items: center; gap: 6px; padding-right: 8px; font-weight: 700; font-size: 14px"><svg width="18" height="18" stroke-width="4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>{{c.lockLabel}}</span></sc-if>
+<sc-if value="{{c.free}}" hint-placeholder-val="{{true}}"><span style="display: flex; gap: 4px"><button onClick="{{c.up}}" disabled="{{c.upDis}}" aria-label="{{c.upAria}}" style="width: 44px; height: 44px; padding: 0; background: var(--ground); color: var(--text); border: solid 2px var(--line); border-radius: 10px; cursor: pointer"><svg width="20" height="20" stroke-width="3" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button><button onClick="{{c.down}}" disabled="{{c.downDis}}" aria-label="{{c.downAria}}" style="width: 44px; height: 44px; padding: 0; background: var(--ground); color: var(--text); border: solid 2px var(--line); border-radius: 10px; cursor: pointer"><svg width="20" height="20" stroke-width="3" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button></span></sc-if>
+</li>
+</sc-for>
+</ol>
+<sc-if value="{{tPlaying}}" hint-placeholder-val="{{false}}"><button onClick="{{tCheck}}" style="height: 56px; background: var(--m3); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer; font-size: 20px; border-radius: 14px; box-shadow: 4px 4px 0 var(--line)">Check my order</button></sc-if>
+</div>
+</sc-if>
+</main>
+<aside aria-label="Advertisement" style="flex: 1 1 300px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted)">Advertisement</span>
+<div style="width: {{adW}}; max-width: 100%; height: {{adH}}; box-sizing: border-box; border: dashed 2px var(--muted); border-radius: 8px; color: var(--muted); font-size: 13px; display: flex; align-items: center; justify-content: center">{{adText}}</div>
+</aside>
+</div>
+</sc-if>
+
+<sc-if value="{{isSummary}}" hint-placeholder-val="{{false}}">
+<main style="display: flex; flex-direction: column; gap: 20px; max-width: 720px; margin: 0 auto; padding: 16px 16px 40px; box-sizing: border-box">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
+<sc-if value="{{perfect}}" hint-placeholder-val="{{false}}"><span style="display: flex; align-items: center; gap: 8px; padding: 6px 16px; background: var(--y); color: var(--ink); border: 2px solid var(--line); border-radius: 999px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 18px; transform: rotate(-3deg)"><svg width="20" height="20" stroke-width="2.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 16.9 6.6 19.8l1.1-6.1L3.2 9.4l6.1-.8z"/></svg>Perfect day</span></sc-if>
+<h1 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 48px">Day complete!</h1>
+<p style="margin: 0; font-size: 17px; color: var(--muted)">{{summaryLine}}</p>
+</div>
+<section aria-label="Today's results" style="display: flex; flex-direction: column; gap: 4px; padding: 14px 22px; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<sc-for list="{{results}}" as="r" hint-placeholder-count="3"><div style="display: flex; align-items: center; gap: 12px; min-height: 52px"><span aria-hidden="true" style="flex: none; width: 16px; height: 16px; border-radius: 50%; background: {{r.dot}}; border: solid 2px var(--line)"></span><strong style="flex-grow: 1; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-size: 20px">{{r.name}}</strong><span style="font-weight: 700; font-size: 18px; white-space: nowrap; font-variant-numeric: tabular-nums">{{r.score}}</span><button onClick="{{r.go}}" style="height: 44px; padding: 0 14px; background: transparent; color: var(--text); border: solid 2px var(--text); border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer">View</button></div></sc-for>
+</section>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px; border: dashed 2px var(--muted); border-radius: 20px; font-weight: 700; font-variant-numeric: tabular-nums; text-align: center"><span>Leaderdle #128</span><span>{{dayLine}}</span><span style="font-weight: 500; color: var(--muted)">leaderdle.com</span></div>
+<button onClick="{{shareDay}}" style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 56px; background: var(--m1); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer; font-size: 20px; border-radius: 14px; box-shadow: 4px 4px 0 var(--line)"><svg width="22" height="22" stroke-width="2.5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5M5 13v6h14v-6"/></svg>Share my day</button>
+<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 16px 22px; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)"><span style="font-weight: 500; font-size: 16px">Next puzzles in</span><span style="font-weight: 700; font-size: 26px; font-variant-numeric: tabular-nums">{{countdown}}</span></div>
+<div role="complementary" aria-label="Advertisement" style="display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted)">Advertisement</span><div style="width: 300px; max-width: 100%; height: 250px; box-sizing: border-box; border: dashed 2px var(--muted); border-radius: 8px; color: var(--muted); font-size: 13px; display: flex; align-items: center; justify-content: center">Ad space · 300 × 250</div></div>
+</main>
+</sc-if>
+
+<sc-if value="{{isPage}}" hint-placeholder-val="{{false}}">
+<main style="display: flex; flex-direction: column; gap: 18px; max-width: 720px; margin: 0 auto; padding: 16px 16px 40px; box-sizing: border-box">
+<button onClick="{{goHome}}" style="align-self: flex-start; display: flex; align-items: center; gap: 6px; height: 44px; padding: 0 16px; background: transparent; color: var(--text); border: solid 2px var(--text); border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer"><svg width="18" height="18" stroke-width="3" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back to puzzles</button>
+<h1 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 40px">{{pageTitle}}</h1>
+<sc-for list="{{pageParas}}" as="para" hint-placeholder-count="3"><p style="margin: 0; font-size: 17px">{{para.text}}</p></sc-for>
+<sc-if value="{{isReport}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 22px; background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 5px 5px 0 var(--line)">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="rep-leader" style="font-weight: 700; font-size: 14px">Which leader?</label><input id="rep-leader" type="text" placeholder="Name" style="height: 48px; box-sizing: border-box; padding: 0 14px; background: var(--ground); color: var(--text); border: solid 2px var(--text); border-radius: 12px; font-size: 16px"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="rep-text" style="font-weight: 700; font-size: 14px">What should we fix?</label><textarea id="rep-text" rows="4" placeholder="The date, role or country that looks wrong, and where you checked" style="box-sizing: border-box; padding: 12px 14px; background: var(--ground); color: var(--text); border: solid 2px var(--text); border-radius: 12px; font-size: 16px; resize: vertical"></textarea></div>
+<button onClick="{{sendReport}}" style="align-self: flex-start; height: 52px; padding: 0 28px; background: var(--m1); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">Send report</button>
+</div>
+</sc-if>
+<footer style="display: flex; flex-wrap: wrap; gap: 0 8px; font-size: 14px">
+<sc-for list="{{footLinks}}" as="f" hint-placeholder-count="4"><button onClick="{{f.go}}" style="height: 44px; padding: 0 8px; background: transparent; border: 0; color: var(--text); font-size: 14px; text-decoration: underline; cursor: pointer">{{f.label}}</button></sc-for>
+</footer>
+</main>
+</sc-if>
+
+<sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+<main style="display: flex; flex-direction: column; align-items: center; gap: 16px; max-width: 520px; margin: 0 auto; padding: 64px 16px; box-sizing: border-box; text-align: center">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 96px; height: 96px; background: var(--x); color: var(--xt); border: 2px solid var(--line); border-radius: 22px; box-shadow: 5px 5px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 44px; transform: rotate(-4deg)">{{errGlyph}}</span>
+<h1 style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 36px">{{errTitle}}</h1>
+<p style="margin: 0; font-size: 17px; color: var(--muted)">{{errText}}</p>
+<button onClick="{{goHome}}" style="height: 52px; padding: 0 28px; background: var(--m1); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">{{errCta}}</button>
+</main>
+</sc-if>
+
+<sc-if value="{{showHelp}}" hint-placeholder-val="{{false}}">
+<div style="position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 16px; background: var(--veil)">
+<div role="dialog" aria-modal="true" aria-labelledby="help-title" style="width: 100%; max-width: 520px; max-height: 90vh; overflow: auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px; padding: 24px; color: var(--text); background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 6px 6px 0 var(--line)">
+<h2 id="help-title" style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 28px">{{helpTitle}}</h2>
+<sc-if value="{{helpClassic}}" hint-placeholder-val="{{false}}">
+<p style="margin: 0">Find today's leader in 8 tries. Type a name, and five tiles compare your guess with the answer.</p>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: none; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; box-sizing: border-box; background: var(--g); color: var(--ink); border: 2px solid var(--line); border-radius: 10px"><svg width="20" height="20" stroke-width="4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span><strong>Correct.</strong> An exact match.</span></div>
+<div style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: none; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; box-sizing: border-box; background: var(--y); color: var(--ink); border: 2px solid var(--line); border-radius: 10px"><svg width="20" height="20" stroke-width="4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9c2.5-2.5 4.5-2.5 7 0s4.5 2.5 7 0M5 15c2.5-2.5 4.5-2.5 7 0s4.5 2.5 7 0"/></svg></span><span><strong>Close.</strong> Same continent, a shared role, or a near miss: within 10 years for Took office, 2 for Years in office, 5 for Age at start.</span></div>
+<div style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: none; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; box-sizing: border-box; background: var(--x); color: var(--xt); border: 2px solid var(--line); border-radius: 10px"><svg width="20" height="20" stroke-width="4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span><span><strong>No match.</strong> An arrow points to the answer: up means later, more or older.</span></div>
+</div>
+<p style="margin: 0; color: var(--muted)">Role is Head of state, Head of government, or Both. A new puzzle arrives at midnight, your time.</p>
+</sc-if>
+<sc-if value="{{helpSuc}}" hint-placeholder-val="{{false}}">
+<p style="margin: 0">Two leaders are shown. Name the one who governed between them. You get 5 tries.</p>
+<div aria-hidden="true" style="display: flex; align-items: center; gap: 8px; color: var(--ink)"><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px"></span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--ink); color: var(--paper); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">?</span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px"></span></div>
+<p style="margin: 0">Every miss unlocks a clue, in this order: the years, the role, the continent, then the country.</p>
+<p style="margin: 0; color: var(--muted)">No guess is wasted: each one brings you closer.</p>
+</sc-if>
+<sc-if value="{{helpTim}}" hint-placeholder-val="{{false}}">
+<p style="margin: 0">Put five leaders in order, from the earliest to take office to the most recent.</p>
+<div aria-hidden="true" style="display: flex; align-items: center; gap: 8px; color: var(--ink)"><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">3</span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">1</span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">5</span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">2</span><span style="flex: 1; display: flex; align-items: center; justify-content: center; height: 40px; background: var(--paper); color: var(--ink); border: solid 2px var(--line); border-radius: 9px; font-weight: 700; font-size: 18px">4</span></div>
+<p style="margin: 0">Drag the cards, or use the arrows on each card. Then check your order: cards in the right place lock in.</p>
+<p style="margin: 0; color: var(--muted)">You get 3 checks. The years appear at the end.</p>
+</sc-if>
+<button onClick="{{closeModal}}" style="height: 52px; background: {{mc}}; color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">Got it</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showStats}}" hint-placeholder-val="{{false}}">
+<div style="position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 16px; background: var(--veil)">
+<div role="dialog" aria-modal="true" aria-labelledby="stats-title" style="width: 100%; max-width: 520px; max-height: 90vh; overflow: auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px; padding: 24px; color: var(--text); background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 6px 6px 0 var(--line); gap: 16px">
+<h2 id="stats-title" style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 28px">Your stats</h2>
+<div role="tablist" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{statTabs}}" as="tb" hint-placeholder-count="3"><button role="tab" aria-selected="{{tb.on}}" onClick="{{tb.go}}" style="height: 44px; padding: 0 16px; background: {{tb.bg}}; color: {{tb.fg}}; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: 15px; cursor: pointer">{{tb.label}}</button></sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; text-align: center">
+<div style="display: flex; flex-direction: column"><strong style="font-size: 28px; font-variant-numeric: tabular-nums">{{tabPlayed}}</strong><span style="font-size: 13px; color: var(--muted)">Played</span></div>
+<div style="display: flex; flex-direction: column"><strong style="font-size: 28px; font-variant-numeric: tabular-nums">{{tabWin}}</strong><span style="font-size: 13px; color: var(--muted)">Win rate</span></div>
+<div style="display: flex; flex-direction: column"><strong style="font-size: 28px; font-variant-numeric: tabular-nums">{{tabStreak}}</strong><span style="font-size: 13px; color: var(--muted)">Win streak</span></div>
+<div style="display: flex; flex-direction: column"><strong style="font-size: 28px; font-variant-numeric: tabular-nums">{{tabBest}}</strong><span style="font-size: 13px; color: var(--muted)">Best streak</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<strong>{{distTitle}}</strong>
+<sc-for list="{{dist}}" as="d" hint-placeholder-count="8">
+<div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-variant-numeric: tabular-nums"><span style="width: 12px">{{d.n}}</span><span style="display: flex; align-items: center; justify-content: flex-end; width: {{d.width}}; min-width: 28px; height: 24px; box-sizing: border-box; padding: 0 8px; background: {{d.bg}}; color: {{d.fg}}; border-radius: 6px; font-size: 13px">{{d.count}}</span></div>
+</sc-for>
+</div>
+<p style="margin: 0; font-size: 13px; color: var(--muted)">Your stats are saved on this device only.</p>
+<button onClick="{{closeModal}}" style="height: 52px; background: var(--m1); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">Close</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showSettings}}" hint-placeholder-val="{{false}}">
+<div style="position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 16px; background: var(--veil)">
+<div role="dialog" aria-modal="true" aria-labelledby="set-title" style="width: 100%; max-width: 520px; max-height: 90vh; overflow: auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px; padding: 24px; color: var(--text); background: var(--surf); border: 2px solid var(--line); border-radius: 20px; box-shadow: 6px 6px 0 var(--line); gap: 12px">
+<h2 id="set-title" style="margin: 0; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; line-height: 1.1; font-size: 28px">Settings</h2>
+<sc-for list="{{switches}}" as="w" hint-placeholder-count="3"><div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px"><span><strong>{{w.title}}</strong><br><span style="font-size: 13px; color: var(--muted)">{{w.text}}</span></span><button role="switch" aria-checked="{{w.on}}" aria-label="{{w.title}}" onClick="{{w.toggle}}" style="flex: none; width: 84px; height: 44px; background: {{w.bg}}; color: {{w.fg}}; border: 2px solid var(--line); border-radius: 999px; font-weight: 700; font-size: 15px; cursor: pointer">{{w.label}}</button></div></sc-for>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px"><span><strong>Clear my data</strong><br><span style="font-size: 13px; color: var(--muted)">Erase today's games, streak and stats on this device.</span></span><button onClick="{{clearData}}" style="flex: none; height: 44px; padding: 0 16px; background: var(--paper); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-weight: 700; font-size: 15px; cursor: pointer">Clear</button></div>
+<button onClick="{{closeModal}}" style="height: 52px; background: var(--m1); color: var(--ink); border: 2px solid var(--line); border-radius: 12px; box-shadow: 3px 3px 0 var(--line); font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer">Done</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{showConsent}}" hint-placeholder-val="{{false}}">
+<div role="region" aria-label="Cookie consent" style="position: fixed; z-index: 15; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 20px; max-width: 760px; margin: 0 auto; padding: 14px 18px; box-sizing: border-box; color: var(--text); background: var(--surf); border: 2px solid var(--line); border-radius: 16px; box-shadow: 5px 5px 0 var(--line)">
+<p style="flex: 1 1 280px; margin: 0; font-size: 14px">Cookies help us show ads and count visits. The game works the same either way.</p>
+<div style="display: flex; gap: 10px"><button onClick="{{consentNo}}" style="width: 110px; height: 44px; background: transparent; color: var(--text); border: solid 2px var(--text); border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer">Decline</button><button onClick="{{consentYes}}" style="width: 110px; height: 44px; background: transparent; color: var(--text); border: solid 2px var(--text); border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer">Accept</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{showKb}}" hint-placeholder-val="{{false}}">
+<div aria-hidden="true" style="position: fixed; z-index: 12; left: 0; right: 0; bottom: 0; height: 290px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; background: var(--ground); border-top: dashed 2px var(--muted); color: var(--muted); font-size: 13px">On-screen keyboard · placeholder</div>
+</sc-if>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}">
+<div role="status" style="position: fixed; z-index: 30; left: 50%; bottom: 28px; transform: translateX(-50%); padding: 12px 20px; background: var(--paper); color: var(--ink); border: 2px solid var(--line); border-radius: 999px; box-shadow: 4px 4px 0 var(--line); font-weight: 700">{{toast}}</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"scene":{"editor":"enum","options":["live","home-first","home-progress","home-done","home-complete","empty","progress","resumed","suggest","nomatch","won","lost","help","stats","settings","s-empty","s-progress","s-won","s-lost","t-start","t-progress","t-won","t-lost","hint","hint-used","won-hint","typing","summary","about","how","privacy","report","consent","err-offline","err-data","err-404"],"default":"live"},"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"colorblind":{"editor":"boolean","default":false},"compact":{"editor":"boolean","default":false},"tablet":{"editor":"boolean","default":false},"$preview":{"width":1280,"height":1100}}'>
+const LEADERS = [
+{ id: 'lky', name: 'Lee Kuan Yew', country: 'Singapore', code: 'SGP', cont: 'Asia', role: 'gov', took: 1959, years: 31, age: 35 },
+{ id: 'tha', name: 'Margaret Thatcher', country: 'United Kingdom', code: 'GBR', cont: 'Europe', role: 'gov', took: 1979, years: 11, age: 53 },
+{ id: 'man', name: 'Nelson Mandela', country: 'South Africa', code: 'ZAF', cont: 'Africa', role: 'both', took: 1994, years: 5, age: 75 },
+{ id: 'mer', name: 'Angela Merkel', country: 'Germany', code: 'DEU', cont: 'Europe', role: 'gov', took: 2005, years: 16, age: 51 },
+{ id: 'ard', name: 'Jacinda Ardern', country: 'New Zealand', code: 'NZL', cont: 'Oceania', role: 'gov', took: 2017, years: 5, age: 37 },
+{ id: 'chu', name: 'Winston Churchill', country: 'United Kingdom', code: 'GBR', cont: 'Europe', role: 'gov', took: 1940, years: 8, age: 65 },
+{ id: 'fdr', name: 'Franklin D. Roosevelt', alias: 'fdr franklin delano roosevelt', country: 'United States', code: 'USA', cont: 'North America', role: 'both', took: 1933, years: 12, age: 51 },
+{ id: 'jfk', name: 'John F. Kennedy', alias: 'jfk john fitzgerald kennedy', country: 'United States', code: 'USA', cont: 'North America', role: 'both', took: 1961, years: 2, age: 43 },
+{ id: 'rea', name: 'Ronald Reagan', country: 'United States', code: 'USA', cont: 'North America', role: 'both', took: 1981, years: 8, age: 69 },
+{ id: 'oba', name: 'Barack Obama', country: 'United States', code: 'USA', cont: 'North America', role: 'both', took: 2009, years: 8, age: 47 },
+{ id: 'neh', name: 'Jawaharlal Nehru', country: 'India', code: 'IND', cont: 'Asia', role: 'gov', took: 1947, years: 16, age: 57 },
+{ id: 'gan', name: 'Indira Gandhi', country: 'India', code: 'IND', cont: 'Asia', role: 'gov', took: 1966, years: 15, age: 48 },
+{ id: 'mei', name: 'Golda Meir', country: 'Israel', code: 'ISR', cont: 'Asia', role: 'gov', took: 1969, years: 5, age: 70 },
+{ id: 'koh', name: 'Helmut Kohl', country: 'Germany', code: 'DEU', cont: 'Europe', role: 'gov', took: 1982, years: 16, age: 52 },
+{ id: 'bla', name: 'Tony Blair', country: 'United Kingdom', code: 'GBR', cont: 'Europe', role: 'gov', took: 1997, years: 10, age: 43 },
+{ id: 'eli', name: 'Elizabeth II', alias: 'queen elizabeth 2 elizabeth the second', country: 'United Kingdom', code: 'GBR', cont: 'Europe', role: 'state', took: 1952, years: 70, age: 25 },
+{ id: 'cla', name: 'Helen Clark', country: 'New Zealand', code: 'NZL', cont: 'Oceania', role: 'gov', took: 1999, years: 8, age: 49 }
+];
+const ANSWER = 'mer';
+const MAX = { classic: 8, succession: 5, timeline: 3 };
+const SORTED = ['lky', 'tha', 'man', 'mer', 'ard'];
+const SHUFFLED = ['man', 'ard', 'lky', 'mer', 'tha'];
+const NAMES = { classic: 'Classic', succession: 'Succession', timeline: 'Timeline' };
+const MC = { classic: 'var(--m1)', succession: 'var(--m2)', timeline: 'var(--m3)' };
+const ROLE = { gov: ['Head of government', 'Gov'], state: ['Head of state', 'State'], both: ['Both', 'Both'] };
+const HINTS = [['Years', '2005 – 2021'], ['Role', 'Head of government'], ['Continent', 'Europe'], ['Country', 'Germany']];
+const PAGES = {
+about: ['About Leaderdle', [
+'Leaderdle is a daily guessing game about the people who have led countries: heads of state and heads of government, from 1900 to today.',
+'There is one Classic puzzle a day, plus two short bonus rounds. Everyone gets the same puzzles, and new ones arrive at midnight, your time.',
+'No account needed. Your streak and stats stay in your browser.']],
+how: ['How we pick and describe leaders', [
+'Every leader in the game was a head of state or a head of government at some point since 1900.',
+'The daily answer is always someone widely known. Lesser-known leaders can be guessed, but they are never the answer.',
+'We describe leaders with checkable facts only: country, role and dates. No quotes, no ratings, no opinions.',
+'Every leader gets the same visual treatment, whoever they are. We never show photos, portraits or caricatures. Appearing in the game is not an endorsement.',
+'For leaders with several separate terms, Took office is the first start date and Years in office is the total. For leaders still in office, the count runs to today.',
+'Spotted a mistake? Tell us through Report an error.']],
+privacy: ['Privacy', [
+'Leaderdle has no accounts. Your progress, streak and stats are saved in this browser only, and you can erase them any time in Settings.',
+'The game shows ads. Cookies for ads and visit counts are used only if you accept them. If you decline, the game works exactly the same.',
+'Political ads are excluded.',
+'Ads are served by [AD PARTNER]. The cookies they set are listed here: [COOKIE LIST].',
+'Questions about your data? Write to [CONTACT EMAIL].']],
+report: ['Report an error', [
+'Found a wrong date, role or country? Tell us what to fix and, if you can, where you checked.',
+'You can also write to [CONTACT EMAIL].']]
+};
+const ERRORS = {
+'err-offline': ['!', 'You’re offline', 'Reconnect to load today’s puzzles. Games you already started are safe on this device.', 'Try again'],
+'err-data': ['!', 'Today’s puzzles aren’t ready', 'Something went wrong on our side. Please try again in a moment.', 'Try again'],
+'err-404': ['?', 'Page not found', 'That page doesn’t exist. Today’s puzzles are waiting, though.', 'Back to puzzles']
+};
+const norm = (v) => v.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+const find = (id) => LEADERS.filter((l) => l.id === id)[0];
+const allTrue = (row) => row.every((v) => !!v);
+
+class Component extends DCLogic {
+constructor(...args) {
+super(...args);
+this.state = this.fresh(this.props || {});
+if (!this.state.frozen) Object.assign(this.state, this.load());
+}
+dayKey(offset) {
+const d = new Date(); d.setDate(d.getDate() + (offset || 0));
+return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+}
+load() {
+try {
+const raw = window.localStorage.getItem('leaderdle-v1');
+if (!raw) return {};
+const d = JSON.parse(raw);
+const out = { cb: !!d.cb, light: !!d.light, reduce: !!d.reduce, consent: d.consent || null, helpSeen: d.helpSeen || {}, hist: d.hist || {}, streak: d.streak || { n: 0, last: '' } };
+if (d.day === this.dayKey(0)) {
+Object.assign(out, { guesses: d.guesses || [], sG: d.sG || [], tOrder: d.tOrder || SHUFFLED.slice(), tChecks: d.tChecks || [], hint: !!d.hint, rec: d.rec || {} });
+out.banner = out.guesses.length + out.sG.length + out.tChecks.length > 0;
+}
+return out;
+} catch (err) { return {}; }
+}
+save() {
+const s = this.state;
+if (s.frozen) return;
+try {
+const raw = JSON.stringify({ day: this.dayKey(0), guesses: s.guesses, sG: s.sG, tOrder: s.tOrder, tChecks: s.tChecks, hint: s.hint, rec: s.rec, cb: s.cb, light: s.light, reduce: s.reduce, consent: s.consent, helpSeen: s.helpSeen, hist: s.hist, streak: s.streak });
+if (raw === this.lastSaved) return;
+this.lastSaved = raw;
+window.localStorage.setItem('leaderdle-v1', raw);
+} catch (err) {}
+}
+componentDidUpdate() {
+const s = this.state;
+if (s.frozen) return;
+const st = this.status();
+const rec = Object.assign({}, s.rec);
+const hist = JSON.parse(JSON.stringify(s.hist));
+let streak = s.streak;
+let changed = false;
+['classic', 'succession', 'timeline'].forEach((m) => {
+if (!st[m].done || rec[m]) return;
+rec[m] = 1; changed = true;
+const h = hist[m] || { played: 0, wins: 0, cur: 0, best: 0, dist: {} };
+h.played += 1;
+if (st[m].won) { h.wins += 1; h.cur += 1; h.best = Math.max(h.best, h.cur); h.dist[st[m].used] = (h.dist[st[m].used] || 0) + 1; } else { h.cur = 0; }
+hist[m] = h;
+if (m === 'classic') streak = { n: (streak.last === this.dayKey(-1) ? streak.n : 0) + 1, last: this.dayKey(0) };
+});
+if (changed) this.setState({ rec: rec, hist: hist, streak: streak }); else this.save();
+}
+base() {
+return { screen: 'home', guesses: [], sG: [], tOrder: SHUFFLED.slice(), tChecks: [], q: '', open: false, ai: 0, modal: null, statTab: 'classic', helpSeen: {}, cb: false, light: false, reduce: false, consent: null, toast: '', freshId: null, freshAt: 0, shake: false, msg: '', banner: false, forceLost: null, hint: false, forceHint: false, kb: false, hist: {}, streak: { n: 0, last: '' }, rec: {}, frozen: false, now: Date.now() };
+}
+fresh(p) {
+const sc = (p && p.scene) || 'live';
+const three = ['lky', 'tha', 'man'];
+const four = three.concat(['mer']);
+const mixed = ['lky', 'mer', 'man', 'tha', 'ard'];
+const r1 = [1, 0, 1, 0, 1];
+const r5 = [1, 1, 1, 1, 1];
+const full = { guesses: four, sG: ['lky', 'mer'], tOrder: SORTED.slice(), tChecks: [r1, r5] };
+const P = {
+'home-progress': { guesses: three }, 'home-done': { guesses: four }, 'home-complete': full,
+'empty': { screen: 'classic' }, 'progress': { screen: 'classic', guesses: three },
+'resumed': { screen: 'classic', guesses: three, banner: true },
+'suggest': { screen: 'classic', guesses: ['lky', 'tha'], q: 'ma', open: true },
+'nomatch': { screen: 'classic', guesses: ['lky', 'tha'], q: 'zz', open: true },
+'won': { screen: 'classic', guesses: four },
+'lost': { screen: 'classic', guesses: ['lky', 'tha', 'man', 'ard', 'chu', 'oba', 'bla', 'koh'] },
+'hint': { screen: 'classic', guesses: ['lky', 'tha', 'man', 'ard', 'chu'] },
+'hint-used': { screen: 'classic', guesses: ['lky', 'tha', 'man', 'ard', 'chu'], hint: true },
+'won-hint': { screen: 'classic', guesses: four, hint: true },
+'typing': { screen: 'classic', guesses: three, q: 'ang', open: true, kb: true },
+'help': { screen: 'classic', guesses: three, modal: 'help' },
+'stats': { screen: 'classic', guesses: four, modal: 'stats' },
+'settings': { screen: 'classic', guesses: three, modal: 'settings' },
+'s-empty': { screen: 'succession' }, 's-progress': { screen: 'succession', sG: ['lky', 'tha'] },
+'s-won': { screen: 'succession', sG: ['lky', 'mer'] },
+'s-lost': { screen: 'succession', sG: ['lky', 'tha', 'man', 'ard', 'koh'] },
+'t-start': { screen: 'timeline' }, 't-progress': { screen: 'timeline', tOrder: mixed, tChecks: [r1] },
+'t-won': { screen: 'timeline', tOrder: SORTED.slice(), tChecks: [r1, r5] },
+'t-lost': { screen: 'timeline', tOrder: mixed, tChecks: [r1, r1, r1] },
+'summary': Object.assign({ screen: 'summary' }, full),
+'about': { screen: 'page-about' }, 'how': { screen: 'page-how' }, 'privacy': { screen: 'page-privacy' }, 'report': { screen: 'page-report' },
+'consent': { consent: null },
+'err-offline': { screen: 'err-offline' }, 'err-data': { screen: 'err-data' }, 'err-404': { screen: 'err-404' }
+};
+const frozen = sc !== 'live';
+const on = (v) => v === true || v === 'true';
+return Object.assign(this.base(), { frozen: frozen, consent: frozen ? 'no' : null, helpSeen: frozen ? { classic: 1, succession: 1, timeline: 1 } : {}, light: !!p && p.theme === 'light', cb: !!p && on(p.colorblind) }, P[sc] || {});
+}
+componentDidMount() {
+this.onResize = () => this.forceUpdate();
+window.addEventListener('resize', this.onResize);
+if (this.state.frozen) return;
+this.timer = setInterval(() => {
+if (Date.now() - this.state.freshAt < 2600) return;
+this.setState({ now: Date.now() });
+}, 1000);
+}
+componentWillUnmount() {
+clearInterval(this.timer);
+clearTimeout(this.toastTimer);
+window.removeEventListener('resize', this.onResize);
+}
+flash(text) {
+clearTimeout(this.toastTimer);
+this.setState({ toast: text });
+this.toastTimer = setTimeout(() => this.setState({ toast: '' }), 2400);
+}
+shareOut(text, compact) {
+if (compact && navigator.share) {
+try { navigator.share({ text: text }).catch(() => this.copy(text)); return; } catch (err) {}
+}
+this.copy(text);
+}
+copy(text) {
+const ok = () => this.flash('Copied to clipboard');
+const no = () => this.flash('Copy is not available here');
+try { navigator.clipboard.writeText(text).then(ok, no); } catch (err) { no(); }
+}
+compare(g, a) {
+const num = (label, gv, av, th, more, less) => {
+const d = av - gv;
+return { label: label, val: String(gv), short: String(gv), s: d === 0 ? 'g' : Math.abs(d) <= th ? 'y' : 'x', dir: d > 0 ? 'u' : d < 0 ? 'd' : null, hint: d > 0 ? more : d < 0 ? less : null, num: true };
+};
+return [
+{ label: 'Country', val: g.country, short: g.code, s: g.country === a.country ? 'g' : g.cont === a.cont ? 'y' : 'x' },
+{ label: 'Role', val: ROLE[g.role][0], short: ROLE[g.role][1], s: g.role === a.role ? 'g' : (g.role === 'both' || a.role === 'both') ? 'y' : 'x' },
+num('Took office', g.took, a.took, 10, 'later', 'earlier'),
+num('Years in office', g.years, a.years, 2, 'more', 'fewer'),
+num('Age at start', g.age, a.age, 5, 'older', 'younger')
+];
+}
+status() {
+const s = this.state;
+const cWon = s.guesses.indexOf(ANSWER) !== -1;
+const cLost = !cWon && (s.guesses.length >= MAX.classic || s.forceLost === 'classic');
+const sWon = s.sG.indexOf(ANSWER) !== -1;
+const sLost = !sWon && (s.sG.length >= MAX.succession || s.forceLost === 'succession');
+const last = s.tChecks[s.tChecks.length - 1];
+const tWon = !!last && allTrue(last);
+const tLost = !tWon && s.tChecks.length >= MAX.timeline;
+return {
+classic: { won: cWon, lost: cLost, done: cWon || cLost, used: s.guesses.length },
+succession: { won: sWon, lost: sLost, done: sWon || sLost, used: s.sG.length },
+timeline: { won: tWon, lost: tLost, done: tWon || tLost, used: s.tChecks.length, locked: last || [0, 0, 0, 0, 0] }
+};
+}
+tried() {
+return this.state.screen === 'succession' ? this.state.sG : this.state.guesses;
+}
+matches() {
+const q = norm(this.state.q);
+return LEADERS.filter((l) => !q || norm(l.name + ' ' + (l.alias || '')).indexOf(q) !== -1);
+}
+submit(id) {
+const s = this.state;
+const mode = s.screen;
+const st = this.status()[mode];
+if (!st || st.done || this.tried().indexOf(id) !== -1) return;
+const next = { q: '', open: false, ai: 0, msg: '', freshId: id, freshAt: Date.now() };
+if (mode === 'succession') next.sG = s.sG.concat([id]); else next.guesses = s.guesses.concat([id]);
+this.setState(next);
+}
+invalid(text) {
+this.setState({ shake: !this.state.reduce, msg: text });
+setTimeout(() => this.setState({ shake: false }), 420);
+}
+tryGuess() {
+const s = this.state;
+const list = this.matches();
+if (!norm(s.q)) { this.setState({ open: true }); return this.invalid('Type a name, or pick one from the list.'); }
+if (!list.length) return this.invalid('No leader found. Check the spelling?');
+const pick = list[Math.min(s.ai, list.length - 1)];
+if (this.tried().indexOf(pick.id) !== -1) return this.invalid('You already tried ' + pick.name + '.');
+this.submit(pick.id);
+}
+swap(i, j) {
+const locked = this.status().timeline.locked;
+if (i === j || i < 0 || j < 0 || i > 4 || j > 4 || locked[i] || locked[j]) return;
+const o = this.state.tOrder.slice();
+const tmp = o[i]; o[i] = o[j]; o[j] = tmp;
+this.setState({ tOrder: o });
+}
+target(i, dir) {
+const locked = this.status().timeline.locked;
+let j = i + dir;
+while (j >= 0 && j <= 4 && locked[j]) j += dir;
+return (j < 0 || j > 4) ? -1 : j;
+}
+renderVals() {
+const s = this.state;
+const st = this.status();
+const isGame = !!NAMES[s.screen];
+const mode = isGame ? s.screen : 'classic';
+const cur = st[mode];
+const compact = this.props.compact === true || this.props.compact === 'true' || window.innerWidth < 620;
+const smallAd = compact || this.props.tablet === true || this.props.tablet === 'true' || window.innerWidth < 1000;
+const derived = (m) => ({ played: st[m].done ? 1 : 0, wins: st[m].won ? 1 : 0, cur: st[m].won ? 1 : 0, best: st[m].won ? 1 : 0, dist: st[m].won ? { [st[m].used]: 1 } : {} });
+const H = (m) => s.frozen ? derived(m) : (s.hist[m] || { played: 0, wins: 0, cur: 0, best: 0, dist: {} });
+const pct = (h) => h.played ? Math.round(100 * h.wins / h.played) + '%' : '0%';
+const streakN = s.frozen ? (st.classic.done ? 1 : 0) : ((s.streak.last === this.dayKey(0) || s.streak.last === this.dayKey(-1)) ? s.streak.n : 0);
+const misses = s.guesses.filter((id) => id !== ANSWER).length;
+const hintOn = mode === 'classic' && s.hint;
+const BG = { g: 'var(--g)', y: 'var(--y)', x: 'var(--x)' };
+const FG = { g: 'var(--ink)', y: 'var(--ink)', x: 'var(--xt)' };
+const WORD = { g: 'correct', y: 'close', x: 'no match' };
+const ans = find(ANSWER);
+const chrono = s.guesses.map((id) => {
+const g = find(id);
+const animate = id === s.freshId && !s.reduce && Date.now() - s.freshAt < 2600;
+return { name: g.name, country: g.country, tiles: this.compare(g, ans).map((t, i) => ({
+val: compact ? t.short : t.val, bg: BG[t.s], fg: FG[t.s], ok: t.s === 'g', near: t.s === 'y', up: t.dir === 'u', down: t.dir === 'd',
+size: t.num ? (compact ? '17px' : '20px') : '14px', s: t.s, dir: t.dir,
+anim: animate ? 'lflip 380ms ease both' : 'none', delay: animate ? (i * 130) + 'ms' : '0ms',
+aria: t.label + ': ' + t.val + ', ' + (t.hint ? (t.s === 'y' ? 'close, ' : '') + 'target is ' + t.hint : WORD[t.s])
+})) };
+});
+const tried = this.tried();
+const list = this.matches();
+const ai = Math.min(s.ai, Math.max(list.length - 1, 0));
+const suggestions = list.map((l, i) => {
+const was = tried.indexOf(l.id) !== -1;
+return { name: l.name, sub: l.country + ' \u00B7 from ' + l.took + ', ' + l.years + ' years in office', done: was, note: was ? 'Already guessed' : '',
+bg: i === ai && !was ? 'var(--x)' : 'transparent', fg: was ? 'var(--muted)' : (i === ai ? 'var(--xt)' : 'var(--text)'),
+pick: (e) => { if (e && e.preventDefault) e.preventDefault(); this.submit(l.id); } };
+});
+const n = new Date(s.now);
+const mid = new Date(s.now); mid.setHours(24, 0, 0, 0);
+const sec = Math.max(0, Math.floor((mid - n) / 1000));
+const two = (v) => (v < 10 ? '0' : '') + v;
+const countdown = s.frozen ? '07:42:16' : two(Math.floor(sec / 3600)) + ':' + two(Math.floor(sec / 60) % 60) + ':' + two(sec % 60);
+const E = { g: '🟩', y: '🟨', w: '⬜', u: '⬆️', d: '⬇️' };
+const score = (m) => (st[m].won ? st[m].used : 'X') + '/' + MAX[m];
+let grid = [];
+let emoji = [];
+if (mode === 'classic') {
+grid = chrono.map((r) => ({ cells: r.tiles.map((t) => ({ bg: BG[t.s], ch: t.s === 'x' ? (t.dir === 'u' ? '↑' : t.dir === 'd' ? '↓' : '') : '' })) }));
+emoji = chrono.map((r) => r.tiles.map((t) => t.s === 'g' ? E.g : t.s === 'y' ? E.y : t.dir === 'u' ? E.u : t.dir === 'd' ? E.d : E.w).join(''));
+} else if (mode === 'succession') {
+grid = [{ cells: s.sG.map((id) => ({ bg: id === ANSWER ? BG.g : BG.x, ch: '' })) }];
+emoji = [s.sG.map((id) => id === ANSWER ? E.g : E.w).join('')];
+} else {
+grid = s.tChecks.map((row) => ({ cells: row.map((v) => ({ bg: v ? BG.g : BG.x, ch: '' })) }));
+emoji = s.tChecks.map((row) => row.map((v) => v ? E.g : E.w).join(''));
+}
+const shareTitle = 'Leaderdle #128 · ' + NAMES[mode] + ' ' + score(mode);
+const shareText = shareTitle + (hintOn ? ' \uD83D\uDCA1' : '') + '\n' + emoji.join('\n') + '\nleaderdle.com';
+const dayLine = 'Classic ' + score('classic') + ' · Succession ' + score('succession') + ' · Timeline ' + score('timeline');
+const allDone = st.classic.done && st.succession.done && st.timeline.done;
+const perfect = st.classic.won && st.succession.won && st.timeline.won;
+const confColors = ['var(--m1)', 'var(--m2)', 'var(--m3)', 'var(--g)', 'var(--y)', 'var(--text)'];
+const confetti = (s.reduce || !cur.won || !isGame) ? [] : (s.frozen ? [2, 6, 10, 14, 18, 22, 78, 82, 86, 90, 94, 97] : [4, 12, 21, 30, 38, 47, 55, 64, 72, 81, 89, 96]).map((left, i) => ({ left: left + '%', top: s.frozen ? ((i * 37) % 90) + 'px' : '0', op: s.frozen ? 1 : 0, bg: confColors[i % 6], anim: s.frozen ? 'none' : 'lfall 1600ms ease-in both', delay: (700 + (i * 97) % 500) + 'ms' }));
+const label = (m, unit) => {
+const x = st[m];
+if (x.won) return 'Solved ' + x.used + '/' + MAX[m];
+if (x.lost) return 'Missed X/' + MAX[m];
+return x.used ? 'In progress · ' + x.used + '/' + MAX[m] : 'Not played yet';
+};
+const cta = (m) => st[m].done ? 'See result' : st[m].used ? 'Keep going' : 'Play';
+const goMode = (m) => () => {
+const seen = Object.assign({}, s.helpSeen); const first = !seen[m]; seen[m] = 1;
+this.setState({ screen: m, modal: first ? 'help' : null, helpSeen: seen, q: '', open: false, msg: '' });
+};
+const left = MAX[mode] - cur.used;
+const unit = mode === 'timeline' ? 'check' : 'guess';
+const plural = mode === 'timeline' ? 'checks' : 'guesses';
+const nextMode = ['classic', 'succession', 'timeline'].filter((m) => !st[m].done)[0];
+const sucDone = st.succession.done;
+const missCount = s.sG.filter((id) => id !== ANSWER).length;
+const hints = HINTS.map((h, i) => {
+const shown = sucDone || i < missCount;
+return { label: h[0], value: shown ? h[1] : 'Unlocks after miss ' + (i + 1), bg: shown ? 'var(--surf)' : 'transparent', fg: shown ? 'var(--text)' : 'var(--muted)', border: shown ? 'solid 2px var(--m2)' : 'dashed 2px var(--muted)' };
+});
+const tl = st.timeline;
+const tCards = s.tOrder.map((id, i) => {
+const l = find(id);
+const locked = !!tl.locked[i] || tl.done;
+const good = !!tl.locked[i];
+const up = this.target(i, -1); const down = this.target(i, 1);
+return { pos: i + 1, name: l.name, country: l.country, locked: locked, free: !locked,
+lockLabel: good ? 'Right spot' : 'Wrong spot',
+bg: good ? 'var(--g)' : tl.done ? 'var(--x)' : 'var(--surf)', fg: good ? 'var(--ink)' : tl.done ? 'var(--xt)' : 'var(--text)', cursor: locked ? 'default' : 'grab',
+upDis: up === -1, downDis: down === -1, upAria: 'Move ' + l.name + ' up', downAria: 'Move ' + l.name + ' down',
+up: () => this.swap(i, up), down: () => this.swap(i, down),
+dragStart: (e) => { this.dragFrom = i; try { e.dataTransfer.setData('text/plain', String(i)); } catch (err) {} },
+dragOver: (e) => { e.preventDefault(); },
+drop: (e) => { e.preventDefault(); if (typeof this.dragFrom === 'number') this.swap(this.dragFrom, i); this.dragFrom = null; } };
+});
+const tabM = s.statTab;
+const tab = st[tabM];
+const sw = (title, text, on, toggle) => ({ title: title, text: text, on: on, toggle: toggle, label: on ? 'On' : 'Off', bg: on ? 'var(--g)' : 'var(--ground)', fg: on ? 'var(--ink)' : 'var(--text)' });
+const page = s.screen.indexOf('page-') === 0 ? s.screen.slice(5) : null;
+const err = ERRORS[s.screen];
+const heroWin = { classic: 'You got it!', succession: 'You got it!', timeline: 'All in order!' };
+const scoreLine = cur.won ? 'Solved in ' + cur.used + ' of ' + MAX[mode] + ' ' + (cur.used === 1 ? unit : plural)
+: mode === 'timeline' ? 'Out of checks. Here is the right order.' : 'Out of guesses. The answer was Angela Merkel.';
+return {
+rootCls: (s.light ? 'th-light' : 'th-dark') + (s.cb ? ' cb' : ''),
+isHome: s.screen === 'home', isGame: isGame, isClassic: s.screen === 'classic', isSuc: s.screen === 'succession', isTim: s.screen === 'timeline',
+isSummary: s.screen === 'summary', isPage: !!page, isReport: page === 'report', isError: !!err,
+modeName: NAMES[mode], mc: MC[mode],
+pills: ['classic', 'succession', 'timeline'].map((m) => ({ label: NAMES[m], dot: m === mode ? 'var(--ink)' : st[m].done ? 'var(--paper)' : MC[m], go: goMode(m), cur: m === mode ? 'page' : null, bg: m === mode ? MC[m] : 'var(--surf)', fg: m === mode ? 'var(--ink)' : 'var(--text)', sh: m === mode ? '3px 3px 0 var(--line)' : 'none' })),
+done: isGame && cur.done, showLeader: isGame && cur.done && mode !== 'timeline', showInput: isGame && mode !== 'timeline' && !cur.done,
+hasGuesses: s.guesses.length > 0, noGuesses: s.guesses.length === 0, rows: chrono.slice().reverse(),
+heroTitle: cur.won ? heroWin[mode] : 'So close!', scoreLine: scoreLine, hasBanner: !!s.banner && isGame && !cur.done && cur.used > 0,
+leftLabel: cur.won ? 'Solved ' + cur.used + '/' + MAX[mode] : cur.lost ? 'No ' + plural + ' left' : left + ' ' + (left === 1 ? unit : plural) + ' left',
+inputLabel: mode === 'succession' ? 'Who governed in between?' : 'Who is today’s leader?',
+inputMsg: s.msg || 'Prototype: 17 leaders. Focus the field to browse them.',
+streak: streakN, streakAria: 'Streak: ' + streakN + (streakN === 1 ? ' day' : ' days'),
+showHintBtn: s.screen === 'classic' && !cur.done && !s.hint && (misses >= 5 || s.forceHint), hintShown: s.screen === 'classic' && s.hint && !cur.done, hintBulb: hintOn,
+revealHint: () => this.setState({ hint: true }),
+listPos: compact ? 'static' : 'absolute', showKb: !!s.kb, rootShift: s.kb ? '-186px' : '0',
+classicState: label('classic'), sucState: label('succession'), timState: label('timeline'),
+classicCta: st.classic.done ? 'See result' : st.classic.used ? 'Keep guessing' : 'Play Classic', sucCta: cta('succession'), timCta: cta('timeline'),
+perfectLine: perfect ? 'Perfect day! All three solved.' : 'Solve all three in one day to earn the Perfect day badge.',
+allDone: allDone, perfect: perfect, dayLine: dayLine,
+summaryLine: perfect ? 'Three out of three. See you after midnight.' : 'All three puzzles played. A fresh set arrives at midnight.',
+results: ['classic', 'succession', 'timeline'].map((m) => ({ name: NAMES[m], dot: MC[m], score: compact ? score(m) : (st[m].won ? 'Solved ' : 'Missed ') + score(m), go: goMode(m) })),
+hasNext: isGame && cur.done && !!nextMode, nextLabel: nextMode ? 'Next up: ' + NAMES[nextMode] : '', nextBg: nextMode ? MC[nextMode] : 'var(--m1)', goNext: nextMode ? goMode(nextMode) : () => {},
+countdown: countdown, q: s.q, open: s.open && isGame && !cur.done, suggestions: suggestions, noMatch: list.length === 0,
+shakeAnim: s.shake ? 'lshake 360ms ease' : 'none',
+grid: grid, shareTitle: shareTitle, confetti: confetti,
+sucMid: sucDone ? 'Angela Merkel' : '?', sucMidSize: sucDone ? '18px' : '40px', sucMidSub: sucDone ? '2005 – 2021' : '',
+sucMidBg: st.succession.won ? 'var(--g)' : 'var(--m2)', sucMidAnim: (st.succession.won && s.freshId === ANSWER && !s.reduce && !s.frozen) ? 'lflip 420ms ease both' : 'none',
+sucBefore: sucDone ? 'until 2005' : '', sucAfter: sucDone ? 'from 2021' : '',
+hints: hints, hasMisses: missCount > 0, sucMisses: s.sG.filter((id) => id !== ANSWER).map((id) => ({ name: find(id).name })),
+tCards: tCards, tPlaying: s.screen === 'timeline' && !tl.done,
+frise: SORTED.map((id) => { const l = find(id); return { year: l.took, name: l.name, country: l.country }; }),
+tCheck: () => {
+const row = s.tOrder.map((id, i) => id === SORTED[i] ? 1 : 0);
+this.setState({ tChecks: s.tChecks.concat([row]), freshAt: Date.now() });
+if (!allTrue(row) && s.tChecks.length + 1 < MAX.timeline) this.flash(row.filter((v) => v).length + ' of 5 in the right spot');
+},
+adW: smallAd ? '320px' : '300px', adH: smallAd ? '100px' : '600px', adText: smallAd ? 'Ad space · 320 × 100' : 'Ad space · 300 × 600',
+logoSize: compact ? '21px' : '28px',
+showHelp: s.modal === 'help', showStats: s.modal === 'stats', showSettings: s.modal === 'settings',
+helpTitle: 'How to play ' + NAMES[mode], helpClassic: mode === 'classic', helpSuc: mode === 'succession', helpTim: mode === 'timeline',
+stPlayed: H('classic').played, stWin: pct(H('classic')), stBest: H('classic').best,
+statTabs: ['classic', 'succession', 'timeline'].map((m) => ({ label: NAMES[m], on: m === tabM, go: () => this.setState({ statTab: m }), bg: m === tabM ? MC[m] : 'var(--ground)', fg: m === tabM ? 'var(--ink)' : 'var(--text)' })),
+tabPlayed: H(tabM).played, tabWin: pct(H(tabM)), tabStreak: H(tabM).cur, tabBest: H(tabM).best,
+distTitle: tabM === 'timeline' ? 'Checks needed' : 'Guesses needed',
+dist: Array.from({ length: MAX[tabM] }, (v, k) => k + 1).map((k) => { const dd = H(tabM).dist; const top = Math.max.apply(null, [1].concat(Object.keys(dd).map((x) => dd[x]))); const cnt = dd[k] || 0; return { n: k, count: cnt, width: cnt ? Math.round(100 * cnt / top) + '%' : '28px', bg: cnt ? 'var(--g)' : 'var(--x)', fg: cnt ? 'var(--ink)' : 'var(--xt)' }; }),
+switches: [
+sw('Light theme', 'A bright version of the same colors.', s.light, () => this.setState({ light: !s.light })),
+sw('Colorblind colors', 'Blue and orange instead of green and yellow.', s.cb, () => this.setState({ cb: !s.cb })),
+sw('Reduce motion', 'Turn off tile flips, shakes and confetti.', s.reduce, () => this.setState({ reduce: !s.reduce }))
+],
+showConsent: s.consent === null, consentYes: () => this.setState({ consent: 'yes' }), consentNo: () => this.setState({ consent: 'no' }),
+hasToast: !!s.toast, toast: s.toast,
+pageTitle: page ? PAGES[page][0] : '', pageParas: page ? PAGES[page][1].map((t) => ({ text: t })) : [],
+footLinks: [['about', 'About'], ['how', 'How we pick and describe leaders'], ['privacy', 'Privacy'], ['report', 'Report an error']].map((f) => ({ label: f[1], go: () => this.setState({ screen: 'page-' + f[0], modal: null }) })),
+errGlyph: err ? err[0] : '', errTitle: err ? err[1] : '', errText: err ? err[2] : '', errCta: err ? err[3] : '',
+goHome: () => this.setState({ screen: 'home', open: false, modal: null }),
+goClassic: goMode('classic'), goSuc: goMode('succession'), goTim: goMode('timeline'),
+goSummary: () => this.setState({ screen: 'summary', modal: null }),
+goReport: () => this.setState({ screen: 'page-report', modal: null }),
+sendReport: () => this.flash('Reports need a contact address before they can be sent'),
+openHelp: () => this.setState({ modal: 'help' }),
+openStats: () => this.setState({ modal: 'stats', statTab: mode }),
+openSettings: () => this.setState({ modal: 'settings' }),
+closeModal: () => this.setState({ modal: null }),
+clearData: () => { try { window.localStorage.removeItem('leaderdle-v1'); } catch (err) {} this.setState(Object.assign(this.base(), { cb: s.cb, light: s.light, reduce: s.reduce, consent: s.consent, helpSeen: s.helpSeen, now: Date.now() })); this.flash('Your data was cleared'); },
+onQ: (e) => this.setState({ q: e.target.value, open: true, ai: 0, msg: '' }),
+onFocus: (e) => { this.setState({ open: true }); if (compact && !s.frozen) { try { e.target.parentNode.scrollIntoView({ block: 'start', behavior: 'smooth' }); } catch (err) {} } },
+onBlur: () => setTimeout(() => this.setState({ open: false }), 160),
+onKey: (e) => {
+if (e.key === 'ArrowDown') { e.preventDefault(); this.setState({ open: true, ai: Math.min(ai + 1, list.length - 1) }); }
+else if (e.key === 'ArrowUp') { e.preventDefault(); this.setState({ ai: Math.max(ai - 1, 0) }); }
+else if (e.key === 'Enter') { e.preventDefault(); this.tryGuess(); }
+else if (e.key === 'Escape') { this.setState({ open: false }); }
+},
+guessBtn: () => this.tryGuess(),
+share: () => this.shareOut(shareText, compact),
+shareDay: () => this.shareOut('Leaderdle #128\n' + dayLine + '\nleaderdle.com', compact)
+};
+}
+}
+
+</script>
+</body>
+</html>

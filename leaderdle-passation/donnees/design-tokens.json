@@ -1,0 +1,92 @@
+{
+ "themes": {
+  "dark (default)": {
+   "ground": "#1C1A2B",
+   "surface": "#2A2740",
+   "text": "#FFF4DE",
+   "muted": "#B9B3CC",
+   "outline": "#0A0912",
+   "ink (text on color)": "#14121F",
+   "paper": "#FFF4DE",
+   "noMatch": "#454160",
+   "noMatchText": "#FFF4DE",
+   "focus": "#FFD23F",
+   "veil": "rgba(10,9,18,0.78)"
+  },
+  "light": {
+   "ground": "#FBF3E4",
+   "surface": "#FFFDF8",
+   "text": "#1C1A2B",
+   "muted": "#5B5670",
+   "outline": "#1C1A2B",
+   "ink (text on color)": "#14121F",
+   "paper": "#FFFDF8",
+   "noMatch": "#D9D3E6",
+   "noMatchText": "#1C1A2B",
+   "focus": "#5A3FE0",
+   "veil": "rgba(28,26,43,0.6)"
+  }
+ },
+ "modes": {
+  "classic": "#9B87FF",
+  "succession": "#3DD6C3",
+  "timeline": "#FF9D5C"
+ },
+ "answers": {
+  "correct": "#4ADE80",
+  "close": "#FFD23F",
+  "colorblind": {
+   "correct": "#6CB6FF",
+   "close": "#FF9A3D"
+  }
+ },
+ "typography": {
+  "title": {
+   "family": "Fredoka",
+   "weights": [
+    600,
+    700
+   ],
+   "sizes": "22–52px"
+  },
+  "ui": {
+   "family": "DM Sans",
+   "weights": [
+    400,
+    500,
+    700
+   ],
+   "sizes": "13–17px",
+   "numerals": "tabular-nums in tiles and counters"
+  }
+ },
+ "shape": {
+  "outline": "2px solid outline",
+  "shadow": {
+   "sm": "3px 3px 0 outline",
+   "md": "4px 4px 0 outline",
+   "lg": "5px 5px 0 outline"
+  },
+  "radius": {
+   "tile": 12,
+   "button": 12,
+   "card": 20,
+   "pill": 999
+  }
+ },
+ "layout": {
+  "maxWidth": 1120,
+  "breakpoints": {
+   "phone": "<620px",
+   "narrowAd": "<1000px",
+   "desktop": ">=1000px"
+  },
+  "minTouchTarget": 44
+ },
+ "motion": {
+  "tileFlip": "380ms ease, 130ms stagger per tile",
+  "shake": "360ms ease",
+  "confetti": "1600ms ease-in",
+  "reducedMotion": "all animations off"
+ }
+}

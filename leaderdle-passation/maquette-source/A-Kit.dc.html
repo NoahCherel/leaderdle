@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wordmark and tile states</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 720px; height: 420px; box-sizing: border-box; padding: 40px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; background: #FFF7EA; color: #1F1B2E; font-family: 'DM Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.4">
+<div style="display: flex; flex-direction: column; gap: 28px">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #5B5568">Wordmark</span>
+<div role="img" aria-label="Leaderdle" style="display: flex; align-items: center; gap: 6px; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 54px; line-height: 1">Leader<span style="display: inline-block; padding: 4px 10px; background: #6C4CF1; color: #FFFFFF; border: solid 3px #1F1B2E; border-radius: 16px; box-shadow: 4px 4px 0 #1F1B2E; transform: rotate(-4deg)">dle</span></div>
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #5B5568">Short mark</span>
+<div style="display: flex; align-items: flex-end; gap: 20px">
+<div role="img" aria-label="Leaderdle icon" style="display: flex; align-items: center; justify-content: center; width: 88px; height: 88px; box-sizing: border-box; background: #6C4CF1; color: #FFFFFF; border: solid 3px #1F1B2E; border-radius: 22px; box-shadow: 4px 4px 0 #1F1B2E; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 60px; line-height: 1; transform: rotate(-4deg)">L</div>
+<div aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; box-sizing: border-box; background: #6C4CF1; color: #FFFFFF; border: solid 2px #1F1B2E; border-radius: 10px; font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 24px; line-height: 1; transform: rotate(-4deg)">L</div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 28px">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #5B5568">Tile states</span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div role="img" aria-label="Role: head of government, correct" style="position: relative; height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #2DBE6C; border: 2px solid #1F1B2E; border-radius: 12px; box-shadow: 3px 3px 0 #1F1B2E; font-weight: 700; font-size: 22px">Gov<span style="position: absolute; top: -9px; right: -9px; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; box-sizing: border-box; background: #FFFDF8; border: solid 2px #1F1B2E; border-radius: 50%"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1F1B2E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><strong style="font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-size: 18px">Correct</strong><span style="font-size: 13px; color: #5B5568">Exact match. Check badge.</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div role="img" aria-label="Age at start: 53, close, target is younger" style="position: relative; height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: #F5B921; border: 2px solid #1F1B2E; border-radius: 12px; box-shadow: 3px 3px 0 #1F1B2E; font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums">53<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F1B2E" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg><span style="position: absolute; top: -9px; right: -9px; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; box-sizing: border-box; background: #FFFDF8; border: solid 2px #1F1B2E; border-radius: 50%"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1F1B2E" stroke-width="3.5" stroke-linecap="round"><path d="M5 9c2.5-2.5 4.5-2.5 7 0s4.5 2.5 7 0M5 15c2.5-2.5 4.5-2.5 7 0s4.5 2.5 7 0"/></svg></span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><strong style="font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-size: 18px">Close</strong><span style="font-size: 13px; color: #5B5568">Within range. Wave badge, arrow to target.</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div role="img" aria-label="Took office: 1959, target is later" style="position: relative; height: 88px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: #D9D5CC; border: 2px solid #1F1B2E; border-radius: 12px; box-shadow: 3px 3px 0 #1F1B2E; font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums">1959<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F1B2E" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><strong style="font-family: 'Fredoka', 'Trebuchet MS', sans-serif; font-size: 18px">Wrong</strong><span style="font-size: 13px; color: #5B5568">No badge. Arrow to target.</span></div>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":720,"height":420}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

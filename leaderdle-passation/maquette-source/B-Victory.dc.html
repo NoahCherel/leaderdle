@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Classic, puzzle solved</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Figtree:wght@400;500;700&display=swap">
+<style>
+body{margin:0}
+a{color:#1B2A28}a:hover{color:#1B2A28}
+button:active{transform:translate(0,3px)}
+input::placeholder{color:#4A5A56;opacity:1}
+</style>
+</helmet>
+<div style="width: 360px; min-height: 1400px; box-sizing: border-box; background: #F1F4E8; color: #1B2A28; font-family: 'Figtree', system-ui, sans-serif; font-size: 15px; line-height: 1.4">
+<header style="display: flex; align-items: center; gap: 4px; height: 56px; padding: 0 6px 0 16px; box-sizing: border-box">
+<a href="B-Home.dc.html" aria-label="Leaderdle home" style="display: flex; align-items: center; gap: 3px; height: 44px; text-decoration: none; color: #1B2A28; font-family: 'Baloo 2', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 22px">Leader<span style="display: inline-flex; gap: 2px; margin-left: 2px"><span style="display: inline-block; width: 17px; text-align: center; background: #C92C76; color: #FFFFFF; border-radius: 6px; box-shadow: 0 2px 0 rgba(27,42,40,0.3)">d</span><span style="display: inline-block; width: 17px; text-align: center; background: #4CC3F0; color: #1B2A28; border-radius: 6px; box-shadow: 0 2px 0 rgba(27,42,40,0.3)">l</span><span style="display: inline-block; width: 17px; text-align: center; background: #FF8A3D; color: #1B2A28; border-radius: 6px; box-shadow: 0 2px 0 rgba(27,42,40,0.3)">e</span></span></a>
+<div style="flex-grow: 1"></div>
+<div role="img" aria-label="Streak: 12 days" style="display: flex; align-items: center; gap: 4px; height: 30px; padding: 0 10px 0 7px; background: #FBFCF5; border: solid 2px #1B2A28; border-radius: 999px; font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="#FFD23F" stroke="#1B2A28" stroke-width="2.5" stroke-linejoin="round"><path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3 0-6 1-9z"/></svg>12</div>
+<button aria-label="How to play" style="width: 44px; height: 44px; padding: 0; background: transparent; border: 0; color: #1B2A28; cursor: pointer"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7"/><path d="M12 17h.01"/></svg></button>
+<button aria-label="Statistics" style="width: 44px; height: 44px; padding: 0; background: transparent; border: 0; color: #1B2A28; cursor: pointer"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11M12 20V4M19 20v-6"/></svg></button>
+<button aria-label="Settings" style="width: 44px; height: 44px; padding: 0; background: transparent; border: 0; color: #1B2A28; cursor: pointer"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></button>
+</header>
+<main style="display: flex; flex-direction: column; gap: 14px; padding: 8px 16px 24px">
+<nav aria-label="Game modes" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<a href="B-Classic.dc.html" aria-current="page" style="display: flex; align-items: center; justify-content: center; height: 44px; background: #C92C76; color: #FFFFFF; border: 2px solid transparent; border-radius: 999px; box-shadow: 0 3px 0 rgba(27,42,40,0.3); text-decoration: none; font-weight: 700; font-size: 14px">Classic</a>
+<a href="#" style="display: flex; align-items: center; justify-content: center; gap: 6px; height: 44px; background: #FBFCF5; color: #1B2A28; border: 2px solid transparent; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 14px"><span aria-hidden="true" style="width: 10px; height: 10px; border-radius: 50%; background: #4CC3F0"></span>Succession</a>
+<a href="#" style="display: flex; align-items: center; justify-content: center; gap: 6px; height: 44px; background: #FBFCF5; color: #1B2A28; border: 2px solid transparent; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 14px"><span aria-hidden="true" style="width: 10px; height: 10px; border-radius: 50%; background: #FF8A3D"></span>Timeline</a>
+</nav>
+<div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 0 6px; text-align: center">
+<div aria-hidden="true"><span style="position: absolute; left: 6px; top: 8px; width: 10px; height: 10px; background: #FFD23F; border-radius: 3px; transform: rotate(20deg)"></span><span style="position: absolute; left: 40px; top: 70px; width: 8px; height: 14px; background: #4CC3F0; border-radius: 3px; transform: rotate(-15deg)"></span><span style="position: absolute; left: 290px; top: 4px; width: 10px; height: 10px; background: #FF8A3D; border-radius: 3px; transform: rotate(35deg)"></span><span style="position: absolute; left: 312px; top: 60px; width: 8px; height: 14px; background: #C92C76; border-radius: 3px; transform: rotate(-25deg)"></span><span style="position: absolute; left: 262px; top: 84px; width: 9px; height: 9px; background: #23B573; border-radius: 50px; transform: rotate(10deg)"></span><span style="position: absolute; left: 18px; top: 44px; width: 8px; height: 8px; background: #FF8A3D; border-radius: 50px; transform: rotate(0deg)"></span><span style="position: absolute; left: 300px; top: 34px; width: 7px; height: 7px; background: #FFD23F; border-radius: 3px; transform: rotate(50deg)"></span></div>
+<h1 style="margin: 0; font-family: 'Baloo 2', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 38px; line-height: 1.1">You got it!</h1>
+<p style="margin: 0; font-weight: 700; font-size: 16px; font-variant-numeric: tabular-nums">Solved in 4 of 8 guesses</p>
+<p style="margin: 0; font-size: 14px; color: #4A5A56">Classic #128</p>
+</div>
+<section aria-label="Today's leader" style="display: flex; flex-direction: column; gap: 12px; padding: 18px; background: #FBFCF5; border: 2px solid transparent; border-radius: 24px; box-shadow: 0 5px 0 rgba(27,42,40,0.3)">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #4A5A56">Today's leader</span>
+<div style="display: flex; align-items: center; gap: 12px">
+<div role="img" aria-label="Flag of Germany" style="display: flex; flex-direction: column; flex: none; width: 42px; height: 28px; box-sizing: border-box; overflow: hidden; border: solid 2px #1B2A28; border-radius: 5px"><span style="flex: 1; background: #000000"></span><span style="flex: 1; background: #DD0000"></span><span style="flex: 1; background: #FFCE00"></span></div>
+<h2 style="margin: 0; font-family: 'Baloo 2', 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 26px; line-height: 1.1">Angela Merkel</h2>
+</div>
+<dl style="display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 6px 10px; margin: 0; font-size: 14px">
+<dt style="color: #4A5A56">Country</dt><dd style="margin: 0; font-weight: 700">Germany</dd>
+<dt style="color: #4A5A56">Role</dt><dd style="margin: 0; font-weight: 700">Head of government</dd>
+<dt style="color: #4A5A56">In office</dt><dd style="margin: 0; font-weight: 700; font-variant-numeric: tabular-nums">2005 – 2021 · 16 years</dd>
+<dt style="color: #4A5A56">Age at start</dt><dd style="margin: 0; font-weight: 700; font-variant-numeric: tabular-nums">51</dd>
+</dl>
+<p style="margin: 0; font-size: 14px">Chancellor of Germany from 2005 to 2021.</p>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<a href="https://en.wikipedia.org/wiki/Angela_Merkel" style="display: flex; align-items: center; height: 44px; font-weight: 700; font-size: 14px">Read more on Wikipedia</a>
+<a href="#" style="display: flex; align-items: center; height: 44px; font-size: 13px; color: #4A5A56">Report an error</a>
+</div>
+</section>
+<section aria-label="Share" style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px; border: dashed 2px #4A5A56; border-radius: 24px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums">
+<span>Leaderdle #128 · Classic 4/8</span>
+<div role="img" aria-label="Result grid, four guesses, no spoilers" style="display: flex; flex-direction: column; gap: 4px">
+<sc-for list="{{grid}}" as="line" hint-placeholder-count="4">
+<div style="display: flex; gap: 4px">
+<sc-for list="{{line.cells}}" as="cell" hint-placeholder-count="5">
+<span style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: {{cell.bg}}; border-radius: 5px; font-size: 14px; line-height: 1">{{cell.ch}}</span>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<span style="font-weight: 500; color: #4A5A56">leaderdle.com</span>
+</div>
+<button style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 52px; background: #C92C76; color: #FFFFFF; border: 2px solid transparent; border-radius: 16px; box-shadow: 0 4px 0 rgba(27,42,40,0.3); font-family: 'Baloo 2', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5M5 13v6h14v-6"/></svg>Share result</button>
+<a href="#" style="display: flex; align-items: center; justify-content: center; height: 52px; background: #4CC3F0; color: #1B2A28; border: 2px solid transparent; border-radius: 16px; box-shadow: 0 4px 0 rgba(27,42,40,0.3); text-decoration: none; font-family: 'Baloo 2', 'Trebuchet MS', sans-serif; font-weight: 600; font-size: 18px">Next up: Succession</a>
+<p style="margin: 0; text-align: center; font-size: 14px">Next Classic in <strong style="font-variant-numeric: tabular-nums">07:42:16</strong></p>
+</section>
+<aside aria-label="Advertisement" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 6px">
+<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #4A5A56">Advertisement</span>
+<div style="display: flex; align-items: center; justify-content: center; width: 300px; height: 250px; box-sizing: border-box; border: dashed 2px #4A5A56; border-radius: 8px; color: #4A5A56; font-size: 13px">Ad space · 300 × 250</div>
+</aside>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":360,"height":1400}}'>
+class Component extends DCLogic {
+renderVals() {
+const bg = { g: '#23B573', y: '#FFD23F', x: '#D5D8CB' };
+const ch = { u: '\u2191', d: '\u2193' };
+const line = (s) => ({ cells: s.split('').map((k) => ({ bg: bg[k] || bg.x, ch: ch[k] || '' })) });
+return { grid: [line('xgudu'), line('yguuy'), line('xyuud'), line('ggggg')] };
+}
+}
+</script>
+</body>
+</html>
