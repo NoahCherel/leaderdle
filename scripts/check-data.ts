@@ -1,7 +1,8 @@
 // Fails the build when the shipped data is invalid: schema, unknown ids, non-answerable answers,
 // gaps in day numbers. Run by `npm run build` (prebuild) and `npm run check:data`.
 import { readdirSync, readFileSync } from 'node:fs';
-import { DayPuzzleSchema, LeaderFileSchema } from '../src/data/schema.ts';
+import { DayPuzzleSchema, LeaderFileSchema, MayhemFileSchema } from '../src/data/schema.ts';
+import { buildCells } from '../src/game/mayhem.ts';
 import { lettersWord } from '../src/game/letters.ts';
 
 const errors: string[] = [];
@@ -40,6 +41,16 @@ for (const f of files) {
   if (d.letters.word.replace(/ /g, '').length > 11) errors.push(`${f}: "${d.letters.word}" is too long for a phone`);
   const years = d.timeline.order.map((id) => leaders.get(id)?.tookOffice ?? 0);
   if (years.some((y, i) => i > 0 && y <= years[i - 1]!)) errors.push(`${f}: Timeline order is not by year`);
+}
+
+// Leader Mayhem ratings: valid, about known leaders. Too few playable draws only warns while ratings are being written.
+const MIN_DRAWS = 150;
+const mayhem = MayhemFileSchema.safeParse(read('public/data/mayhem.json'));
+if (!mayhem.success) errors.push(`mayhem.json: ${mayhem.error.issues[0]?.message} at ${mayhem.error.issues[0]?.path.join('.')}`);
+else {
+  for (const id of Object.keys(mayhem.data.ratings)) if (!leaders.has(id)) errors.push(`mayhem.json: unknown leader ${id}`);
+  const draws = buildCells([...leaders.values()], mayhem.data.ratings).filter((c) => c.leaders.length >= 2).length;
+  if (draws < MIN_DRAWS) console.warn(`warning: Leader Mayhem has ${draws} playable draws, ${MIN_DRAWS} wanted (ratings still being written?)`);
 }
 
 if (errors.length) {

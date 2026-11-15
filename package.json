@@ -23,7 +23,9 @@
     "check:data": "node scripts/check-data.ts",
     "prebuild": "node scripts/check-data.ts",
     "walk": "node scripts/walk.mjs",
-    "icons": "node scripts/make-icons.mjs"
+    "icons": "node scripts/make-icons.mjs",
+    "mayhem:pool": "node scripts/mayhem/pool.ts",
+    "mayhem:build": "node scripts/mayhem/build.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

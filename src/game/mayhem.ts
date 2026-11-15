@@ -3,7 +3,7 @@
  * draws, then send it through a three-round tournament. Ratings are hidden until the end.
  * Everything random comes from the run's seed, so a run can be replayed and tested.
  */
-import { pickOne, rng, shuffle } from './rng';
+import { pickOne, rng, shuffle } from './rng.ts';
 import type { Leader } from './types';
 
 export const PORTFOLIOS = ['education', 'war', 'economy', 'domestic', 'foreign'] as const;
