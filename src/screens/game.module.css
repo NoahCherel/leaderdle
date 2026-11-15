@@ -26,6 +26,7 @@
 }
 .h1 {
   font-size: 36px;
+  white-space: nowrap;
 }
 .no {
   font-size: 20px;
@@ -34,10 +35,11 @@
   font-variant-numeric: tabular-nums;
 }
 .left {
+  min-width: 0;
   font-weight: 700;
   font-size: 16px;
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+  text-align: right;
 }
 .banner {
   padding: 12px 16px;
@@ -455,5 +457,8 @@
   }
   .lock {
     padding-right: 0;
+  }
+  .facts {
+    grid-template-columns: 96px minmax(0, 1fr);
   }
 }

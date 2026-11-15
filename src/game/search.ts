@@ -13,19 +13,31 @@ export function normalize(text: string): string {
 
 interface Entry {
   leader: Leader;
-  /** Normalized name and variants. */
-  keys: string[];
+  /** Normalized name, then other names. */
+  name: string;
+  aliases: string[];
+}
+
+/** 0: starts with the query, 1: a word starts with it, 2: contains it, Infinity: no match. */
+const score = (key: string, q: string) => (key.startsWith(q) ? 0 : key.includes(' ' + q) ? 1 : key.includes(q) ? 2 : Infinity);
+
+/** The other name that matched the query, when the shown name did not (shown in suggestions). */
+export function matchedAlias(leader: Leader, query: string): string | undefined {
+  const q = normalize(query);
+  if (!q || normalize(leader.name).includes(q)) return undefined;
+  return leader.aliases.find((a) => normalize(a).includes(q));
 }
 
 /**
  * Builds a search over the leader list (PASSATION §6): case, accent and punctuation
- * insensitive, matches variants, ranks names that start with the query, then names
- * with a word starting with it, then any substring. Ties keep list order.
+ * insensitive. Names that start with the query come first, then names with a word
+ * starting with it, then any substring, then the same for other names. Ties keep list order.
  */
 export function createSearch(leaders: Leader[]): (query: string) => Leader[] {
   const entries: Entry[] = leaders.map((leader) => ({
     leader,
-    keys: [leader.name, ...leader.aliases].map(normalize),
+    name: normalize(leader.name),
+    aliases: leader.aliases.map(normalize),
   }));
 
   return (query: string) => {
@@ -33,12 +45,9 @@ export function createSearch(leaders: Leader[]): (query: string) => Leader[] {
     if (!q) return leaders.slice();
     const ranked: Array<[number, number, Leader]> = [];
     entries.forEach((e, i) => {
-      let best = Infinity;
-      for (const key of e.keys) {
-        if (key.startsWith(q)) best = Math.min(best, 0);
-        else if (key.includes(' ' + q)) best = Math.min(best, 1);
-        else if (key.includes(q)) best = Math.min(best, 2);
-      }
+      // Matches on the shown name first, then on other names.
+      let best = score(e.name, q);
+      for (const a of e.aliases) best = Math.min(best, 3 + score(a, q));
       if (best < Infinity) ranked.push([best, i, e.leader]);
     });
     return ranked.sort((a, b) => a[0] - b[0] || a[1] - b[1]).map((r) => r[2]);

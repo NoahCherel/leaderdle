@@ -64,3 +64,18 @@ test('Timeline: keyboard drag with space and arrows', async ({ page }) => {
   }
   await expect(cards(page).first()).toContainText('Lee Kuan Yew');
 });
+
+test('the cookie banner never covers the game: content scrolls above it, it steps aside while typing', async ({ page }) => {
+  await openAt(page, '/');
+  const banner = page.getByRole('region', { name: 'Cookie consent' });
+  await expect(banner).toBeVisible();
+  // The last thing on the page can be scrolled above the banner.
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  const ad = await page.getByLabel('Advertisement').last().boundingBox();
+  const bar = await banner.boundingBox();
+  expect(ad!.y + ad!.height).toBeLessThanOrEqual(bar!.y);
+  await page.getByRole('link', { name: 'Play Classic' }).click();
+  await page.getByRole('button', { name: 'Got it' }).click();
+  await page.getByRole('combobox').click();
+  await expect(banner).toBeHidden();
+});

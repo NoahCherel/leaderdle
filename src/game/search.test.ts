@@ -1,4 +1,4 @@
-import { createSearch, normalize } from './search';
+import { createSearch, matchedAlias, normalize } from './search';
 import { SAMPLE_LEADERS } from './fixtures';
 
 const search = createSearch(SAMPLE_LEADERS);
@@ -37,6 +37,17 @@ describe('search', () => {
     // Name starts with "t", then a word starts with "t", then substrings.
     expect(names('t').slice(0, 2)).toEqual(['Tony Blair', 'Margaret Thatcher']);
     expect(names('helen')).toEqual(['Helen Clark']);
+  });
+
+  it('ranks other names after matches on the shown name', () => {
+    const extra = [...SAMPLE_LEADERS, { ...SAMPLE_LEADERS[0]!, id: 'hcm', name: 'Ho Chi Minh', aliases: ['Mai Huu Phuc'] }];
+    expect(createSearch(extra)('ma').map((l) => l.name)).toEqual(['Margaret Thatcher', 'Nelson Mandela', 'Barack Obama', 'Ho Chi Minh']);
+  });
+
+  it('tells which other name matched, only when the shown name did not', () => {
+    const fdr = SAMPLE_LEADERS.find((l) => l.id === 'fdr')!;
+    expect(matchedAlias(fdr, 'fdr')).toBe('FDR');
+    expect(matchedAlias(fdr, 'roose')).toBeUndefined();
   });
 
   it('returns nothing for gibberish (capture 05-nomatch)', () => {

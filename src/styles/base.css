@@ -63,6 +63,8 @@ body {
 }
 #root {
   min-height: 100vh;
+  /* Room for the cookie banner, so it never hides the end of the page. */
+  padding-bottom: var(--consent-h, 0px);
 }
 a {
   color: inherit;
@@ -155,6 +157,13 @@ p {
   font-size: 18px;
   text-decoration: none;
   white-space: nowrap;
+}
+/* Disabled buttons look switched off, not like a darker version of the mode color. */
+.btn:disabled {
+  opacity: 1;
+  background: var(--x);
+  color: var(--muted);
+  box-shadow: none;
 }
 .btn--lg {
   height: 56px;

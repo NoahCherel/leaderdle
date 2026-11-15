@@ -1,4 +1,5 @@
 import { useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { matchedAlias } from '../game/search';
 import { termSpan } from '../game/tenure';
 import type { Leader } from '../game/types';
 import s from './NameInput.module.css';
@@ -31,7 +32,8 @@ export function NameInput({ label, tried, search, onSubmit, color = 'var(--m1)',
   const boxRef = useRef<HTMLDivElement>(null);
 
   const matches = useMemo(() => search(q), [search, q]);
-  const shown = matches.slice(0, LIMIT);
+  // An empty field lists nobody: thousands of names in notability order would favour some leaders.
+  const shown = q.trim() ? matches.slice(0, LIMIT) : [];
   const isTried = (l: Leader) => tried.includes(l.id);
   const [active, setActive] = useState<number>(-1);
   // The best match is active by default, unless it was already guessed: Enter must never swap in another leader.
@@ -148,12 +150,14 @@ export function NameInput({ label, tried, search, onSubmit, color = 'var(--m1)',
                     <span className={s.sub}>
                       {l.country} · {termSpan(l)}
                     </span>
+                    {matchedAlias(l, q) && <span className={s.sub}>Also known as {matchedAlias(l, q)}</span>}
                   </span>
                   {done && <span className={s.note}>Already guessed</span>}
                 </div>
               );
             })}
-            {matches.length > LIMIT && <p className={s.more}>Keep typing to narrow the list.</p>}
+            {!q.trim() && <p className={s.more}>Type a few letters: {matches.length.toLocaleString('en-US')} leaders to choose from.</p>}
+            {q.trim() && matches.length > LIMIT && <p className={s.more}>Keep typing to narrow the list.</p>}
             {!matches.length && <p className={s.empty}>No leader found. Check the spelling?</p>}
           </div>
         )}

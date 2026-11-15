@@ -21,7 +21,8 @@
     "data:leaders": "node scripts/leaders/build.ts",
     "data:schedule": "node scripts/schedule/build.ts",
     "check:data": "node scripts/check-data.ts",
-    "prebuild": "node scripts/check-data.ts"
+    "prebuild": "node scripts/check-data.ts",
+    "walk": "node scripts/walk.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

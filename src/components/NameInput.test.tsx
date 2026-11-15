@@ -12,11 +12,18 @@ const setup = (tried: string[] = []) => {
 };
 
 describe('NameInput', () => {
-  it('opens the full list on focus', async () => {
+  it('on focus, invites to type instead of listing every leader', async () => {
     const { input, user } = setup();
     await user.click(input);
     expect(input).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getAllByRole('option')).toHaveLength(SAMPLE_LEADERS.length);
+    expect(screen.queryAllByRole('option')).toHaveLength(0);
+    expect(screen.getByRole('listbox')).toHaveTextContent(`Type a few letters: ${SAMPLE_LEADERS.length} leaders to choose from.`);
+  });
+
+  it('shows the other name that matched', async () => {
+    const { input, user } = setup();
+    await user.type(input, 'fdr');
+    expect(screen.getByRole('option', { name: /Franklin D. Roosevelt/ })).toHaveTextContent('Also known as FDR');
   });
 
   it('filters as you type and shows country and term', async () => {
