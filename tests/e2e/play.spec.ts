@@ -271,6 +271,9 @@ test('Letters: type any letters, colors follow Wordle rules, win and share', asy
   await openAt(page, '/letters');
   await closeHelp(page);
   await expect(page.getByText('5 letters')).toBeVisible();
+  // The year is given from the start: it tells which leader of that name is meant.
+  await expect(page.getByText('Took office')).toBeVisible();
+  await expect(page.getByText('2009', { exact: true })).toBeVisible();
 
   // An unfinished row is refused and costs nothing.
   await page.keyboard.type('ab');

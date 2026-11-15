@@ -13,8 +13,11 @@ const TURN = 380;
 const STATE_WORD: Record<LetterState, string> = { correct: 'right place', present: 'wrong place', absent: 'not in the name', gap: '' };
 const KIND: Record<LetterState, GridCell['kind']> = { correct: 'g', present: 'y', absent: 'x', gap: 'gap' };
 
-/** Clues unlocked by misses, so a blank start is never a dead end. */
-const CLUE_AFTER = [2, 4] as const;
+/**
+ * Misses needed for each clue. The year is there from the start: several leaders share a surname
+ * (Bush, Castro, Gandhi), and the year says which one is meant.
+ */
+const CLUE_AFTER = [0, 2, 4] as const;
 
 /** Lays the typed letters over the word's shape, spaces included. */
 function shape(word: string, typed: readonly string[]): string[] {
@@ -97,6 +100,7 @@ export function Letters() {
   const rowStyle = { gridTemplateColumns: columns, ['--n' as string]: word.length };
   const misses = guesses.filter((g) => g !== word).length;
   const clues: Array<[string, string]> = [
+    ['Took office', String(answer.tookOffice)],
     ['Continent', answer.continent],
     ['Country', answer.country],
   ];
@@ -187,13 +191,13 @@ export function Letters() {
       )}
       <div className={s.stack} style={{ gap: 8 }}>
         <strong className="eyebrow muted">Clues</strong>
-        <div className={s.clues}>
+        <div className={s.clues + ' ' + s.clues3}>
           {clues.map(([label, value], i) => {
             const shown = st.done || misses >= CLUE_AFTER[i]!;
             return (
               <div key={label} className={`${s.clue} ${shown ? s.clueOn : ''}`}>
                 <span className="eyebrow">{label}</span>
-                <strong>{shown ? value : `Unlocks after miss ${CLUE_AFTER[i]}`}</strong>
+                <strong className="num">{shown ? value : `Unlocks after miss ${CLUE_AFTER[i]}`}</strong>
               </div>
             );
           })}

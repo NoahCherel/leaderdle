@@ -45,14 +45,6 @@ export const IconBulb = (p: P) => (
 );
 export const IconShare = (p: P) => <Svg {...p}><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5M5 13v6h14v-6" /></Svg>;
 export const IconBack = (p: P) => <Svg weight={3} {...p}><path d="M19 12H5M11 6l-6 6 6 6" /></Svg>;
-export const IconStar = (p: P) => (
-  <Svg {...p}><path d="M12 3l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 16.9 6.6 19.8l1.1-6.1L3.2 9.4l6.1-.8z" /></Svg>
-);
 export const IconGrip = (p: P) => (
   <Svg weight={3} {...p}><path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" /></Svg>
-);
-export const IconFlame = ({ size = 18 }: { size?: number }) => (
-  <svg aria-hidden="true" focusable="false" width={size} height={size} viewBox="0 0 24 24" fill="#FFD23F" stroke="#0A0912" strokeWidth={2.5} strokeLinejoin="round">
-    <path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3 0-6 1-9z" />
-  </svg>
 );

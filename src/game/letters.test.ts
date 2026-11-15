@@ -45,6 +45,12 @@ describe('fitsWord', () => {
     expect(fitsWord('MERKE1', 'MERKEL')).toBe(false);
     expect(fitsWord('merkel', 'MERKEL')).toBe(false);
   });
+  it('refuses a guess that is too long', () => {
+    expect(fitsWord('MERKELX', 'MERKEL')).toBe(false);
+  });
+  it('refuses a letter where the answer has a space, even with every other slot filled', () => {
+    expect(fitsWord('ABCDEFGHI', 'DE GAULLE')).toBe(false);
+  });
 });
 
 describe('lettersWord', () => {

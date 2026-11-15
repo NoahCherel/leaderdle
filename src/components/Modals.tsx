@@ -89,7 +89,7 @@ function HelpBody({ mode }: { mode: Mode }) {
             </span>
           </div>
         </div>
-        <p className="muted">The name is the one the leader is best known by, without accents. Clues unlock after 2 and 4 misses.</p>
+        <p className="muted">The name is the one the leader is best known by, without accents. You know the year they took office from the start. The continent unlocks after 2 misses, the country after 4.</p>
       </>
     );
   }

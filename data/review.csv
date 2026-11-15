@@ -61,7 +61,7 @@ Q132345,Shinzo Abe,Japan,gov,2006,8,52,164,true,true,
 Q11860,Silvio Berlusconi,Italy,gov,1994,9,57,164,true,true,
 Q35236,Herbert Hoover,United States,both,1929,4,54,164,true,true,
 Q57336,Ali Khamenei,Iran,both,1981,44,42,162,true,true,
-Q181383,Mahathir Mohamad,Malaysia,gov,1981,24,56,162,true,false,
+Q181383,Mahathir Mohamad,Malaysia,gov,1981,24,56,162,true,true,
 Q34453,Boris Yeltsin,Russia,state,1990,9,59,162,true,true,held state and government offices
 Q41117,Kim Il Sung,North Korea,both,1948,45,36,162,true,true,
 Q36023,Calvin Coolidge,United States,both,1923,5,51,161,true,false,
@@ -100,7 +100,7 @@ Q16574,Chiang Kai-shek,Republic of China,state,1928,39,40,138,true,true,held sta
 Q42992,Golda Meir,Israel,gov,1969,5,70,138,true,true,
 Q34105,Hosni Mubarak,Egypt,state,1981,29,53,137,true,true,held state and government offices
 Q40722,Dilma Rousseff,Brazil,both,2011,5,63,137,true,true,
-Q23873,Pope John XXIII,Vatican City,state,1958,4,76,137,true,false,
+Q23873,Pope John XXIII,Vatican City,state,1958,4,76,137,true,true,
 Q40787,Nicholas II,Russian Empire,state,1894,22,26,137,true,true,
 Q10665,Kim Jong Il,North Korea,state,1994,17,53,136,true,true,
 Q2038,François Mitterrand,France,state,1981,13,64,135,true,true,
@@ -110,7 +110,7 @@ Q38823,Ruhollah Khomeini,Iran,state,1979,9,77,133,true,true,
 Q39464,Pol Pot,Cambodia,gov,1976,2,50,132,true,true,
 Q43179,Ellen Johnson Sirleaf,Liberia,both,2006,12,67,130,true,false,
 Q311440,António Guterres,Portugal,gov,1995,6,46,130,true,false,
-Q37979,Akihito,Japan,state,1989,30,55,130,true,false,
+Q37979,Akihito,Japan,state,1989,30,55,130,true,true,
 Q57371,Ilham Aliyev,Azerbaijan,state,2003,23,41,130,true,false,held state and government offices
 Q2677,Wilhelm II,Germany,state,1888,30,29,130,true,true,
 Q9161,Josip Broz Tito,Socialist Federal Republic of Yugoslavia,state,1953,27,60,130,true,true,
@@ -134,7 +134,7 @@ Q131248,Lee Kuan Yew,Singapore,gov,1959,31,35,123,true,true,term outside country
 Q3318231,Joko Widodo,Indonesia,both,2014,10,53,122,true,false,
 Q2604,Pope Pius XII,Vatican City,state,1939,19,63,122,true,false,
 Q58077,Petro Poroshenko,Ukraine,state,2014,4,48,122,true,false,
-Q15029,Hu Jintao,People's Republic of China,state,2003,9,60,122,true,false,
+Q15029,Hu Jintao,People's Republic of China,state,2003,9,60,122,true,true,
 Q42410,Evo Morales,Bolivia,both,2006,13,46,122,true,true,
 Q272201,Liz Truss,United Kingdom,gov,2022,0,47,121,true,true,
 Q43330,Mikheil Saakashvili,Georgia,state,2004,9,36,121,true,false,held state and government offices
@@ -146,11 +146,11 @@ Q191045,Felipe VI,Spain,state,2014,12,46,120,true,true,
 Q60206,Ariel Sharon,Israel,gov,2001,5,73,119,true,true,
 Q1459658,Viktor Yanukovych,Ukraine,state,2002,7,52,119,true,false,held state and government offices
 Q320,Michelle Bachelet,Chile,both,2006,8,54,119,true,false,
-Q40649,Cristina Fernández de Kirchner,Argentina,both,2007,7,54,119,true,false,
-Q44819,Suharto,Indonesia,both,1967,31,45,119,true,false,
+Q40649,Cristina Fernández de Kirchner,Argentina,both,2007,7,54,119,true,true,
+Q44819,Suharto,Indonesia,both,1967,31,45,119,true,true,
 Q80504,Nicolae Ceaușescu,Romania,state,1974,15,56,119,true,true,
 Q43739,Pope Pius X,Vatican City,state,1903,11,68,118,true,false,term outside country dates
-Q40495,Pervez Musharraf,Pakistan,state,1999,8,56,117,true,false,held state and government offices
+Q40495,Pervez Musharraf,Pakistan,state,1999,8,56,117,true,true,held state and government offices
 Q57641,Viktor Orbán,Hungary,gov,1998,19,35,117,true,true,
 Q3956186,Sergio Mattarella,Italy,state,2015,11,73,117,true,false,
 Q4631,Mohamed Morsi,Egypt,state,2012,1,60,117,true,false,

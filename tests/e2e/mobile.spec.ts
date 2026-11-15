@@ -94,7 +94,8 @@ test('Letters on a phone: the whole board and keyboard fit the screen width, key
     const box = (await key.boundingBox())!;
     expect(box.x).toBeGreaterThanOrEqual(0);
     expect(box.x + box.width).toBeLessThanOrEqual(width);
-    expect(box.height).toBeGreaterThanOrEqual(44);
+    expect(box.height).toBeGreaterThanOrEqual(56);
+    expect(box.width).toBeGreaterThanOrEqual(31);
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
 });

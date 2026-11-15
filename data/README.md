@@ -35,8 +35,12 @@ La base est construite automatiquement depuis Wikidata (licence CC0), puis corri
    - `open term after death` : vérifier la date de fin.
    - `odd age` : rois montés sur le trône enfants. C'est en général exact.
    - `term outside country dates` : le mandat tombe hors des dates de l'État sur Wikidata. Le plus souvent, l'État moderne a une date de création récente (Japon, Royaume-Uni, Iran) et le dirigeant est légitime. Reste quelques dirigeants de républiques fédérées yougoslaves d'avant 1991, à exclure au cas par cas.
-2. **Les réponses possibles** (`answerable=true` dans `review.csv`). Ce doivent être des dirigeants connus du grand public (PASSATION §5). Le seuil automatique (90 liens Wikipedia) en laissait 326 ; 156 ont été retirés à la main dans `answerable.remove` (Kaja Kallas, Thomas Sankara, présidents honorifiques, monarques peu connus hors de leur pays…). Il en reste 170. Ce tri est un jugement : remettre un nom se fait en le retirant de `answerable.remove`.
-3. **Les noms du jeu Letters** : `data/letters.json` associe un dirigeant au nom à épeler (138 noms). C'est le nom d'usage, en capitales sans accents, 11 lettres au plus : `MERKEL`, `DE GAULLE`, `XI JINPING`. Un dirigeant absent de ce fichier n'est jamais tiré dans Letters : c'est voulu pour les papes, les monarques numérotés, les noms de 3 lettres et les translittérations qui varient (Zelenskyy). `check:data` vérifie que chaque nom figure bien dans le nom affiché du dirigeant.
+2. **Les réponses possibles** (`answerable=true` dans `review.csv`). Ce doivent être des dirigeants connus du grand public (PASSATION §5). Le seuil automatique (90 liens Wikipedia) en laissait 326 ; 149 ont été retirés à la main dans `answerable.remove` (Kaja Kallas, Thomas Sankara, présidents honorifiques, monarques peu connus hors de leur pays…). Il en reste 177. Ce tri est un jugement : remettre un nom se fait en le retirant de `answerable.remove`.
+   Cas limites, à trancher par le propriétaire :
+   - *Retirés malgré beaucoup de liens Wikipedia* : Rafael Correa (173) et Guillermo Lasso (161), dont le score est gonflé ; les présidents américains du début du XXe siècle (Coolidge, Taft, McKinley, Harding) ; Bhumibol Adulyadej ; Sukarno ; les papes Paul VI, Pie XI et Pie XII ; Rouhani, Porochenko, Ianoukovytch, Saakachvili.
+   - *Gardés malgré peu de liens* (90 à 100) : Senghor, Mobutu, de Klerk, Salazar, Perón, Pétain, Honecker, Léopold II, Olof Palme, Albert II de Monaco, George Weah, Kagame, Draghi, Mark Carney, Milei.
+   - *Remis après une seconde lecture* : Hu Jintao, Suharto, Akihito, Cristina Kirchner, Musharraf, Mahathir Mohamad, Jean XXIII.
+3. **Les noms du jeu Letters** : `data/letters.json` associe un dirigeant au nom à épeler (144 noms). C'est le nom d'usage, en capitales sans accents, 11 lettres au plus : `MERKEL`, `DE GAULLE`, `XI JINPING`. Un dirigeant absent de ce fichier n'est jamais tiré dans Letters : c'est voulu pour les papes, les monarques numérotés, les noms de 3 lettres et les translittérations qui varient (Zelenskyy). `check:data` vérifie que chaque nom figure bien dans le nom affiché du dirigeant.
 4. **Les choix sensibles déjà faits dans `overrides.json`, à confirmer** :
    - Exclus comme non reconnus ou non nationaux : républiques populaires de Donetsk et de Louhansk, Artsakh, Krajina serbe, Republika Srpska, Bavière, Bade, gouvernement de Canton, Médie-Perse.
    - Empire allemand, République de Weimar et Reich allemand fusionnés dans « Germany », **sans drapeau**. Aucun drapeau historique n'est jamais affiché, seuls les drapeaux ISO actuels existent dans le jeu.
@@ -58,7 +62,7 @@ Après chaque correction : `npm run data:leaders`, puis `npm run check:data`.
 - Règles :
   - Classic : pas de réponse répétée avant 120 jours.
   - Letters : pas de réponse répétée avant 90 jours.
-  - Succession : pas de réponse répétée avant 60 jours (86 réponses possibles seulement).
+  - Succession : pas de réponse répétée avant 60 jours (92 réponses possibles seulement).
   - Une réponse de Classic, Letters ou Succession ne sert pas de réponse à un autre jeu pendant 14 jours.
   - Timeline : une carte ne revient pas avant 14 jours.
   - Le même jour, aucun dirigeant n'apparaît dans deux modes.

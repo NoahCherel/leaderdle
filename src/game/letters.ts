@@ -54,7 +54,7 @@ export function lettersWord(name: string): string {
   return name
     .replace(/[łŁđĐøØßæÆœŒı]/g, (c) => SPECIAL[c]!)
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/\p{M}/gu, '')
     .toUpperCase()
     .replace(/[^A-Z]+/g, ' ')
     .trim();

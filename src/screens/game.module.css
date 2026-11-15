@@ -577,8 +577,30 @@
   color: var(--xt);
 }
 @media (max-width: 619.98px) {
+  /* Edge to edge: ten keys share the whole screen width, as on a phone keyboard. */
+  .keys {
+    width: auto;
+    margin: 0 -13px;
+    gap: 7px;
+  }
   .krow {
-    gap: 4px;
+    gap: 3px;
+  }
+  .key {
+    height: 58px;
+    font-size: 21px;
+  }
+  .keyWide {
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+  .clues3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .clues3 .clue {
+    padding: 8px;
+    font-size: 14px;
   }
   .lrow,
   .board {

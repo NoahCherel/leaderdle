@@ -206,20 +206,6 @@ p {
   color: var(--text);
 }
 
-.badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border: 1px solid currentColor;
-  border-radius: var(--r);
-  font-family: var(--font-mono);
-  font-weight: 500;
-  font-size: 12px;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
 /* A rubber stamp: result marks. */
 .stamp {
   display: inline-block;
@@ -279,19 +265,6 @@ p {
   }
   75% {
     transform: translateX(6px);
-  }
-}
-@keyframes lfall {
-  0% {
-    transform: translateY(-30px) rotate(0);
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(150px) rotate(220deg);
-    opacity: 0;
   }
 }
 @keyframes lpop {
