@@ -19,7 +19,6 @@ import {
   rerollTargets,
   runOutcome,
   shownYear,
-  teamTotal,
   type Match,
   type MayhemData,
   type MayhemRun,
@@ -31,6 +30,13 @@ import { GameLayout, gameStyles as s } from './GameParts';
 /** Time between two duels being shown. */
 const DUEL_MS = 650;
 const STAMP: Record<Outcome, string> = { champion: 'Champion', final: 'Runner-up', semi: 'Knocked out', quarter: 'Knocked out' };
+/** Under the result: how close the last match was. */
+function scoreLine(run: MayhemRun): string {
+  if (runOutcome(run) === 'champion') return 'Three matches, three wins.';
+  const last = run.matches[run.matches.length - 1]!;
+  const wins = last.duels.filter(Boolean).length;
+  return `${wins} of ${PORTFOLIOS.length} duels won in the ${ROUNDS[run.matches.length - 1]!.toLowerCase()}.`;
+}
 const yy = (year: number | null) => (year === null ? '' : `'${String(year).slice(-2)}`);
 
 /** `?seed=` fixes the draws (tests, or two friends comparing). Each new run moves on from it. */
@@ -86,8 +92,8 @@ function Game({ data }: { data: MayhemData }) {
   const still = frozen || state.settings.reduce || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const save = useCallback(
-    (next: MayhemRun | null) => dispatch({ type: 'mayhem', run: next, total: next?.done ? teamTotal(next.team as string[], data.ratings) : undefined }),
-    [dispatch, data.ratings],
+    (next: MayhemRun | null) => dispatch({ type: 'mayhem', run: next }),
+    [dispatch],
   );
   const start = () => save(newRun(nextSeed(stats.played), data));
 
@@ -127,8 +133,8 @@ function Game({ data }: { data: MayhemData }) {
           </p>
           <p>Your government then plays a quarter-final, a semi-final and a final against rival governments, portfolio against portfolio. Play as often as you like.</p>
           <p className={s.mNote}>
-            Every leader has a hidden rating from 1 to 10 in each portfolio. These ratings are <strong>our own judgement</strong> of the weight a leader carried in that field, whatever their aims. They are not facts and not a moral verdict.{' '}
-            <Link href="/how-we-pick">How we rate</Link>
+            A duel goes to the leader who weighed more in that field, as we judge it, with a share of luck. Our judgement looks at what leaders achieved, whatever their aims: it is an opinion, not a fact, and not a moral verdict.{' '}
+            <Link href="/how-we-pick">How we pick</Link>
           </p>
         </div>
         <button type="button" className="btn btn--lg" style={{ alignSelf: 'flex-start' }} onClick={start}>
@@ -153,14 +159,14 @@ function Game({ data }: { data: MayhemData }) {
         <section aria-label="Result" className={s.hero}>
           <span className={`stamp ${outcome === 'champion' || outcome === 'final' ? '' : s.stampLost}`}>{STAMP[outcome]}</span>
           <h2 className="title">{OUTCOME_TEXT[outcome]}</h2>
-          <p className={s.score}>Team total {teamTotal(run.team as string[], data.ratings)}/50</p>
+          <p className={s.score}>{scoreLine(run)}</p>
         </section>
       )}
 
       {drafting && run.cell && (
         <>
           <p className={s.brief}>
-            <strong>Pick {filled + 1} of 5.</strong> Choose a leader from the draw, then the portfolio to give them. Ratings stay hidden until the end.
+            <strong>Pick {filled + 1} of 5.</strong> Choose a leader from the draw, then the portfolio to give them.
           </p>
           <section aria-label="The draw" className={`card ${s.draw}`}>
             <div key={`${run.cell.decade}-${run.cell.country}`} className={still ? s.drawIn : `${s.drawIn} ${s.drawFlip}`}>
@@ -188,6 +194,7 @@ function Game({ data }: { data: MayhemData }) {
                     onClick={() => save(reroll(run, kind, data))}
                   >
                     Another {kind}
+                    {!possible && <span className="sr-only">{spent ? ', already used' : `, no other ${kind} to draw`}</span>}
                   </button>
                 );
               })}
@@ -222,17 +229,11 @@ function Game({ data }: { data: MayhemData }) {
                     <strong>{byId(id).name}</strong> <span className="num muted">{yy(run.years[i] ?? null)}</span>
                   </span>
                 ) : pickable ? (
-                  <button type="button" className={`btn ${s.slotBtn}`} onClick={() => save(pick(run, chosen!, i, data))}>
+                  <button type="button" className={`btn btn--outline ${s.slotBtn}`} onClick={() => save(pick(run, chosen!, i, data))}>
                     Give {PORTFOLIO_NAMES[p]} to {byId(chosen!).name}
                   </button>
                 ) : (
                   <span className="muted">{drafting ? 'Empty' : ''}</span>
-                )}
-                {ended && id && (
-                  <span className={`num ${s.slotRating}`} aria-label={`${PORTFOLIO_NAMES[p]} rating ${data.ratings[id]?.[i]} out of 10`}>
-                    {data.ratings[id]?.[i]}
-                    <small>/10</small>
-                  </span>
                 )}
               </li>
             );
@@ -305,11 +306,11 @@ function MatchCard({ title, match, team, shown }: { title: string; match: Match;
   );
 }
 
-function StatsLine({ stats }: { stats: { played: number; titles: number; best: number } }) {
+function StatsLine({ stats }: { stats: { played: number; titles: number } }) {
   if (!stats.played) return null;
   return (
     <p className="eyebrow muted">
-      {stats.played} played · {stats.titles} {stats.titles === 1 ? 'title' : 'titles'} · best total {stats.best}/50
+      {stats.played} played · {stats.titles} {stats.titles === 1 ? 'title' : 'titles'}
     </p>
   );
 }

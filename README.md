@@ -1,6 +1,6 @@
 # Leaderdle
 
-Jeu web quotidien : deviner un dirigeant politique (chef d'État ou de gouvernement, depuis 1900). Quatre jeux par jour : Classic (cinq indices), Letters (épeler le nom, façon Wordle), Succession et Timeline. Site 100 % statique, sans compte, progression enregistrée dans le navigateur.
+Jeu web quotidien : deviner un dirigeant politique (chef d'État ou de gouvernement, depuis 1900). Quatre jeux par jour : Classic (cinq indices), Letters (épeler le nom, façon Wordle), Succession et Timeline. En bonus, Leader Mayhem : former un gouvernement de cinq dirigeants et le mener dans un tournoi, rejouable à volonté. Site 100 % statique, sans compte, progression enregistrée dans le navigateur.
 
 Cahier des charges d'origine : `leaderdle-passation/PASSATION.md`. Les règles en viennent toujours. L'apparence, elle, a été refaite depuis (voir « Apparence ») : les maquettes et captures du dossier ne correspondent plus au site.
 
@@ -71,3 +71,9 @@ Restent dans le texte de la page Privacy : `[AD PARTNER]` et `[COOKIE LIST]` (`s
 - `scripts/` : construction des données, calendrier, contrôle, pages statiques par route, serveur statique de test.
 
 Hébergement : n'importe quel hébergeur statique. Le build écrit un `index.html` par route et un `404.html`, aucune règle de réécriture n'est nécessaire. Un service worker garde le site jouable hors ligne une fois chargé.
+
+## Leader Mayhem
+
+- Règles et moteur : `src/game/mayhem.ts` (tirages, relances, duels, tournoi, tout dépend de la graine de la partie). `?seed=42` dans l'adresse impose les tirages.
+- Notes : `data/mayhem-ratings.csv`, privées (jamais affichées aux joueurs). Voir `data/README.md`.
+- `npm run mayhem:build` génère `public/data/mayhem.json`, `npm run mayhem:balance` simule des milliers de parties pour vérifier la difficulté (joueur qui connaît toutes les notes : environ 37 % de titres ; joueur au hasard : environ 4 %).

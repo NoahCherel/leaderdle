@@ -51,10 +51,14 @@ export interface MayhemRun {
 export type Outcome = 'quarter' | 'semi' | 'final' | 'champion';
 
 const FIRST_DECADE = 1900;
-/** How fast a rating gap turns into a win: 2 points ≈ 71 %, 4 points ≈ 86 %. */
-const STEEPNESS = 0.45;
+/**
+ * How fast a rating gap turns into a win: 2 points ≈ 67 %, 4 points ≈ 80 %. Tuned with
+ * scripts/mayhem/balance.ts: a player who knows every rating is champion about 37 % of the time,
+ * one who picks at random about 4 %.
+ */
+const STEEPNESS = 0.35;
 /** Where each round's opponent sits among sampled governments, weakest to strongest. */
-const OPPONENT_RANK = [0.5, 0.72, 0.9];
+const OPPONENT_RANK = [0.3, 0.6, 0.85];
 const SAMPLES = 60;
 
 const year = (iso: string) => Number(iso.slice(0, 4));
@@ -158,10 +162,31 @@ export function playMatch(mine: readonly number[], theirs: readonly number[], ra
 export const teamTotal = (team: readonly string[], ratings: Ratings) => team.reduce((sum, id, i) => sum + (ratings[id]?.[i] ?? 0), 0);
 const onPortfolio = (team: readonly string[], ratings: Ratings) => team.map((id, i) => ratings[id]?.[i] ?? 0);
 
+/** Every order of five portfolios (120), to seat a rival government at its best. */
+const ORDERS: number[][] = (function orders(rest: number[]): number[][] {
+  if (rest.length <= 1) return [rest];
+  return rest.flatMap((x, i) => orders([...rest.slice(0, i), ...rest.slice(i + 1)]).map((o) => [x, ...o]));
+})(PORTFOLIOS.map((_, i) => i));
+
+/** Seats five leaders on the portfolios that give the highest total, as a sensible player would. */
+function arrange(five: string[], ratings: Ratings): string[] {
+  let best = five;
+  let top = -1;
+  for (const order of ORDERS) {
+    const seated = order.map((k) => five[k]!);
+    const total = teamTotal(seated, ratings);
+    if (total > top) [best, top] = [seated, total];
+  }
+  return best;
+}
+
 /** A rival government for the round: sampled at random, then taken at that round's strength. */
-export function opponent(data: MayhemData, team: ReadonlyArray<string | null>, round: number, rand: () => number): string[] {
-  const pool = Object.keys(data.ratings).filter((id) => !team.includes(id));
-  const samples = Array.from({ length: SAMPLES }, () => shuffle(pool, rand).slice(0, PORTFOLIOS.length));
+export function opponent(data: MayhemData, team: ReadonlyArray<string | null>, round: number, rand: () => number, met: readonly string[] = []): string[] {
+  // Leaders already met are left out when enough remain, so each round brings new faces.
+  const rated = Object.keys(data.ratings).filter((id) => !team.includes(id));
+  const fresh = rated.filter((id) => !met.includes(id));
+  const pool = fresh.length >= PORTFOLIOS.length ? fresh : rated;
+  const samples = Array.from({ length: SAMPLES }, () => arrange(shuffle(pool, rand).slice(0, PORTFOLIOS.length), data.ratings));
   samples.sort((a, b) => teamTotal(a, data.ratings) - teamTotal(b, data.ratings));
   return samples[Math.min(SAMPLES - 1, Math.floor(OPPONENT_RANK[round]! * SAMPLES))]!;
 }
@@ -171,7 +196,7 @@ export function playNext(run: MayhemRun, data: MayhemData): MayhemRun {
   if (run.done || run.team.includes(null) || run.matches.length >= ROUNDS.length) return run;
   const team = run.team as string[];
   const rand = event(run);
-  const opp = opponent(data, team, run.matches.length, rand);
+  const opp = opponent(data, team, run.matches.length, rand, run.matches.flatMap((m) => m.opponent));
   const result = playMatch(onPortfolio(team, data.ratings), onPortfolio(opp, data.ratings), rand);
   const matches = [...run.matches, { opponent: opp, ...result }];
   return { ...run, draws: run.draws + 1, matches, done: !result.won || matches.length === ROUNDS.length };

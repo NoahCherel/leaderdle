@@ -20,7 +20,8 @@ export const PAGES: Record<string, [title: string, paragraphs: string[]]> = {
     [
       'Every leader in the game was a head of state or a head of government at some point since 1900.',
       'The daily answer is always someone widely known. Lesser-known leaders can be guessed, but they are never the answer.',
-      'We describe leaders with checkable facts only: country, role and dates. No quotes, no ratings, no opinions.',
+      'In the four daily games, we describe leaders with checkable facts only: country, role and dates. No quotes, no ratings, no opinions.',
+      'Leader Mayhem is the exception. A duel there goes to the leader who weighed more in a field, and that weight is our own judgement of what each leader achieved, whatever their aims. It is an opinion, never shown as a score, and not a verdict on anyone. Every leader is in it, including dictators, because the game is about history as it happened.',
       'Every leader gets the same visual treatment, whoever they are. We never show photos, portraits or caricatures. Appearing in the game is not an endorsement.',
       'For leaders with several separate terms, Took office is the first start date and Years in office is the total. For leaders still in office, the count runs to today.',
       'Spotted a mistake? Tell us through Report an error.',

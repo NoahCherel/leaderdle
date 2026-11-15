@@ -730,19 +730,6 @@
   font-size: 16px;
   letter-spacing: 0.03em;
 }
-.slotRating {
-  flex: none;
-  font-family: var(--font-title);
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 1;
-}
-.slotRating small {
-  font-family: var(--font-mono);
-  font-weight: 500;
-  font-size: 12px;
-  color: var(--muted);
-}
 .match {
   display: flex;
   flex-direction: column;

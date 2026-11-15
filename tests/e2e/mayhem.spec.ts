@@ -32,7 +32,7 @@ test('Leader Mayhem: draft five leaders, play the tournament, see the ratings, s
   await page.getByRole('button', { name: 'Decline' }).click();
   await page.getByRole('link', { name: /Leader Mayhem/ }).click();
   await expect(page).toHaveURL(/\/mayhem$/);
-  await expect(page.getByText('our own judgement')).toBeVisible();
+  await expect(page.getByText(/as we judge it/)).toBeVisible();
   await page.getByRole('button', { name: 'Form a government' }).click();
 
   // The draw names a decade and a country, and offers at least two leaders with their year.
@@ -49,14 +49,15 @@ test('Leader Mayhem: draft five leaders, play the tournament, see the ratings, s
   await playOut(page);
 
   await expect(page.getByRole('heading', { name: END })).toBeVisible();
-  await expect(page.getByText(/Team total \d+\/50/)).toBeVisible();
+  // Ratings are ours: never shown, not even at the end.
+  await expect(page.getByText(/\/10|\/50|rating/i)).toHaveCount(0);
   await page.getByRole('button', { name: 'Share result' }).click();
   const text = (await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, '\n');
   expect(text).toMatch(/^Leaderdle · Leader Mayhem\n.*\nEDU: .+ \('\d\d\)\nWAR: .+\nECO: .+\nDOM: .+\nFOR: .+\nleaderdle\.com\/mayhem$/);
 
   // A bonus: the day streak and the day's games are untouched.
   await expect(page.getByRole('img', { name: 'Streak: 0 days' })).toBeVisible();
-  await expect(page.getByText('1 played')).toBeVisible();
+  await expect(page.getByText(/^1 played · \d titles?$/)).toBeVisible();
   await page.getByRole('button', { name: 'Form a new government' }).click();
   await expect(page.getByText('Pick 1 of 5')).toBeVisible();
 });

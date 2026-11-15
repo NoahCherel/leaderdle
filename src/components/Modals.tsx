@@ -54,9 +54,9 @@ function HelpBody({ mode }: { mode: Topic }) {
       <>
         <p>Form a government of five leaders, one per portfolio: Education, War, Economy, Domestic and Foreign.</p>
         <p>Each round draws a decade and a country. Choose one of the leaders in office then, and give them a portfolio. You may ask once for another country and once for another decade.</p>
-        <p>Your government then plays a quarter-final, a semi-final and a final. A match is five duels, portfolio against portfolio. The better rated leader usually wins a duel, not always. Three duels take the match.</p>
+        <p>Your government then plays a quarter-final, a semi-final and a final. A match is five duels, portfolio against portfolio. The leader who weighed more in that field usually wins the duel, not always. Three duels take the match.</p>
         <p className="muted">
-          Each leader has a hidden rating from 1 to 10 in each portfolio. It is our own judgement of the weight they carried in that field, whatever their aims: not a fact, and not a moral verdict. Education also covers science and culture.
+          Who weighed more in a field is our own judgement of what each leader achieved there, whatever their aims: an opinion, not a fact, and not a moral verdict. Education also covers science and culture.
         </p>
       </>
     );

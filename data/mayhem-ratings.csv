@@ -1,32 +1,437 @@
 id,name,education,war,economy,domestic,foreign,why
-Q8016,Winston Churchill,3,10,4,5,9,"Chef de guerre de 1940 à 1945, artisan de l'alliance avec Roosevelt et Staline. Bilan intérieur et économique modeste, second mandat terne."
-Q8007,Franklin D. Roosevelt,5,9,9,9,9,"New Deal, sortie de la Grande Dépression, conduite de la guerre et préparation de l'ONU."
-Q352,Adolf Hitler,3,6,5,7,4,"Contrôle total du pays et réarmement rapide ; conquêtes initiales puis défaite totale, isolement et ruine de l'Allemagne."
-Q855,Joseph Stalin,7,8,7,7,8,"Industrialisation forcée et alphabétisation au prix de famines et de purges ; victoire de 1945 malgré 1941 ; bloc de l'Est."
-Q5816,Mao Zedong,4,7,2,5,6,"Guerre civile gagnée et unification ; Grand Bond en avant et famine ; Révolution culturelle qui ferme écoles et universités."
-Q2042,Charles de Gaulle,5,7,7,8,8,"France libre, fin de la guerre d'Algérie, Ve République, croissance des Trente Glorieuses, politique d'indépendance."
-Q7416,Margaret Thatcher,4,7,8,7,7,"Transformation libérale de l'économie au prix d'un fort chômage ; guerre des Malouines gagnée ; rôle dans la fin de la guerre froide."
-Q9960,Ronald Reagan,3,6,7,6,8,"Reprise économique et déficits ; course aux armements ; sommets avec Gorbatchev."
-Q567,Angela Merkel,5,2,8,7,8,"Seize ans de stabilité, gestion de la crise de l'euro, poids central dans l'Union européenne ; aucune guerre."
-Q1047,Jawaharlal Nehru,8,3,5,8,7,"Fondation des IIT et de l'enseignement scientifique, démocratie et unité de l'Inde ; défaite de 1962 face à la Chine ; non-alignement."
-Q8023,Nelson Mandela,5,2,5,10,8,"Transition pacifique et réconciliation après l'apartheid ; immense autorité morale à l'étranger ; économie peu transformée."
-Q30487,Mikhail Gorbachev,4,3,2,5,9,"Fin de la guerre froide, retrait d'Afghanistan, réunification allemande acceptée ; échec économique et éclatement de l'URSS."
-Q5152,Mustafa Kemal Atatürk,10,9,5,9,7,"Nouvel alphabet, école laïque et obligatoire ; guerre d'indépendance gagnée ; fondation de la République."
-Q131248,Lee Kuan Yew,9,3,10,9,7,"De port colonial à pays riche en une génération ; école bilingue exigeante ; État très contrôlé."
-Q2492,Konrad Adenauer,5,3,8,8,9,"Miracle économique avec Erhard, démocratie stable, ancrage à l'Ouest, réconciliation franco-allemande."
-Q1394,Vladimir Lenin,6,7,3,7,4,"Prise et maintien du pouvoir, guerre civile gagnée ; communisme de guerre puis NEP ; paix humiliante de Brest-Litovsk."
-Q9640,Lyndon B. Johnson,9,3,7,9,3,"Great Society : lois sur l'école, droits civiques, santé ; enlisement au Vietnam."
-Q9588,Richard Nixon,5,4,5,4,9,"Ouverture à la Chine et détente avec l'URSS ; fin lente de la guerre du Vietnam ; Watergate et démission."
-Q76,Barack Obama,6,5,7,7,6,"Sortie de la crise de 2008 et réforme de la santé ; retrait d'Irak, guerre en Afghanistan ; accord de Paris."
-Q22686,Donald Trump,3,4,6,4,5,"Baisses d'impôts et guerre commerciale ; pays très divisé ; diplomatie de rupture avec les alliés."
-Q7747,Vladimir Putin,4,5,6,7,5,"Croissance des années 2000 portée par l'énergie ; contrôle étroit du pays ; guerres de Tchétchénie et d'Ukraine, isolement de l'Occident."
-Q1149,Indira Gandhi,5,9,6,5,7,"Victoire de 1971 et naissance du Bangladesh ; Révolution verte ; état d'urgence de 1975 à 1977."
-Q39524,Gamal Abdel Nasser,7,3,5,7,8,"Nationalisation de Suez, figure du panarabisme et du non-alignement ; réforme agraire et écoles ; défaite de 1967."
-Q29179,Francisco Franco,3,8,6,6,5,"Guerre civile gagnée ; dictature longue et répression ; miracle économique des années 1960 ; neutralité pendant la guerre."
-Q23559,Benito Mussolini,4,2,4,6,3,"Régime fasciste bien établi ; défaites en Grèce et en Afrique ; alliance avec Hitler qui mène à la chute."
-Q11256,Fidel Castro,9,7,3,7,7,"Alphabétisation et médecine pour tous ; révolution et baie des Cochons ; économie dépendante de l'URSS."
-Q9696,John F. Kennedy,6,5,6,6,7,"Programme Apollo ; crise des missiles de Cuba désamorcée après l'échec de la baie des Cochons ; mandat court."
-Q9545,Tony Blair,7,4,7,7,6,"Investissement dans l'école et la santé, accord du Vendredi saint ; guerre d'Irak contestée."
-Q3052772,Emmanuel Macron,5,4,6,4,7,"Réformes du marché du travail et des retraites ; fortes contestations intérieures ; rôle actif en Europe."
-Q39259,Recep Tayyip Erdoğan,5,5,6,7,6,"Forte croissance puis inflation ; pouvoir de plus en plus personnel ; diplomatie régionale ambitieuse."
-Q37610,David Ben-Gurion,7,9,6,9,7,"Fondation de l'État d'Israël, guerre de 1948 gagnée, intégration de l'immigration de masse."
+Q8016,Winston Churchill,2,10,3,4,9,"Chef de guerre de 1940 à 1945, artisan de l'alliance avec Roosevelt et Staline. Bilan intérieur et économique modeste, second mandat terne."
+Q8007,Franklin D. Roosevelt,4,9,9,10,9,"New Deal, sortie de la Grande Dépression, conduite de la guerre et préparation de l'ONU."
+Q352,Adolf Hitler,2,6,5,8,2,"Contrôle total du pays et réarmement rapide ; conquêtes initiales puis défaite totale, isolement et ruine de l'Allemagne."
+Q855,Joseph Stalin,6,9,6,8,8,Industrialisation forcée et alphabétisation au prix de famines et de purges ; victoire de 1945 malgré 1941 ; bloc de l'Est.
+Q5816,Mao Zedong,3,8,1,5,5,Guerre civile gagnée et unification ; Grand Bond en avant et famine ; Révolution culturelle qui ferme écoles et universités.
+Q2042,Charles de Gaulle,4,8,7,9,9,"France libre, fin de la guerre d'Algérie, Ve République, croissance des Trente Glorieuses, politique d'indépendance."
+Q7416,Margaret Thatcher,3,7,9,6,7,Transformation libérale de l'économie au prix d'un fort chômage ; guerre des Malouines gagnée ; rôle dans la fin de la guerre froide.
+Q9960,Ronald Reagan,2,6,7,5,8,Reprise économique et déficits ; course aux armements ; sommets avec Gorbatchev.
+Q567,Angela Merkel,4,1,8,7,8,"Seize ans de stabilité, gestion de la crise de l'euro, poids central dans l'Union européenne ; aucune guerre."
+Q1047,Jawaharlal Nehru,9,2,4,8,7,"Fondation des IIT et de l'enseignement scientifique, démocratie et unité de l'Inde ; défaite de 1962 face à la Chine ; non-alignement."
+Q8023,Nelson Mandela,4,1,3,10,8,Transition pacifique et réconciliation après l'apartheid ; immense autorité morale à l'étranger ; économie peu transformée.
+Q30487,Mikhail Gorbachev,3,2,1,4,9,"Fin de la guerre froide, retrait d'Afghanistan, réunification allemande acceptée ; échec économique et éclatement de l'URSS."
+Q5152,Mustafa Kemal Atatürk,10,9,4,9,6,"Nouvel alphabet, école laïque et obligatoire ; guerre d'indépendance gagnée ; fondation de la République."
+Q131248,Lee Kuan Yew,9,2,10,8,6,De port colonial à pays riche en une génération ; école bilingue exigeante ; État très contrôlé.
+Q2492,Konrad Adenauer,3,2,9,8,9,"Miracle économique avec Erhard, démocratie stable, ancrage à l'Ouest, réconciliation franco-allemande."
+Q1394,Vladimir Lenin,5,8,2,7,3,"Prise et maintien du pouvoir, guerre civile gagnée ; communisme de guerre puis NEP ; paix humiliante de Brest-Litovsk."
+Q9640,Lyndon B. Johnson,9,2,7,9,2,"Great Society : lois sur l'école, droits civiques, santé ; enlisement au Vietnam."
+Q9588,Richard Nixon,4,3,4,2,9,Ouverture à la Chine et détente avec l'URSS ; fin lente de la guerre du Vietnam ; Watergate et démission.
+Q76,Barack Obama,5,4,7,6,6,"Sortie de la crise de 2008 et réforme de la santé ; retrait d'Irak, guerre en Afghanistan ; accord de Paris."
+Q22686,Donald Trump,2,3,6,3,4,Baisses d'impôts et guerre commerciale ; pays très divisé ; diplomatie de rupture avec les alliés.
+Q7747,Vladimir Putin,3,4,6,8,4,"Croissance des années 2000 portée par l'énergie ; contrôle étroit du pays ; guerres de Tchétchénie et d'Ukraine, isolement de l'Occident."
+Q1149,Indira Gandhi,4,9,6,4,7,Victoire de 1971 et naissance du Bangladesh ; Révolution verte ; état d'urgence de 1975 à 1977.
+Q39524,Gamal Abdel Nasser,7,2,5,7,8,"Nationalisation de Suez, figure du panarabisme et du non-alignement ; réforme agraire et écoles ; défaite de 1967."
+Q29179,Francisco Franco,2,8,6,6,4,Guerre civile gagnée ; dictature longue et répression ; miracle économique des années 1960 ; neutralité pendant la guerre.
+Q23559,Benito Mussolini,3,1,3,6,2,Régime fasciste bien établi ; défaites en Grèce et en Afrique ; alliance avec Hitler qui mène à la chute.
+Q11256,Fidel Castro,9,7,2,7,7,Alphabétisation et médecine pour tous ; révolution et baie des Cochons ; économie dépendante de l'URSS.
+Q9696,John F. Kennedy,6,5,6,5,7,Programme Apollo ; crise des missiles de Cuba désamorcée après l'échec de la baie des Cochons ; mandat court.
+Q9545,Tony Blair,7,3,7,7,5,"Investissement dans l'école et la santé, accord du Vendredi saint ; guerre d'Irak contestée."
+Q3052772,Emmanuel Macron,4,3,6,3,7,Réformes du marché du travail et des retraites ; fortes contestations intérieures ; rôle actif en Europe.
+Q39259,Recep Tayyip Erdoğan,5,4,5,7,6,Forte croissance puis inflation ; pouvoir de plus en plus personnel ; diplomatie régionale ambitieuse.
+Q37610,David Ben-Gurion,7,9,5,9,6,"Fondation de l'État d'Israël, guerre de 1948 gagnée, intégration de l'immigration de masse."
+Q171730,Georges Clemenceau,2,10,3,5,7,Père la Victoire en 1917-1918 ; traité de Versailles très dur ; grèves réprimées en 1906-1909.
+Q296673,Armand Fallières,2,1,2,4,3,Président de la IIIe République au rôle surtout protocolaire.
+Q179888,Aristide Briand,5,2,3,6,9,"Rapporteur de la loi de séparation des Églises et de l'État ; Locarno, pacte Briand-Kellogg, Nobel de la paix."
+Q191974,Raymond Poincaré,2,6,8,6,6,Président pendant la Grande Guerre ; sauve le franc en 1926-1928 ; occupation de la Ruhr.
+Q296064,Gaston Doumergue,2,1,2,4,3,"Président protocolaire, puis bref gouvernement d'union en 1934."
+Q274540,Alexandre Millerand,2,3,3,5,4,"Président de 1920 à 1924, poussé à la démission après avoir voulu renforcer sa fonction."
+Q151983,Pierre Laval,1,2,3,3,2,"Déflation des années 1930 ; principal artisan de la collaboration sous Vichy, fusillé en 1945."
+Q12680,Paul Doumer,2,1,2,3,2,Président assassiné un an après son élection.
+Q158749,Albert Lebrun,1,1,1,3,2,Président effacé qui laisse la place à Pétain en 1940.
+Q213526,Édouard Daladier,2,3,3,4,2,Signataire des accords de Munich ; France mal préparée en 1939.
+Q18434,Léon Blum,6,1,5,9,3,"Front populaire : congés payés, 40 heures, école jusqu'à 14 ans ; non-intervention en Espagne."
+Q5721,Philippe Pétain,2,3,2,4,1,"Vainqueur de Verdun, puis chef d'un régime de collaboration de 1940 à 1944."
+Q15981,Robert Schuman,3,1,5,5,10,"Déclaration du 9 mai 1950, acte de naissance de la construction européenne."
+Q158772,Vincent Auriol,2,1,2,5,4,"Premier président de la IVe République, arbitre de gouvernements instables."
+Q2185,Georges Pompidou,5,2,9,7,6,"Industrialisation, TGV, nucléaire civil, Beaubourg ; entrée du Royaume-Uni dans la CEE."
+Q2105,Jacques Chirac,4,4,5,5,8,"Refus de la guerre d'Irak, fin du service militaire, reconnaissance de la responsabilité de l'État dans la Shoah."
+Q2124,Valéry Giscard d'Estaing,6,2,5,8,7,"Majorité à 18 ans, IVG, divorce, collège unique ; Conseil européen et G7."
+Q2038,François Mitterrand,6,4,4,7,9,"Abolition de la peine de mort, décentralisation, tournant de la rigueur ; Maastricht et l'euro."
+Q156511,Pierre Mauroy,3,1,3,7,3,"Retraite à 60 ans, 39 heures, nationalisations, puis rigueur."
+Q217070,Laurent Fabius,3,1,4,4,4,"Plus jeune Premier ministre, modernisation industrielle ; affaire du Rainbow Warrior."
+Q230861,Édith Cresson,2,1,3,2,2,"Première femme Première ministre, mandat court et impopulaire."
+Q187099,Lionel Jospin,4,1,7,7,4,"35 heures, CMU, PACS, emplois-jeunes ; chômage en baisse."
+Q131660,Dominique de Villepin,2,1,3,3,6,Contre la guerre d'Irak à l'ONU avant Matignon ; échec du CPE.
+Q329,Nicolas Sarkozy,3,6,5,5,7,"Crise de 2008, retraite à 62 ans, intervention en Libye, retour dans l'OTAN intégrée."
+Q101410,François Fillon,2,1,4,4,3,Premier ministre discret pendant cinq ans.
+Q157,François Hollande,3,6,3,4,5,"Mariage pour tous, attentats de 2015, intervention au Mali, accord de Paris."
+Q7711,Jean-Marc Ayrault,2,1,3,4,3,"Premier ministre de 2012 à 2014, peu de réformes marquantes."
+Q10287,Manuel Valls,2,2,3,4,3,"Premier ministre après les attentats, état d'urgence, loi travail."
+Q3579995,Édouard Philippe,2,1,4,5,3,"Réformes de la SNCF et du travail, gilets jaunes, début du Covid."
+Q3171170,Jean Castex,2,1,4,4,2,Premier ministre du Covid et des confinements.
+Q20020731,Élisabeth Borne,2,1,4,3,2,Réforme des retraites adoptée par le 49.3.
+Q30339350,Gabriel Attal,4,1,2,3,2,Ministre de l'Éducation puis Premier ministre quelques mois.
+Q438465,Michel Barnier,2,1,2,2,3,Gouvernement renversé après trois mois ; auparavant négociateur du Brexit.
+Q9439,Queen Victoria,4,6,6,5,8,"Apogée de l'Empire britannique, impératrice des Indes."
+Q20875,Edward VII,2,1,2,3,6,Roi qui favorise l'Entente cordiale.
+Q19008,Arthur Balfour,6,2,3,4,7,Loi sur l'éducation de 1902 ; déclaration Balfour de 1917 comme ministre.
+Q166714,H. H. Asquith,4,4,5,8,4,"Retraites, assurance sociale, Parliament Act ; débuts difficiles de la Grande Guerre."
+Q269412,George V,2,3,2,6,4,"Roi pendant la Grande Guerre, monarchie constitutionnelle stable."
+Q134982,David Lloyd George,4,9,6,8,7,"Victoire de 1918, budget du peuple, vote des femmes ; Versailles, indépendance de l'Irlande."
+Q166663,Bonar Law,1,1,2,2,2,"Premier ministre quelques mois, malade."
+Q166635,Stanley Baldwin,3,2,4,6,3,"Grève générale de 1926, abdication d'Édouard VIII ; réarmement tardif."
+Q166646,Ramsay MacDonald,3,1,2,4,4,Premier Premier ministre travailliste ; gouvernement d'union pendant la crise de 1931.
+Q280856,George VI,2,6,1,6,4,"Roi de la guerre, symbole de résistance pendant le Blitz."
+Q590227,Edward VIII,1,1,1,1,1,Abdique au bout de onze mois ; sympathies pour l'Allemagne nazie.
+Q10664,Neville Chamberlain,2,2,3,4,1,Accords de Munich et politique d'apaisement.
+Q129006,Clement Attlee,6,4,6,10,6,"NHS, État-providence, nationalisations ; indépendance de l'Inde ; OTAN."
+Q9682,Elizabeth II,3,2,2,7,8,"Soixante-dix ans de règne, continuité, Commonwealth, diplomatie de la Couronne."
+Q128995,Anthony Eden,2,2,3,3,1,Fiasco de Suez en 1956.
+Q128985,Harold Macmillan,3,2,7,6,7,"Prospérité des années 1950, « vent du changement » et décolonisation."
+Q128976,Alec Douglas-Home,1,1,2,2,3,Un an à Downing Street.
+Q128956,Harold Wilson,8,2,3,7,5,"Open University, libéralisation des mœurs ; dévaluation ; reste hors du Vietnam."
+Q128967,Edward Heath,3,1,2,3,7,Entrée dans la CEE en 1973 ; choc pétrolier et semaine de trois jours.
+Q9576,James Callaghan,3,1,2,2,3,Crise du FMI et « hiver du mécontentement ».
+Q9559,John Major,3,4,5,4,5,"Guerre du Golfe, Maastricht, paix en Irlande du Nord amorcée ; mercredi noir."
+Q10648,Gordon Brown,4,3,7,4,6,"Réponse à la crise financière de 2008, G20 de Londres."
+Q192,David Cameron,3,3,5,4,2,"Austérité, mariage pour tous ; référendum du Brexit perdu."
+Q264766,Theresa May,2,1,3,2,3,Trois ans à négocier le Brexit sans le faire voter.
+Q180589,Boris Johnson,2,3,3,4,5,"Brexit conclu, Covid, soutien rapide à l'Ukraine ; démission après les scandales."
+Q43274,Charles III,3,1,1,4,4,"Roi depuis 2022, engagement écologique ancien."
+Q20055561,Rishi Sunak,3,1,5,3,3,Stabilisation après la crise ouverte par Liz Truss.
+Q272201,Liz Truss,1,1,1,1,2,49 jours ; mini-budget qui fait plonger la livre.
+Q6383803,Keir Starmer,3,2,4,3,5,Premier ministre travailliste depuis 2024.
+Q269909,Andy Burnham,3,1,3,3,2,Mandat trop récent pour un bilan.
+Q243705,"Robert Gascoyne-Cecil, 3rd Marquess of Salisbury",3,6,4,4,8,"Splendide isolement, guerre des Boers, partage de l'Afrique."
+Q2677,Wilhelm II,2,3,5,4,1,"Weltpolitik, course navale, entrée dans la Grande Guerre ; défaite et abdication."
+Q77113,Theobald von Bethmann Hollweg,2,2,3,4,2,Chancelier de l'entrée en guerre de 1914.
+Q2646,Friedrich Ebert,3,4,2,6,3,"Premier président de Weimar, défend la république contre les putschs ; hyperinflation."
+Q103955,Gustav Stresemann,3,1,8,6,9,"Fin de l'hyperinflation, Locarno, entrée à la SDN, Nobel de la paix."
+Q2667,Paul von Hindenburg,1,6,2,3,3,Héros de Tannenberg ; président qui nomme Hitler chancelier en 1933.
+Q150552,Franz von Papen,1,1,2,2,2,Chancelier qui ouvre la voie à Hitler.
+Q57133,Kurt von Schleicher,1,2,2,2,2,"Dernier chancelier avant Hitler, deux mois."
+Q41749,Joseph Goebbels,2,1,1,1,1,"Ministre de la propagande, chancelier une seule journée en mai 1945."
+Q76437,Karl Dönitz,1,3,1,1,1,Signe la capitulation après trois semaines à la tête du Reich.
+Q2594,Theodor Heuss,4,1,3,6,5,"Premier président de la RFA, autorité morale de la jeune démocratie."
+Q2582,Heinrich Lübke,2,1,2,3,3,"Président de 1959 à 1969, rôle protocolaire."
+Q2496,Ludwig Erhard,3,1,10,6,4,Père du miracle économique et de l'économie sociale de marché.
+Q2512,Kurt Georg Kiesinger,2,1,5,4,3,Grande coalition de 1966 à 1969.
+Q2514,Willy Brandt,6,2,5,7,10,"Ostpolitik, génuflexion de Varsovie, Nobel de la paix ; réformes sociales et éducatives."
+Q2573,Gustav Heinemann,3,1,2,5,3,Président attaché aux libertés civiles.
+Q2516,Helmut Schmidt,3,4,7,6,8,"Choc pétrolier, lutte contre la RAF, Système monétaire européen, euromissiles."
+Q2571,Walter Scheel,2,1,2,3,4,Président de 1974 à 1979.
+Q2569,Karl Carstens,1,1,1,3,2,Président de 1979 à 1984.
+Q2518,Helmut Kohl,4,2,7,9,10,"Réunification allemande, Maastricht et l'euro."
+Q2567,Richard von Weizsäcker,5,1,2,7,6,Discours du 8 mai 1985 ; président de la réunification.
+Q2563,Roman Herzog,4,1,2,5,3,Président qui appelle aux réformes.
+Q2530,Gerhard Schröder,3,5,7,5,5,Agenda 2010 ; Kosovo et Afghanistan ; refus de la guerre d'Irak ; Nord Stream.
+Q2551,Johannes Rau,3,1,1,4,3,Président de 1999 à 2004.
+Q2542,Horst Köhler,2,1,3,3,3,Président démissionnaire en 2010.
+Q2540,Christian Wulff,2,1,1,3,2,Président démissionnaire après un scandale.
+Q2538,Joachim Gauck,4,1,1,5,4,"Ancien dissident de RDA, président de 2012 à 2017."
+Q76658,Frank-Walter Steinmeier,2,1,1,4,4,Président depuis 2017.
+Q61053,Olaf Scholz,3,5,3,3,5,Zeitenwende et réarmement après l'invasion de l'Ukraine ; coalition qui éclate.
+Q566257,Friedrich Merz,3,5,4,4,5,"Chancelier depuis 2025, effort massif pour la défense."
+Q200085,Pietro Badoglio,1,2,1,2,3,"Armistice de 1943 et fuite du roi, armée laissée sans ordres."
+Q153832,Alcide De Gasperi,4,2,8,8,9,"Reconstruction, ancrage occidental, fondateur de l'Europe communautaire."
+Q1242,Luigi Einaudi,3,1,7,5,3,Économiste qui stabilise la lire ; premier président élu de la République.
+Q1245,Enrico De Nicola,2,1,1,4,2,Chef de l'État provisoire de 1946 à 1948.
+Q171834,Aldo Moro,4,1,4,6,5,Compromis historique ; enlevé et assassiné par les Brigades rouges.
+Q1235,Giovanni Leone,1,1,1,2,2,Président démissionnaire après un scandale.
+Q50005,Giulio Andreotti,2,1,4,5,6,"Sept fois président du Conseil, symbole de la Première République et de ses compromissions."
+Q1233,Sandro Pertini,3,2,1,7,4,"Président très populaire, ancien résistant."
+Q1230,Francesco Cossiga,1,2,1,3,2,"Ministre de l'Intérieur pendant l'affaire Moro, puis président."
+Q192818,Bettino Craxi,2,1,5,4,5,Croissance et dette ; crise de Sigonella ; chute dans Mani pulite.
+Q202209,Giuliano Amato,2,1,7,4,3,Plan de rigueur de 1992 qui sauve la lire.
+Q1228,Oscar Luigi Scalfaro,2,1,1,4,2,Président pendant Mani pulite.
+Q1224,Carlo Azeglio Ciampi,3,1,8,5,5,Qualifie l'Italie pour l'euro.
+Q11860,Silvio Berlusconi,2,3,3,3,4,Domine vingt ans de vie politique ; scandales et stagnation.
+Q38484,Romano Prodi,3,1,7,4,7,Entrée dans l'euro ; président de la Commission européenne.
+Q47602,Massimo D'Alema,2,4,3,3,4,Participation à la guerre du Kosovo.
+Q1220,Giorgio Napolitano,3,1,2,6,5,"Deux mandats présidentiels, arbitre de la crise de 2011."
+Q47904,Mario Monti,2,1,6,3,6,"Gouvernement technique d'urgence en 2011, austérité."
+Q674957,Enrico Letta,2,1,3,2,3,Moins d'un an au pouvoir.
+Q47563,Matteo Renzi,4,1,4,4,3,"Jobs Act, réforme de l'école ; démission après un référendum perdu."
+Q3956186,Sergio Mattarella,2,1,1,6,4,"Président depuis 2015, garant de la stabilité."
+Q1071031,Paolo Gentiloni,2,1,3,3,3,Gouvernement de transition de 2016 à 2018.
+Q53844829,Giuseppe Conte,2,1,4,4,3,Premier pays européen frappé par le Covid ; plan de relance européen.
+Q294460,Mario Draghi,2,3,8,5,7,"Plan de relance, soutien ferme à l'Ukraine ; auparavant « whatever it takes »."
+Q451791,Giorgia Meloni,2,3,4,5,6,"Gouvernement stable, ligne atlantiste."
+Q174231,Emperor Meiji,9,8,9,9,7,"Restauration Meiji, modernisation du Japon, victoire sur la Russie en 1905."
+Q174971,Itō Hirobumi,6,4,6,8,5,"Auteur de la Constitution de Meiji ; résident général en Corée, assassiné en 1909."
+Q157052,Emperor Taishō,1,2,1,2,2,"Empereur malade, régence dès 1921."
+Q34479,Hirohito,3,4,4,6,2,Empereur pendant la guerre de conquête et la défaite ; reste sur le trône.
+Q160847,Hideki Tojo,1,3,1,3,1,"Attaque de Pearl Harbor, guerre perdue, exécuté en 1948."
+Q179871,Eisaku Satō,3,1,8,6,7,"Haute croissance, retour d'Okinawa, Nobel de la paix."
+Q250828,Yasuhiro Nakasone,5,2,7,6,7,"Privatisations, réforme de l'école, alliance avec Reagan."
+Q37979,Akihito,2,1,1,7,5,"Empereur pacifiste, gestes de réconciliation, abdication en 2019."
+Q130852,Junichiro Koizumi,2,2,6,6,4,"Privatisation de la poste, visites au sanctuaire Yasukuni."
+Q132345,Shinzo Abe,4,3,6,6,7,"Abenomics, plus long mandat, diplomatie active."
+Q101137,Yasuo Fukuda,1,1,2,2,3,Un an au pouvoir.
+Q132596,Tarō Asō,1,1,3,2,2,Un an au pouvoir pendant la crise de 2008.
+Q131077,Yukio Hatoyama,1,1,2,2,2,"Moins d'un an, querelle sur la base d'Okinawa."
+Q47846,Naoto Kan,1,1,2,4,2,Catastrophe de Fukushima.
+Q57647,Yoshihiko Noda,1,1,3,2,2,"Hausse de la TVA votée, défaite électorale."
+Q217096,Naruhito,2,1,1,4,3,Empereur depuis 2019.
+Q122465,Yoshihide Suga,2,1,3,3,2,Jeux olympiques de Tokyo en pleine pandémie.
+Q359480,Fumio Kishida,2,4,3,3,6,Doublement du budget de défense.
+Q1335527,Shigeru Ishiba,1,2,2,2,2,Un an au pouvoir.
+Q1705028,Sanae Takaichi,2,3,3,3,3,"Première femme Première ministre du Japon, depuis 2025."
+Q197736,Rajendra Prasad,3,1,2,5,3,Premier président de l'Inde.
+Q156349,Sarvepalli Radhakrishnan,6,2,1,4,3,Philosophe devenu président ; la journée des enseignants porte son anniversaire.
+Q244689,Lal Bahadur Shastri,3,7,5,6,5,"Guerre de 1965 contre le Pakistan, débuts de la Révolution verte, accord de Tachkent."
+Q144732,Zakir Husain,6,1,1,3,2,"Éducateur, président mort en fonction."
+Q312557,V. V. Giri,1,1,1,3,2,Président de 1969 à 1974.
+Q317778,Fakhruddin Ali Ahmed,1,1,1,1,1,Signe la proclamation de l'état d'urgence de 1975.
+Q218661,Morarji Desai,2,1,4,4,4,"Premier gouvernement non issu du Congrès, après l'état d'urgence."
+Q319824,Charan Singh,1,1,2,1,1,Premier ministre quelques mois sans jamais affronter le Parlement.
+Q4593,Rajiv Gandhi,6,2,5,5,4,Télécoms et informatique ; intervention ratée au Sri Lanka ; affaire Bofors.
+Q275146,P. V. Narasimha Rao,4,1,9,4,6,Libéralisation économique de 1991 ; politique tournée vers l'Asie de l'Est.
+Q233289,Atal Bihari Vajpayee,6,6,6,5,6,"Essais nucléaires de 1998, guerre de Kargil, routes et scolarisation universelle."
+Q235454,K. R. Narayanan,3,1,1,5,2,Premier président dalit.
+Q9513,A. P. J. Abdul Kalam,8,4,1,4,4,"Père du programme de missiles, « président du peuple » tourné vers les jeunes."
+Q41914,Manmohan Singh,6,2,8,5,7,"Forte croissance, droit à l'éducation, accord nucléaire civil avec les États-Unis."
+Q47854,Pratibha Patil,1,1,1,3,1,"Première femme présidente de l'Inde, rôle protocolaire."
+Q57446,Pranab Mukherjee,2,1,3,4,3,Président de 2012 à 2017 après une longue carrière ministérielle.
+Q1058,Narendra Modi,5,6,7,7,7,"Croissance, infrastructures, numérique ; frappes contre le Pakistan ; pouvoir centralisé et tensions religieuses."
+Q16845347,Ram Nath Kovind,1,1,1,3,2,Président de 2017 à 2022.
+Q19901232,Droupadi Murmu,2,1,1,4,2,Première présidente issue d'un peuple autochtone.
+Q172183,Chaim Weizmann,7,1,2,5,8,"Chimiste, obtient la déclaration Balfour, premier président d'Israël."
+Q191123,Levi Eshkol,3,8,5,6,5,"Guerre des Six Jours, intégration des immigrés."
+Q42992,Golda Meir,3,4,4,5,6,"Guerre du Kippour : surprise initiale, puis victoire militaire coûteuse."
+Q34060,Yitzhak Rabin,3,7,4,5,9,"Accords d'Oslo, Nobel de la paix ; assassiné en 1995."
+Q57410,Shimon Peres,5,3,6,5,8,"Programme nucléaire, plan anti-inflation de 1985, accords d'Oslo."
+Q130873,Menachem Begin,3,6,5,5,9,Paix avec l'Égypte à Camp David ; guerre du Liban.
+Q184351,Yitzhak Shamir,2,4,3,3,3,Premier ministre de la première intifada.
+Q43723,Benjamin Netanyahu,3,5,7,6,6,"Plus long mandat, économie libérale, accords d'Abraham ; 7 octobre et guerre de Gaza."
+Q125731,Ehud Barak,2,4,3,2,5,"Retrait du Liban, échec de Camp David en 2000."
+Q181832,Moshe Katsav,1,1,1,1,1,Président condamné pour viol.
+Q60206,Ariel Sharon,2,8,5,5,4,"Seconde intifada, retrait de Gaza en 2005."
+Q93181,Ehud Olmert,2,3,4,2,4,"Guerre du Liban de 2006, condamné pour corruption."
+Q455854,Reuven Rivlin,2,1,1,5,3,Président de 2014 à 2021.
+Q39318,Naftali Bennett,2,1,4,3,4,Coalition hétéroclite d'un an.
+Q983258,Isaac Herzog,2,1,1,4,3,Président depuis 2021.
+Q1396120,Yair Lapid,2,1,3,2,4,Premier ministre quelques mois en 2022.
+Q183297,İsmet İnönü,6,6,4,6,8,"Neutralité pendant la Seconde Guerre mondiale, passage au multipartisme, instituts de village."
+Q151735,Celâl Bayar,2,1,5,3,4,"Président du Parti démocrate, renversé en 1960."
+Q238745,Adnan Menderes,3,4,6,4,6,Croissance et entrée dans l'OTAN ; pogrom d'Istanbul ; pendu après le coup d'État.
+Q159161,Cemal Gürsel,1,3,1,3,2,Chef du coup d'État de 1960.
+Q151729,Süleyman Demirel,3,2,6,4,5,"Sept fois Premier ministre, renversé deux fois par l'armée."
+Q158500,Cevdet Sunay,1,1,1,2,2,Président de 1966 à 1973.
+Q313357,Fahri Korutürk,1,1,1,2,2,Président de 1973 à 1980.
+Q192634,Bülent Ecevit,4,8,2,4,5,Intervention militaire à Chypre en 1974.
+Q216983,Kenan Evren,2,2,3,5,2,Chef du coup d'État de 1980 et auteur de la Constitution de 1982.
+Q180280,Turgut Özal,3,3,8,5,6,"Ouverture libérale de l'économie, demande d'adhésion à la CEE."
+Q208377,Tansu Çiller,1,4,2,3,3,"Crise financière de 1994, guerre contre le PKK."
+Q243550,Necmettin Erbakan,2,1,2,2,2,"Un an au pouvoir, poussé au départ par l'armée."
+Q165487,Ahmet Necdet Sezer,2,1,1,4,2,Président juriste attaché à la laïcité.
+Q42852,Abdullah Gül,3,1,4,4,6,Ouverture des négociations d'adhésion à l'Union européenne.
+Q58198,Ahmet Davutoğlu,2,2,2,3,4,Doctrine « zéro problème avec les voisins ».
+Q863496,Binali Yıldırım,1,1,2,3,2,Dernier Premier ministre avant le régime présidentiel.
+Q35041,William McKinley,2,7,6,5,7,Guerre hispano-américaine et premières colonies ; assassiné en 1901.
+Q33866,Theodore Roosevelt,5,6,6,8,8,"Lutte contre les trusts, parcs nationaux, canal de Panama, Nobel de la paix."
+Q35648,William Howard Taft,2,1,4,3,4,"« Diplomatie du dollar », rupture avec Roosevelt."
+Q34296,Woodrow Wilson,4,7,7,5,7,"Réserve fédérale, entrée en guerre en 1917, Quatorze points, SDN refusée par le Sénat."
+Q35286,Warren G. Harding,1,1,4,2,3,Mandat court marqué par les scandales.
+Q36023,Calvin Coolidge,2,1,5,4,3,Prospérité des années 1920 qui précède le krach.
+Q35236,Herbert Hoover,3,1,1,3,3,Grande Dépression mal gérée.
+Q11613,Harry S. Truman,3,8,6,6,9,"Fin de la guerre et bombes atomiques, plan Marshall, OTAN, guerre de Corée."
+Q9916,Dwight D. Eisenhower,6,6,7,6,7,"Autoroutes, déségrégation de Little Rock, NASA, fin de la guerre de Corée."
+Q9582,Gerald Ford,2,1,3,4,4,"Grâce de Nixon, fin de la guerre du Vietnam, accords d'Helsinki."
+Q23685,Jimmy Carter,4,1,2,4,7,Accords de Camp David ; inflation et crise des otages en Iran.
+Q23505,George H. W. Bush,3,8,4,4,9,"Fin de la guerre froide, réunification allemande, guerre du Golfe."
+Q1124,Bill Clinton,5,5,9,6,7,"Croissance et excédents budgétaires, Dayton, Kosovo, ALENA."
+Q207,George W. Bush,5,4,3,5,2,"Réponse au 11 septembre, guerres d'Afghanistan et d'Irak, No Child Left Behind, crise de 2008."
+Q6279,Joe Biden,3,3,6,5,7,"Plans d'infrastructures et d'industrie, soutien à l'Ukraine ; retrait chaotique d'Afghanistan."
+Q12967,Leopold II of Belgium,2,3,7,5,6,"Grands travaux et fortune bâtie sur l'État indépendant du Congo, au prix de violences de masse."
+Q55008046,Albert I of Belgium,3,8,3,7,6,Roi-chevalier qui résiste à l'invasion allemande de 1914.
+Q12973,Leopold III of Belgium,1,2,1,1,2,"Capitulation de 1940, question royale, abdication."
+Q12976,Baudouin of Belgium,2,1,2,6,3,Indépendance du Congo en 1960 ; refuse de signer la loi sur l'avortement.
+Q3911,Albert II of Belgium,1,1,1,4,2,Roi de 1993 à 2013.
+Q12978,Guy Verhofstadt,2,1,5,4,5,"Premier ministre de 1999 à 2008, puis figure du Parlement européen."
+Q12983,Herman Van Rompuy,2,1,3,3,6,Premier président du Conseil européen.
+Q12981,Yves Leterme,1,1,2,1,2,Crise politique sans fin à la fin des années 2000.
+Q15048,Elio Di Rupo,2,1,3,4,2,Sixième réforme de l'État après 541 jours sans gouvernement.
+Q155004,Philippe of Belgium,1,1,1,4,2,Roi depuis 2013.
+Q950958,Charles Michel,2,1,3,3,5,"Premier ministre, puis président du Conseil européen."
+Q18434995,Sophie Wilmès,2,1,2,4,2,Première ministre du premier confinement.
+Q476596,Alexander De Croo,2,1,3,3,3,Premier ministre de 2020 à 2025.
+Q182921,Reza Shah,7,4,6,8,4,"Modernisation autoritaire, université de Téhéran, chemin de fer ; déposé en 1941."
+Q123037,Mohammad Mosaddegh,3,1,4,6,6,"Nationalisation du pétrole, renversé par le coup d'État de 1953."
+Q38823,Ruhollah Khomeini,3,7,2,9,4,Fondateur de la République islamique ; guerre contre l'Irak ; universités fermées.
+Q273866,Abolhassan Banisadr,1,2,1,1,1,"Premier président, destitué au bout d'un an."
+Q310592,Mohammad-Ali Rajai,1,1,1,1,1,Président assassiné moins d'un mois après son élection.
+Q57336,Ali Khamenei,3,5,3,8,5,"Guide suprême depuis 1989, réseau d'alliés régionaux, pays sous sanctions."
+Q186111,Akbar Hashemi Rafsanjani,4,2,6,5,5,Reconstruction après la guerre contre l'Irak.
+Q180795,Mohammad Khatami,6,1,4,5,6,"Président réformateur, « dialogue des civilisations »."
+Q34448,Mahmoud Ahmadinejad,2,2,2,4,2,"Populisme, programme nucléaire, isolement du pays."
+Q348144,Hassan Rouhani,3,1,4,3,7,Accord sur le nucléaire de 2015.
+Q5947347,Ebrahim Raisi,1,2,2,3,3,"Répression du mouvement Femme, Vie, Liberté ; mort en 2024."
+Q5933752,Masoud Pezeshkian,2,2,2,3,3,Président depuis 2024.
+Q2919350,Mojtaba Khamenei,1,2,1,3,2,"Successeur de son père en 2026, trop récent pour un bilan."
+Q885,Józef Piłsudski,4,9,3,6,6,"Indépendance de 1918, victoire sur l'Armée rouge en 1920, coup d'État de 1926."
+Q191957,Ignacy Jan Paderewski,6,1,2,4,6,"Pianiste, chef du gouvernement en 1919, signe le traité de Versailles."
+Q55834,Wojciech Jaruzelski,1,4,2,4,3,"État de guerre de 1981, puis table ronde de 1989."
+Q444,Lech Wałęsa,3,1,3,7,7,"Chef de Solidarność, puis premier président élu."
+Q55758,Aleksander Kwaśniewski,3,2,6,6,8,Entrée dans l'OTAN et préparation de l'adhésion à l'Union européenne.
+Q2757,Lech Kaczyński,2,1,2,3,3,Mort dans l'accident de Smolensk en 2010.
+Q55917,Jarosław Kaczyński,2,1,3,4,2,"Chef du PiS, Premier ministre un an."
+Q946,Donald Tusk,3,2,7,5,8,"Croissance pendant la crise de 2008, président du Conseil européen."
+Q42939,Bronisław Komorowski,2,1,2,3,3,Président de 2010 à 2015.
+Q9151911,Andrzej Duda,2,3,2,4,4,Président pendant la guerre en Ukraine.
+Q4877021,Beata Szydło,2,1,4,4,1,"Allocation familiale 500+, conflits avec Bruxelles."
+Q11771436,Mateusz Morawiecki,2,3,5,4,4,Croissance et réarmement.
+Q17704749,Karol Nawrocki,1,1,1,2,2,Président depuis 2025.
+Q171684,Syngman Rhee,3,5,2,3,5,"Premier président, guerre de Corée, pouvoir autoritaire renversé en 1960."
+Q186500,Chang Myon,2,1,2,2,2,Gouvernement démocratique renversé au bout de neuf mois.
+Q192049,Yun Po-sun,1,1,1,2,1,Président de 1960 à 1962.
+Q14356,Park Chung Hee,7,4,10,5,6,"Miracle économique, dictature militaire ; assassiné en 1979."
+Q14362,Chun Doo-hwan,2,2,6,3,3,Coup d'État et massacre de Gwangju ; croissance des années 1980.
+Q165210,Kim Young-sam,3,1,3,6,4,"Premier président civil, lutte anticorruption ; crise asiatique de 1997."
+Q45785,Kim Dae-jung,4,1,6,7,8,"Sortie de la crise de 1997, politique du rayon de soleil, Nobel de la paix."
+Q14345,Roh Moo-hyun,3,1,4,4,4,Président de 2003 à 2008.
+Q14342,Lee Myung-bak,2,1,5,3,4,"Ancien patron de Hyundai, condamné pour corruption."
+Q138048,Park Geun-hye,1,1,3,1,2,Destituée en 2017.
+Q21001,Moon Jae-in,2,1,4,4,6,Sommets avec Kim Jong Un.
+Q16090635,Yoon Suk Yeol,1,1,2,1,4,"Loi martiale de décembre 2024, destitué."
+Q12612463,Lee Jae Myung,2,1,2,3,2,Président depuis 2025.
+Q295713,Liaquat Ali Khan,3,4,2,5,4,"Premier Premier ministre du Pakistan, assassiné en 1951."
+Q190071,Ayub Khan,4,4,7,4,5,"Croissance des années 1960, guerre de 1965."
+Q333981,Yahya Khan,1,1,1,1,1,Guerre de 1971 et perte du Bangladesh.
+Q131355,Zulfikar Ali Bhutto,4,3,3,6,7,"Constitution de 1973, programme nucléaire ; exécuté en 1979."
+Q200499,Zia-ul-Haq,3,5,5,5,7,"Islamisation du pays, soutien aux moudjahidines afghans."
+Q34413,Benazir Bhutto,4,1,3,4,5,Première femme à diriger un pays musulman.
+Q134068,Nawaz Sharif,3,5,5,4,4,"Essais nucléaires de 1998, autoroutes."
+Q40495,Pervez Musharraf,3,5,6,5,6,"Coup d'État de 1999, allié des États-Unis après 2001."
+Q57373,Asif Ali Zardari,2,1,2,3,3,"Président de 2008 à 2013, puis depuis 2024."
+Q14257286,Mamnoon Hussain,1,1,1,2,1,Président de 2013 à 2018.
+Q155164,Imran Khan,3,1,3,4,4,Renversé en 2022 puis emprisonné.
+Q2096387,Shehbaz Sharif,2,4,3,3,4,Premier ministre pendant l'affrontement de 2025 avec l'Inde.
+Q52924,Oscar II,2,1,3,4,4,Accepte sans guerre l'indépendance de la Norvège en 1905.
+Q52890,Gustaf V,2,4,2,5,5,Neutralité suédoise dans les deux guerres mondiales.
+Q53620,Hjalmar Branting,4,1,4,7,6,"Premier Premier ministre social-démocrate, Nobel de la paix."
+Q52878,Gustaf VI Adolf,4,1,1,3,2,Roi archéologue.
+Q53713,Olof Palme,6,1,4,7,8,"Modèle suédois, voix des non-alignés ; assassiné en 1986."
+Q45068,Carl XVI Gustaf,1,1,1,4,3,Roi depuis 1973.
+Q52922,Carl Bildt,2,1,6,4,6,"Réformes libérales, puis médiateur dans les Balkans."
+Q53747,Göran Persson,4,1,7,5,4,Redressement des finances publiques après la crise des années 1990.
+Q52920,Fredrik Reinfeldt,3,1,6,4,3,"Baisses d'impôts, crise de 2008 bien traversée."
+Q2740012,Stefan Löfven,2,1,4,3,3,Premier ministre pendant la crise des réfugiés et le Covid.
+Q4935873,Magdalena Andersson,2,3,4,3,6,Demande d'adhésion à l'OTAN.
+Q1780398,Ulf Kristersson,2,4,3,3,5,Entrée dans l'OTAN en 2024.
+Q212676,Symon Petliura,1,4,1,2,3,Chef de la république ukrainienne pendant la guerre civile ; pogroms.
+Q189732,Leonid Kravchuk,2,1,1,4,5,"Indépendance de 1991, abandon des armes nucléaires."
+Q629702,Leonid Kuchma,2,1,4,3,4,Sortie de l'hyperinflation ; affaire Gongadze.
+Q1459699,Viktor Yushchenko,3,1,3,4,5,Révolution orange.
+Q1459658,Viktor Yanukovych,1,1,2,1,1,Fuite en Russie en 2014 après Maïdan.
+Q57590,Mykola Azarov,1,1,2,1,1,Premier ministre de Ianoukovytch jusqu'à Maïdan.
+Q48283,Yulia Tymoshenko,2,1,3,3,4,"Figure de la révolution orange, emprisonnée de 2011 à 2014."
+Q15850,Oleksandr Turchynov,1,3,1,3,2,Président par intérim lors de l'annexion de la Crimée.
+Q58077,Petro Poroshenko,2,4,3,3,5,"Reconstruction de l'armée, accords de Minsk, Église ukrainienne autocéphale."
+Q471730,Arseniy Yatsenyuk,1,1,3,3,4,Premier ministre de l'après-Maïdan.
+Q3874799,Volodymyr Zelenskyy,2,9,2,7,9,"Résistance à l'invasion russe depuis 2022, soutien occidental obtenu."
+Q66094865,Denys Shmyhal,2,3,3,4,3,Premier ministre en temps de guerre.
+Q43922,Pope Leo XIII,7,1,5,6,6,"Encyclique Rerum novarum, naissance de la doctrine sociale de l'Église."
+Q43739,Pope Pius X,3,1,1,6,2,"Lutte contre le modernisme, réforme de la liturgie."
+Q4448,Pope Benedict XV,3,1,1,4,6,Appels à la paix pendant la Grande Guerre.
+Q42323,Pope Pius XI,4,1,1,6,8,Accords du Latran qui créent l'État du Vatican ; encycliques contre le nazisme et le communisme.
+Q2604,Pope Pius XII,3,1,1,5,4,Silence controversé pendant la Shoah.
+Q23873,Pope John XXIII,6,1,1,9,7,"Concile Vatican II, encyclique Pacem in terris."
+Q16975,Pope Paul VI,5,1,1,8,7,"Achève Vatican II, premiers grands voyages pontificaux."
+Q989,Pope John Paul II,5,1,1,7,10,"Rôle dans la chute du communisme, voyages dans le monde entier."
+Q37278,Pope John Paul I,1,1,1,1,1,Trente-trois jours de pontificat.
+Q2494,Pope Benedict XVI,6,1,1,4,3,Théologien ; renonce au pontificat en 2013.
+Q450675,Pope Francis,4,1,2,7,7,"Pape des périphéries, encyclique sur l'écologie."
+Q6109517,Pope Leo XIV,2,1,1,3,3,"Élu en 2025, premier pape américain."
+Q17142,George I of Greece,3,4,3,6,5,"Long règne, agrandissement du pays ; assassiné en 1913."
+Q205545,Eleftherios Venizelos,5,8,5,7,8,"Guerres balkaniques, territoire doublé, Crète rattachée à la Grèce."
+Q152099,Constantine I of Greece,1,4,1,2,2,"Brouille avec Venizelos, désastre d'Asie Mineure."
+Q151773,Constantine II of Greece,1,1,1,1,1,"Laisse faire les colonels en 1967, puis exil ; monarchie abolie."
+Q57303,Karolos Papoulias,1,1,1,3,2,Président pendant la crise de la dette.
+Q151917,George Papandreou,2,1,1,2,3,"Révèle les comptes truqués, crise de la dette."
+Q164281,Lucas Papademos,1,1,4,2,3,Gouvernement technique de 2011 à 2012.
+Q312015,Alexis Tsipras,2,1,2,3,5,Référendum de 2015 puis accord avec les créanciers ; accord de Prespa.
+Q3407316,Prokopis Pavlopoulos,1,1,1,3,2,Président de 2015 à 2020.
+Q552751,Kyriakos Mitsotakis,3,2,6,5,5,"Sortie de la crise, croissance retrouvée."
+Q57415743,Katerina Sakellaropoulou,2,1,1,4,2,Première femme présidente de la Grèce.
+Q132899,Vyacheslav Molotov,2,5,3,4,7,Chef du gouvernement des années 1930 ; pacte germano-soviétique.
+Q229828,Mikhail Kalinin,2,1,1,3,1,Chef de l'État en titre sous Staline.
+Q202770,Alexei Kosygin,4,1,6,4,6,"Réforme économique de 1965, accord de Tachkent."
+Q180588,Georgy Malenkov,1,1,3,2,2,Successeur éphémère de Staline.
+Q186185,Kliment Voroshilov,1,3,1,1,1,"Maréchal de Staline, chef de l'État en titre."
+Q35314,Nikita Khrushchev,5,5,4,7,6,"Déstalinisation, Spoutnik ; crise des missiles de Cuba."
+Q765165,Leonid Brezhnev,4,5,3,6,6,"Stagnation, détente, invasion de l'Afghanistan."
+Q152738,Anastas Mikoyan,1,1,2,2,4,"Négociateur pendant la crise de Cuba, brièvement chef de l'État."
+Q44071,Yuri Andropov,2,2,2,3,2,"Ancien chef du KGB, quinze mois au pouvoir."
+Q127442,Konstantin Chernenko,1,1,1,1,1,"Treize mois au pouvoir, déjà malade."
+Q184267,Andrei Gromyko,1,1,1,2,7,"Ministre des Affaires étrangères pendant 28 ans, puis chef de l'État en titre."
+Q18363,Alfonso XIII,2,2,3,2,3,"Soutient la dictature de Primo de Rivera, exil en 1931."
+Q192894,Miguel Primo de Rivera,2,5,6,3,3,"Dictature, grands travaux, fin de la guerre du Rif."
+Q203708,Manuel Azaña,7,2,2,5,3,Réformes de la Seconde République ; président pendant la guerre civile perdue.
+Q19943,Juan Carlos I,2,1,2,9,7,"Transition démocratique, échec du coup d'État de 1981."
+Q214367,Adolfo Suárez,3,1,4,9,5,"Pactes de la Moncloa, Constitution de 1978."
+Q156799,Felipe González,6,2,7,7,8,"Entrée dans la CEE et l'OTAN, État-providence ; scandale des GAL."
+Q55637,José María Aznar,2,3,7,4,4,"Croissance et entrée dans l'euro ; guerre d'Irak, attentats de 2004."
+Q41395,José Luis Rodríguez Zapatero,3,1,3,6,3,Mariage pour tous ; crise de 2008 mal anticipée.
+Q10819,Mariano Rajoy,2,1,5,3,3,"Sortie de la crise bancaire, crise catalane."
+Q191045,Felipe VI,1,1,1,5,3,Roi depuis 2014.
+Q6070218,Pedro Sánchez,3,1,5,4,5,"Croissance forte, gouvernements de coalition fragiles."
+Q93330,Juan Perón,4,2,4,8,4,"Justicialisme, droits sociaux, vote des femmes ; régime autoritaire."
+Q40649,Cristina Fernández de Kirchner,3,1,2,4,2,Nationalisations et inflation.
+Q52395487,Javier Milei,1,1,6,4,4,"Choc libéral, inflation en forte baisse, coupes budgétaires massives."
+Q37181,Luiz Inácio Lula da Silva,5,1,7,7,7,"Bolsa Família, des millions de personnes sorties de la pauvreté ; affaire Lava Jato."
+Q40722,Dilma Rousseff,2,1,1,2,2,Récession et destitution en 2016.
+Q10304982,Jair Bolsonaro,1,1,3,2,2,"Gestion du Covid contestée, condamné pour tentative de coup d'État."
+Q42013,Anwar Sadat,2,7,5,4,9,"Guerre de 1973, paix avec Israël ; assassiné en 1981."
+Q34105,Hosni Mubarak,2,3,4,5,5,"Trente ans de stabilité autoritaire, renversé en 2011."
+Q307871,Abdel Fattah el-Sisi,1,3,4,6,4,"Coup d'État de 2013, grands chantiers, répression."
+Q41117,Kim Il Sung,4,6,3,8,5,"Fondateur de la Corée du Nord, guerre de Corée, culte de la personnalité."
+Q10665,Kim Jong Il,1,4,1,7,4,"Famine des années 1990, programme nucléaire."
+Q56226,Kim Jong Un,2,6,2,8,5,"Arme nucléaire et missiles, sommets avec Trump."
+Q17410,Zhou Enlai,4,2,4,6,9,Diplomatie chinoise de Bandung à la visite de Nixon.
+Q15029,Hu Jintao,3,2,8,5,5,"Forte croissance, Jeux olympiques de Pékin."
+Q15031,Xi Jinping,3,5,6,9,7,"Concentration du pouvoir, nouvelles routes de la soie, lutte anticorruption."
+Q3099714,Justin Trudeau,2,1,4,5,5,"Légalisation du cannabis, plan climat."
+Q192533,Mark Carney,2,2,4,3,5,Élu en 2025 face aux droits de douane américains.
+Q440,Salvador Allende,4,1,2,4,3,"Voie chilienne au socialisme, nationalisation du cuivre ; renversé en 1973."
+Q368,Augusto Pinochet,2,6,7,7,3,"Coup d'État, dictature et répression ; réformes libérales des Chicago Boys."
+Q161672,Patrice Lumumba,2,1,1,3,4,"Héros de l'indépendance, assassiné en 1961."
+Q164535,Mobutu Sese Seko,1,3,1,6,6,"Trente ans de pouvoir, pillage du pays, allié de l'Occident."
+Q34211,Yasser Arafat,2,5,2,6,7,"Symbole de la cause palestinienne, accords d'Oslo."
+Q127998,Mahmoud Abbas,2,1,2,2,3,Président de l'Autorité palestinienne depuis 2005.
+Q1463,Ferdinand Marcos,2,3,3,5,4,"Loi martiale, corruption massive ; chassé en 1986."
+Q457786,Rodrigo Duterte,1,4,4,5,3,Guerre contre la drogue et exécutions extrajudiciaires.
+Q8573,Sun Yat-sen,6,4,2,6,5,"Père de la Chine républicaine, Trois Principes du peuple."
+Q16574,Chiang Kai-shek,3,6,4,6,6,"Unification de 1928, guerre contre le Japon, défaite face aux communistes, repli à Taïwan."
+Q34453,Boris Yeltsin,3,2,1,4,5,"Fin de l'URSS, thérapie de choc, guerre de Tchétchénie."
+Q23530,Dmitry Medvedev,2,5,3,3,4,"Guerre de Géorgie en 2008, un mandat présidentiel."
+Q367825,Salman of Saudi Arabia,2,4,5,6,5,"Roi depuis 2015, guerre au Yémen."
+Q6892571,Mohammed bin Salman,4,4,7,8,6,"Vision 2030, ouverture sociale, répression, guerre au Yémen."
+Q151813,F. W. de Klerk,2,1,3,9,8,"Libère Mandela et démantèle l'apartheid, Nobel de la paix."
+Q1148669,Cyril Ramaphosa,2,1,3,4,4,"Président depuis 2018, coupures d'électricité et corruption héritée."
+Q8440,Hugo Chávez,6,2,3,7,6,"Missions sociales financées par le pétrole, pouvoir personnel."
+Q58132,Nicolás Maduro,1,1,1,4,2,Effondrement économique et exode massif.
+Q57308,Abdelaziz Bouteflika,2,2,4,6,5,"Réconciliation nationale après la guerre civile, puis immobilisme."
+Q51056,Franz Joseph I,3,2,4,5,2,Règne de 68 ans ; déclare la guerre à la Serbie en 1914.
+Q2866,Alexander Lukashenko,2,2,3,7,3,"Pouvoir autoritaire depuis 1994, allié de Moscou."
+Q42410,Evo Morales,4,1,7,6,4,"Premier président autochtone, recul de la pauvreté."
+Q39464,Pol Pot,1,3,1,3,1,"Génocide cambodgien, renversé par le Viêt Nam en 1979."
+Q46809,Raúl Castro,2,3,3,6,5,"Réformes économiques prudentes, rapprochement avec Obama."
+Q36233,Václav Havel,7,1,3,8,8,"Révolution de velours, entrée dans l'OTAN, dramaturge."
+Q2607,Erich Honecker,3,1,3,6,3,"Mur de Berlin, Stasi, RDA en faillite en 1989."
+Q41178,Haile Selassie,6,4,3,5,8,"Modernisation de l'Éthiopie, résistance à l'Italie, Organisation de l'unité africaine."
+Q8620,Kwame Nkrumah,7,1,4,6,8,"Indépendance du Ghana, panafricanisme ; dérive autoritaire."
+Q57641,Viktor Orbán,2,1,5,8,5,"Démocratie illibérale, pouvoir solidement établi."
+Q44819,Suharto,4,5,8,6,5,"Massacres de 1965, Ordre nouveau, forte croissance, corruption."
+Q1316,Saddam Hussein,4,3,2,6,1,"Guerres contre l'Iran et le Koweït, sanctions, chute en 2003."
+Q57792,Mark Rutte,2,1,6,4,6,"Quatorze ans au pouvoir, puis secrétaire général de l'OTAN."
+Q173139,George Weah,2,1,2,3,3,"Ancien footballeur, président de 2018 à 2024."
+Q19878,Muammar Gaddafi,5,3,4,7,4,"Quarante ans de pouvoir, rente pétrolière redistribuée, terrorisme d'État."
+Q181383,Mahathir Mohamad,7,1,9,7,6,"Industrialisation de la Malaisie, tours Petronas."
+Q5771800,Claudia Sheinbaum,3,1,4,5,4,Présidente depuis 2024.
+Q3910,Albert II of Monaco,2,1,3,4,4,Prince depuis 2005.
+Q57553,Mohammed VI of Morocco,3,1,6,6,6,"Réforme du code de la famille, grands projets d'infrastructure."
+Q36740,Aung San Suu Kyi,3,1,2,3,2,"Icône de la démocratie, silence sur les Rohingyas, renversée en 2021."
+Q3606816,Jacinda Ardern,3,1,4,7,6,Réponse à l'attentat de Christchurch et au Covid.
+Q151394,António de Oliveira Salazar,2,2,5,6,4,"Estado Novo, finances assainies, guerres coloniales."
+Q80504,Nicolae Ceaușescu,2,1,1,4,3,"Indépendance affichée face à Moscou, misère des années 1980."
+Q40787,Nicholas II,2,1,3,1,1,"Défaite de 1905, Grande Guerre, révolution et exécution."
+Q1231345,Paul Kagame,6,7,8,8,6,"Arrêt du génocide de 1994, reconstruction rapide, pouvoir sans partage."
+Q154545,Léopold Sédar Senghor,8,1,3,6,6,"Poète de la négritude, transition pacifique au Sénégal."
+Q47139,Slobodan Milošević,1,2,1,4,1,"Guerres de Yougoslavie, jugé à La Haye."
+Q9161,Josip Broz Tito,5,8,4,8,9,"Libération par les partisans, rupture avec Staline, non-alignement."
+Q44329,Bashar al-Assad,2,3,1,4,3,"Guerre civile aux centaines de milliers de morts, chute en 2024."
+Q48231,Idi Amin,1,2,1,3,1,"Terreur, expulsion des Asiatiques, invasion ratée de la Tanzanie."
+Q36014,Ho Chi Minh,5,9,2,7,6,"Indépendance du Viêt Nam, victoire sur la France."
+Q10707,Robert Mugabe,7,4,1,6,3,"Éducation de masse au début, puis effondrement économique."

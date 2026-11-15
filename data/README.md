@@ -71,8 +71,10 @@ Tant que la date de lancement n'est pas fixée, le calendrier compte 800 jours �
 
 ## Leader Mayhem
 
-- **`mayhem-ratings.csv`** : les notes du mode bonus. Une ligne par dirigeant, une note de 1 à 10 par portefeuille (`education`, `war`, `economy`, `domestic`, `foreign`) et une justification courte (`why`).
+- **`mayhem-ratings.csv`** : les notes du mode bonus, **privées** : le jeu ne les montre jamais, seuls les résultats des duels en découlent. 436 dirigeants notés. Une ligne par dirigeant, une note de 1 à 10 par portefeuille (`education`, `war`, `economy`, `domestic`, `foreign`) et une justification courte (`why`).
 - **Barème** : la note mesure le poids et l'efficacité du dirigeant dans ce domaine, quels que soient ses buts. Ce n'est ni un fait ni un jugement moral, et le jeu le dit. Aucun dirigeant n'est exclu. `education` couvre aussi la science et la culture.
+- **Écart voulu** : un ou deux points forts à 8-10, des faiblesses à 1-3. Les chefs d'État honorifiques (présidents allemands ou italiens, monarques constitutionnels) sont bas partout : ce sont les pièges des tirages. Pour les papes, `domestic` est le gouvernement de l'Église et `foreign` la diplomatie.
+- Pour ajouter des notes par nom : un fichier de lignes `Nom|e w ec d f|raison`, puis `node scripts/mayhem/add.ts fichier`.
 - **`mayhem-pool.csv`** : les dirigeants à noter (les réponses possibles, plus les dirigeants à 60 liens Wikipedia ou plus des 20 pays les mieux fournis), avec une colonne `rated`. `npm run mayhem:pool` le régénère.
-- Après chaque modification : `npm run mayhem:build` (écrit `public/data/mayhem.json` et affiche le nombre de tirages jouables), puis `npm run check:data`.
+- Après chaque modification : `npm run mayhem:build` (écrit `public/data/mayhem.json` et affiche le nombre de tirages jouables), `npm run mayhem:balance` si beaucoup de notes ont bougé, puis `npm run check:data`.
 - Un tirage pays-décennie n'est jouable qu'avec au moins deux dirigeants notés. Il en faut environ 150 pour que les parties varient ; `check:data` prévient en dessous.

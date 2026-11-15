@@ -125,7 +125,7 @@ export async function renderScene(params: URLSearchParams) {
   state = [{ type: 'start', puzzle: PUZZLE } as Action, ...(scene.actions ?? [])].reduce(reducer, state);
   const leaders = file.leaders as Leader[];
   const mayhem: MayhemData = { leaders, ratings: sampleMayhem.ratings, cells: buildCells(leaders, sampleMayhem.ratings, new Date(2026, 10, 15)) };
-  if (scene.mayhem) state = reducer(state, { type: 'mayhem', run: mayhemRun(mayhem, scene.mayhem.picks, scene.mayhem.matches), total: 0 });
+  if (scene.mayhem) state = reducer(state, { type: 'mayhem', run: mayhemRun(mayhem, scene.mayhem.picks, scene.mayhem.matches) });
 
   return (
     <AppProvider leaders={leaders} puzzle={PUZZLE} initial={state} store={null} frozen scene={scene.ui ?? {}} mayhem={mayhem}>

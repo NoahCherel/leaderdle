@@ -194,6 +194,15 @@ describe('opponent', () => {
       expect(team).not.toContain(id);
     }
   });
+  it('places its five leaders on the portfolios that give it the best total', () => {
+    // Each of these is strong in one field only, and listed in the wrong order.
+    const ratings: MayhemData['ratings'] = {
+      e: [9, 1, 1, 1, 1], w: [1, 9, 1, 1, 1], c: [1, 1, 9, 1, 1], d: [1, 1, 1, 9, 1], f: [1, 1, 1, 1, 9],
+    };
+    const opp = opponent({ leaders: [], ratings, cells: [] }, [], 0, rng(1));
+    expect(opp).toEqual(['e', 'w', 'c', 'd', 'f']);
+    expect(teamTotal(opp, ratings)).toBe(45);
+  });
   it('gets stronger round after round on average', () => {
     const big: MayhemData['ratings'] = Object.fromEntries(Array.from({ length: 60 }, (_, i) => [`p${i}`, PORTFOLIOS.map((_, k) => 1 + ((i * 7 + k * 3) % 10))]));
     const data: MayhemData = { leaders: [], ratings: big, cells: [] };
@@ -222,6 +231,27 @@ describe('playNext', () => {
       expect(run.matches.slice(0, -1).every((m) => m.won)).toBe(true);
       if (run.matches.length < 3) expect(run.matches.at(-1)!.won).toBe(false);
       expect(playNext(run, DATA)).toBe(run);
+    }
+  });
+  it('never sends the same leader twice against the player in one run', () => {
+    const big: MayhemData['ratings'] = Object.fromEntries(Array.from({ length: 40 }, (_, i) => [`p${i}`, [5, 5, 5, 5, 5]]));
+    const data: MayhemData = { ...DATA, ratings: { ...RATINGS, ...big } };
+    for (let seed = 1; seed <= 20; seed++) {
+      let run = fill(newRun(seed, data));
+      run = { ...run, team: run.team, matches: [] };
+      for (let round = 0; round < 3; round++) run = { ...playNext({ ...run, done: false }, data), done: false };
+      const met = run.matches.flatMap((m) => m.opponent);
+      expect(new Set(met).size).toBe(met.length);
+    }
+  });
+  it('always fields five different leaders, even when few are rated', () => {
+    for (let seed = 1; seed <= 20; seed++) {
+      let run = fill(newRun(seed, DATA));
+      for (let round = 0; round < 3; round++) run = { ...playNext({ ...run, done: false }, DATA), done: false };
+      for (const m of run.matches) {
+        expect(new Set(m.opponent).size).toBe(5);
+        for (const id of m.opponent) expect(RATINGS[id]).toBeDefined();
+      }
     }
   });
   it('gives the same tournament for the same seed and the same picks', () => {

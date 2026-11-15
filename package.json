@@ -25,7 +25,8 @@
     "walk": "node scripts/walk.mjs",
     "icons": "node scripts/make-icons.mjs",
     "mayhem:pool": "node scripts/mayhem/pool.ts",
-    "mayhem:build": "node scripts/mayhem/build.ts"
+    "mayhem:build": "node scripts/mayhem/build.ts",
+    "mayhem:balance": "node scripts/mayhem/balance.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

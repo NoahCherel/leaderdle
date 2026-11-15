@@ -147,32 +147,32 @@ describe('Leader Mayhem', () => {
     seed, draws: 9, cell: null, team: ['a', 'b', 'c', 'd', 'e'], years: [1, 2, 3, 4, 5], rerolls: { country: false, decade: false }, done,
     matches: Array.from({ length: Math.min(3, wins + (wins < 3 ? 1 : 0)) }, (_, i) => ({ opponent: ['v', 'w', 'x', 'y', 'z'], duels: [true, true, true, false, false], won: i < wins })),
   });
-  const save = (r: MayhemRun | null, total = 0) => ({ type: 'mayhem' as const, run: r, total });
+  const save = (r: MayhemRun | null) => ({ type: 'mayhem' as const, run: r });
 
   it('keeps the run in progress', () => {
     const s = reducer(started(), save(run(1, false)));
     expect(s.mayhem.run?.seed).toBe(1);
-    expect(s.mayhem.stats).toEqual({ played: 0, titles: 0, best: 0 });
+    expect(s.mayhem.stats).toEqual({ played: 0, titles: 0 });
   });
-  it('counts a finished run once, with titles and the best team total', () => {
-    let s = run2(started(), save(run(1, true, 3), 38), save(run(1, true, 3), 38));
-    expect(s.mayhem.stats).toEqual({ played: 1, titles: 1, best: 38 });
-    s = run2(s, save(run(2, false)), save(run(2, true, 1), 31));
-    expect(s.mayhem.stats).toEqual({ played: 2, titles: 1, best: 38 });
+  it('counts a finished run once, and its title', () => {
+    let s = run2(started(), save(run(1, true, 3)), save(run(1, true, 3)));
+    expect(s.mayhem.stats).toEqual({ played: 1, titles: 1 });
+    s = run2(s, save(run(2, false)), save(run(2, true, 1)));
+    expect(s.mayhem.stats).toEqual({ played: 2, titles: 1 });
   });
   it('leaves the daily games, their stats and the day streak alone', () => {
     const before = started();
-    const s = reducer(before, save(run(1, true, 3), 40));
+    const s = reducer(before, save(run(1, true, 3)));
     expect(s.days).toBe(before.days);
     expect(s.stats).toBe(before.stats);
     expect(s.streak).toBe(before.streak);
   });
   it('is erased by Clear my data', () => {
-    const s = run2(started(), save(run(1, true, 3), 40), { type: 'clear' });
-    expect(s.mayhem).toEqual({ run: null, stats: { played: 0, titles: 0, best: 0 } });
+    const s = run2(started(), save(run(1, true, 3)), { type: 'clear' });
+    expect(s.mayhem).toEqual({ run: null, stats: { played: 0, titles: 0 } });
   });
   it('a new run can replace a finished one', () => {
-    const s = run2(started(), save(run(1, true, 0), 20), save(null));
+    const s = run2(started(), save(run(1, true, 0)), save(null));
     expect(s.mayhem.run).toBeNull();
     expect(s.mayhem.stats.played).toBe(1);
   });

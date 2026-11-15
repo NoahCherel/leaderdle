@@ -29,7 +29,7 @@ export interface DayRecord {
 /** Leader Mayhem: a bonus outside the daily games, their stats and the day streak. */
 export interface MayhemState {
   run: MayhemRun | null;
-  stats: { played: number; titles: number; best: number };
+  stats: { played: number; titles: number };
 }
 
 export interface GameState {
@@ -54,8 +54,8 @@ export type Action =
   | { type: 'setting'; key: keyof Settings; value: boolean }
   | { type: 'consent'; value: 'yes' | 'no' }
   | { type: 'helpSeen'; mode: Mode }
-  /** Saves the Mayhem run after each step. `total` is the team's rating total, known once the run is done. */
-  | { type: 'mayhem'; run: MayhemRun | null; total?: number }
+  /** Saves the Mayhem run after each step. */
+  | { type: 'mayhem'; run: MayhemRun | null }
   | { type: 'clear' }
   /** Another tab saved: take its state, keeping today's puzzle loaded. */
   | { type: 'replace'; state: GameState; puzzle: DayPuzzle };
@@ -67,7 +67,7 @@ const freshDay = (puzzle: DayPuzzle): DayRecord => ({ puzzle, classic: [], hint:
 
 const freshStats = ():Record<Mode, ModeStats> => ({ classic: emptyStats(), letters: emptyStats(), succession: emptyStats(), timeline: emptyStats() });
 
-const freshMayhem = (): MayhemState => ({ run: null, stats: { played: 0, titles: 0, best: 0 } });
+const freshMayhem = (): MayhemState => ({ run: null, stats: { played: 0, titles: 0 } });
 
 export const initialState = (): GameState => ({
   v: 3,
@@ -161,10 +161,10 @@ export function reducer(state: GameState, action: Action): GameState {
         ? {
             played: state.mayhem.stats.played + 1,
             titles: state.mayhem.stats.titles + (runOutcome(run!) === 'champion' ? 1 : 0),
-            best: Math.max(state.mayhem.stats.best, action.total ?? 0),
           }
         : state.mayhem.stats;
-      return { ...state, mayhem: { run, stats } };
+      // Saved stats are rebuilt from known fields only, so an older shape cannot leak through.
+      return { ...state, mayhem: { run, stats: { played: stats.played, titles: stats.titles } } };
     }
     case 'setting':
       return { ...state, settings: { ...state.settings, [action.key]: action.value } };
