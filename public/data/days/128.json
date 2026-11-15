@@ -1,0 +1,30 @@
+{
+ "n": 128,
+ "classic": {
+  "answer": "mer"
+ },
+ "succession": {
+  "before": "sch",
+  "answer": "mer",
+  "after": "olz",
+  "years": "2005 – 2021",
+  "beforeYears": "1998 – 2005",
+  "afterYears": "2021 – 2025"
+ },
+ "timeline": {
+  "order": [
+   "lky",
+   "tha",
+   "man",
+   "mer",
+   "ard"
+  ],
+  "start": [
+   "man",
+   "ard",
+   "lky",
+   "mer",
+   "tha"
+  ]
+ }
+}

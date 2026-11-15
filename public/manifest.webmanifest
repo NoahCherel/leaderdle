@@ -1,0 +1,13 @@
+{
+  "name": "Leaderdle",
+  "short_name": "Leaderdle",
+  "description": "Guess the world leader from five clues. A new puzzle every day.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1C1A2B",
+  "theme_color": "#1C1A2B",
+  "icons": [
+    { "src": "/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

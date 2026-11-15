@@ -1,0 +1,115 @@
+.heads,
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+.heads {
+  align-items: end;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--muted);
+}
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.who {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 8px;
+}
+.name {
+  font-size: 16px;
+  font-weight: 700;
+}
+.country {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.tile {
+  position: relative;
+  min-height: 68px;
+  padding: 6px 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2px 6px;
+  text-align: center;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--sh-sm);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.numeric {
+  font-size: 20px;
+}
+.correct {
+  background: var(--g);
+  color: var(--ink);
+}
+.close {
+  background: var(--y);
+  color: var(--ink);
+}
+.miss {
+  background: var(--x);
+  color: var(--xt);
+}
+.flip {
+  animation: lflip 380ms ease both;
+}
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  border-radius: 50%;
+}
+.inOffice {
+  flex-basis: 100%;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+.short {
+  display: none;
+}
+
+@media (max-width: 619.98px) {
+  .heads,
+  .grid {
+    gap: 8px;
+  }
+  .numeric {
+    font-size: 17px;
+  }
+  .full {
+    display: none;
+  }
+  .short {
+    display: inline;
+  }
+  .inOffice {
+    font-size: 9px;
+    letter-spacing: 0;
+  }
+}

@@ -1,0 +1,297 @@
+/* Design tokens: leaderdle-passation/donnees/design-tokens.json. Dark ("Nuit") is the default. */
+:root,
+.th-dark {
+  --ground: #1c1a2b;
+  --surf: #2a2740;
+  --text: #fff4de;
+  --muted: #b9b3cc;
+  --line: #0a0912;
+  --ink: #14121f;
+  --paper: #fff4de;
+  --x: #454160;
+  --xt: #fff4de;
+  --focus: #ffd23f;
+  --veil: rgba(10, 9, 18, 0.78);
+  color-scheme: dark;
+}
+.th-light {
+  --ground: #fbf3e4;
+  --surf: #fffdf8;
+  --text: #1c1a2b;
+  --muted: #5b5670;
+  --line: #1c1a2b;
+  --ink: #14121f;
+  --paper: #fffdf8;
+  --x: #d9d3e6;
+  --xt: #1c1a2b;
+  --focus: #5a3fe0;
+  --veil: rgba(28, 26, 43, 0.6);
+  color-scheme: light;
+}
+:root {
+  --m1: #9b87ff;
+  --m2: #3dd6c3;
+  --m3: #ff9d5c;
+  --g: #4ade80;
+  --y: #ffd23f;
+  --font-title: 'Fredoka', 'Trebuchet MS', sans-serif;
+  --font-ui: 'DM Sans', system-ui, sans-serif;
+  --sh-sm: 3px 3px 0 var(--line);
+  --sh-md: 4px 4px 0 var(--line);
+  --sh-lg: 5px 5px 0 var(--line);
+  --max: 1120px;
+}
+.cb {
+  --g: #6cb6ff;
+  --y: #ff9a3d;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+#root {
+  min-height: 100vh;
+}
+a {
+  color: inherit;
+}
+button,
+input,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:not(:disabled):active {
+  transform: translate(2px, 2px);
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.num {
+  font-variant-numeric: tabular-nums;
+}
+.muted {
+  color: var(--muted);
+}
+
+/* Titles */
+.title {
+  font-family: var(--font-title);
+  font-weight: 700;
+  line-height: 1.1;
+}
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+/* Sticker card */
+.card {
+  background: var(--surf);
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--sh-lg);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 22px;
+  background: var(--btn-bg, var(--paper));
+  color: var(--ink);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--sh-sm);
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 18px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn--lg {
+  height: 56px;
+  padding: 0 32px;
+  font-size: 20px;
+  border-radius: 14px;
+  box-shadow: var(--sh-md);
+}
+.btn--md {
+  height: 52px;
+  padding: 0 28px;
+}
+.btn--outline {
+  height: 44px;
+  padding: 0 16px;
+  background: transparent;
+  color: var(--text);
+  border-color: var(--text);
+  box-shadow: none;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+}
+.btn--block {
+  width: 100%;
+}
+.link-btn {
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: underline;
+}
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--text);
+}
+
+/* Pills and badges */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.dot {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: var(--dot, var(--m1));
+}
+
+/* Page frame */
+.page {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+}
+.page--narrow {
+  max-width: 720px;
+}
+
+/* Keyframes (PASSATION §10) */
+@keyframes lflip {
+  0% {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+}
+@keyframes lshake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+@keyframes lshake2 {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+@keyframes lfall {
+  0% {
+    transform: translateY(-30px) rotate(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(150px) rotate(220deg);
+    opacity: 0;
+  }
+}
+.reduce *,
+.reduce *::before,
+.reduce *::after {
+  animation: none !important;
+  transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
