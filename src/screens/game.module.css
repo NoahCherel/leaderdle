@@ -453,15 +453,6 @@
   .layout {
     gap: 28px;
   }
-  .h1 {
-    font-size: 32px;
-  }
-  .hero h2 {
-    font-size: 40px;
-  }
-  .link strong {
-    font-size: 14px;
-  }
   .lock {
     padding-right: 0;
   }

@@ -406,22 +406,3 @@
   font-size: 17px;
   color: var(--muted);
 }
-
-@media (max-width: 619.98px) {
-  .intro h1 {
-    font-size: 32px;
-  }
-  .classic {
-    padding: 22px;
-  }
-  .classic h2 {
-    font-size: 44px;
-  }
-  .qs {
-    gap: 8px;
-  }
-  .sumHead h1,
-  .page h1 {
-    font-size: 36px;
-  }
-}
