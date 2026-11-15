@@ -33,9 +33,9 @@ export function NameInput({ label, tried, search, onSubmit, color = 'var(--m1)',
   const matches = useMemo(() => search(q), [search, q]);
   const shown = matches.slice(0, LIMIT);
   const isTried = (l: Leader) => tried.includes(l.id);
-  const firstFree = shown.findIndex((l) => !isTried(l));
   const [active, setActive] = useState<number>(-1);
-  const current = active >= 0 && active < shown.length && !isTried(shown[active]!) ? active : firstFree;
+  // The best match is active by default, unless it was already guessed: Enter must never swap in another leader.
+  const current = active >= 0 && active < shown.length && !isTried(shown[active]!) ? active : shown[0] && !isTried(shown[0]) ? 0 : -1;
 
   const invalid = (text: string) => {
     setMsg(text);

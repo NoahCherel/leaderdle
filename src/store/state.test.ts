@@ -81,10 +81,25 @@ describe('Timeline', () => {
     const s = started();
     expect(reducer(s, { type: 'order', n: 128, order: ['lky', 'lky', 'man', 'tha', 'ard'] })).toBe(s);
   });
+  it('does not spend a check on an order that was already checked (double tap)', () => {
+    const s = run(started(), { type: 'check', n: 128 }, { type: 'check', n: 128 });
+    expect(s.days[128]!.checks).toHaveLength(1);
+  });
   it('stops after three checks', () => {
-    const s = run(started(), { type: 'check', n: 128 }, { type: 'check', n: 128 }, { type: 'check', n: 128 }, { type: 'check', n: 128 });
+    const o1 = ['ard', 'lky', 'man', 'mer', 'tha'];
+    const o2 = ['ard', 'tha', 'man', 'mer', 'lky'];
+    const s = run(started(), { type: 'check', n: 128 }, { type: 'order', n: 128, order: o1 }, { type: 'check', n: 128 }, { type: 'order', n: 128, order: o2 }, { type: 'check', n: 128 }, { type: 'check', n: 128 });
     expect(s.days[128]!.checks).toHaveLength(3);
     expect(s.stats.timeline).toMatchObject({ played: 1, wins: 0 });
+  });
+});
+
+describe('replace (another tab saved)', () => {
+  it('takes the other tab’s state and keeps today loaded', () => {
+    const other = reducer(initialState(), { type: 'setting', key: 'light', value: true });
+    const s = reducer(run(started(), guess('classic', 'lky')), { type: 'replace', state: other, puzzle });
+    expect(s.settings.light).toBe(true);
+    expect(s.days[128]).toMatchObject({ classic: [] });
   });
 });
 

@@ -18,6 +18,8 @@ export interface DayRecord {
   succession: string[];
   order: string[];
   checks: number[][];
+  /** Order at the last check, so the same order is never checked twice. */
+  checked?: string[];
 }
 
 export interface GameState {
@@ -40,7 +42,9 @@ export type Action =
   | { type: 'setting'; key: keyof Settings; value: boolean }
   | { type: 'consent'; value: 'yes' | 'no' }
   | { type: 'helpSeen'; mode: Mode }
-  | { type: 'clear' };
+  | { type: 'clear' }
+  /** Another tab saved: take its state, keeping today's puzzle loaded. */
+  | { type: 'replace'; state: GameState; puzzle: DayPuzzle };
 
 /** Days kept in storage, today included. */
 const KEEP_DAYS = 7;
@@ -122,7 +126,8 @@ export function reducer(state: GameState, action: Action): GameState {
     case 'check': {
       const day = state.days[action.n];
       if (!day || day.checks.length >= MAX.timeline || dayStatus(day).timeline.done) return state;
-      return withDay(state, action.n, { checks: [...day.checks, checkOrder(day.order, day.puzzle.timeline.order)] });
+      if (day.checked?.join() === day.order.join()) return state;
+      return withDay(state, action.n, { checks: [...day.checks, checkOrder(day.order, day.puzzle.timeline.order)], checked: [...day.order] });
     }
     case 'setting':
       return { ...state, settings: { ...state.settings, [action.key]: action.value } };
@@ -130,6 +135,8 @@ export function reducer(state: GameState, action: Action): GameState {
       return { ...state, consent: action.value };
     case 'helpSeen':
       return state.helpSeen[action.mode] ? state : { ...state, helpSeen: { ...state.helpSeen, [action.mode]: true } };
+    case 'replace':
+      return reducer(action.state, { type: 'start', puzzle: action.puzzle });
     case 'clear': {
       // Progress goes, puzzles stay loaded so the current day can be played again from scratch.
       const days: Record<number, DayRecord> = {};

@@ -48,13 +48,20 @@ describe('NameInput', () => {
     expect(onSubmit).toHaveBeenCalledWith('oba');
   });
 
-  it('shows already guessed names greyed out and skips them', async () => {
+  it('shows already guessed names greyed out; Enter never swaps in another leader', async () => {
     const { input, user, onSubmit } = setup(['tha']);
     await user.type(input, 'ma');
     const thatcher = screen.getByRole('option', { name: /Margaret Thatcher/ });
     expect(thatcher).toHaveAttribute('aria-disabled', 'true');
     expect(thatcher).toHaveTextContent('Already guessed');
     await user.keyboard('{Enter}');
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(screen.getByRole('status')).toHaveTextContent('You already tried Margaret Thatcher.');
+  });
+
+  it('arrow keys skip already guessed names', async () => {
+    const { input, user, onSubmit } = setup(['tha']);
+    await user.type(input, 'ma{ArrowDown}{Enter}');
     expect(onSubmit).toHaveBeenCalledWith('man');
   });
 

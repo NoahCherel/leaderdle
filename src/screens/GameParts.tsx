@@ -5,6 +5,7 @@ import { useCountdown, useShare } from '../app/hooks';
 import { AdSlot, Flag, MODE_COLOR, ModePills } from '../components/Chrome';
 import { IconBulb, IconShare } from '../components/icons';
 import { ROLE_LABEL } from '../game/compare';
+import { score } from '../game/share';
 import { isInOffice, termSpan, yearsInOffice } from '../game/tenure';
 import { MAX, MODE_NAMES, MODES, type Leader, type Mode } from '../game/types';
 import s from './game.module.css';
@@ -200,7 +201,7 @@ export function Result({ mode, won, used, scoreLine, celebrate, grid, shareText,
         <section aria-label="Share" className={s.share}>
           <div className={s.shareCard}>
             <span className={s.shareTitle}>
-              Leaderdle #{n} · {MODE_NAMES[mode]} {won ? used : 'X'}/{MAX[mode]}
+              Leaderdle #{n} · {MODE_NAMES[mode]} {score(mode, { won, used })}
               {hint && (
                 <svg role="img" aria-label="Initials hint used" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" />

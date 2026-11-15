@@ -1,4 +1,4 @@
-import { currentStreak, emptyStats, recordResult, recordStreak } from './stats';
+import { currentStreak, currentWinStreak, emptyStats, recordResult, recordStreak } from './stats';
 
 describe('recordResult', () => {
   it('counts a win in the distribution and the win streak', () => {
@@ -22,6 +22,15 @@ describe('recordResult', () => {
   it('records a puzzle only once', () => {
     const s = recordResult(emptyStats(), 10, true, 4);
     expect(recordResult(s, 10, true, 4)).toBe(s);
+  });
+});
+
+describe('currentWinStreak', () => {
+  it('counts until the day after the last game, then drops to 0', () => {
+    const s = recordResult(recordResult(emptyStats(), 10, true, 4), 11, true, 2);
+    expect(currentWinStreak(s, 11)).toBe(2);
+    expect(currentWinStreak(s, 12)).toBe(2);
+    expect(currentWinStreak(s, 13)).toBe(0);
   });
 });
 

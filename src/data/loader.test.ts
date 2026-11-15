@@ -27,6 +27,22 @@ describe('loadGame', () => {
     if (r.ok) expect(r.leaders).toHaveLength(17);
   });
 
+  it('requests the leaders and the puzzle at the same time', async () => {
+    const requested: string[] = [];
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    const f = vi.fn(async (url: string) => {
+      requested.push(url);
+      if (url.endsWith('leaders.json')) await gate;
+      return new Response(JSON.stringify(url.endsWith('leaders.json') ? leadersFile : puzzle));
+    }) as unknown as typeof fetch;
+    const pending = loadGame(128, initialState(), f);
+    await Promise.resolve();
+    expect(requested).toEqual(['/data/leaders.json', '/data/days/128.json']);
+    release();
+    expect((await pending).ok).toBe(true);
+  });
+
   it('reports missing puzzles as a data error', async () => {
     const f = fakeFetch({ '/data/leaders.json': () => json(leadersFile) });
     expect(await loadGame(128, initialState(), f)).toEqual({ ok: false, kind: 'data' });

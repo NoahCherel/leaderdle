@@ -117,7 +117,14 @@ test('the day summary appears when all three are done', async ({ page }) => {
   await guess(page, 'Merkel', 'Who governed in between?');
   await page.getByRole('link', { name: 'Next up: Timeline' }).click();
   await closeHelp(page);
-  for (let i = 0; i < 3; i++) await page.getByRole('button', { name: 'Check my order' }).click();
+  // Start: Mandela, Ardern, Lee Kuan Yew, Merkel, Thatcher. Each check needs a new order.
+  const check = page.getByRole('button', { name: 'Check my order' });
+  await check.click();
+  await expect(check).toBeDisabled();
+  await page.getByRole('button', { name: 'Move Jacinda Ardern up' }).click();
+  await check.click();
+  await page.getByRole('button', { name: 'Move Jacinda Ardern down' }).click();
+  await check.click();
   await page.getByRole('link', { name: "See today's summary" }).click();
   await expect(page.getByRole('heading', { name: 'Day complete!' })).toBeVisible();
   await expect(page.getByText('Classic 1/8 · Succession 1/5 · Timeline X/3')).toBeVisible();
@@ -197,3 +204,56 @@ for (const [name, path] of [['home', '/'], ['classic', '/classic'], ['timeline',
     });
   }
 }
+
+test('Timeline: the same order cannot be checked twice', async ({ page }) => {
+  await openAt(page, '/timeline');
+  await closeHelp(page);
+  const check = page.getByRole('button', { name: 'Check my order' });
+  await check.dblclick();
+  await expect(page.getByText('2 checks left')).toBeVisible();
+  await expect(check).toBeDisabled();
+  await expect(page.getByText('Move a card to check again.')).toBeVisible();
+});
+
+test('after midnight, an open tab offers the new puzzles without touching the current game', async ({ page }) => {
+  await openAt(page, '/classic', new Date(2026, 10, 15, 23, 59, 30));
+  await closeHelp(page);
+  await guess(page, 'Kohl');
+  await page.clock.runFor(61_000);
+  const banner = page.getByRole('status').filter({ hasText: 'New puzzles are ready.' });
+  await expect(banner).toBeVisible();
+  await expect(page.getByText('7 guesses left')).toBeVisible();
+  await banner.getByRole('button', { name: 'Load them' }).click();
+  // Day 129 has no file in the sample data.
+  await expect(page.getByRole('heading', { name: 'Today’s puzzles aren’t ready' })).toBeVisible();
+});
+
+test('two tabs: a stale tab does not erase progress saved by the other', async ({ context }) => {
+  const a = await context.newPage();
+  const b = await context.newPage();
+  await openAt(a, '/classic');
+  await closeHelp(a);
+  await openAt(b, '/classic');
+  await guess(b, 'Merkel');
+  await expect(b.getByRole('heading', { name: 'You got it!' })).toBeVisible();
+  // Tab A catches up, then saves a setting.
+  await expect(a.getByRole('heading', { name: 'You got it!' })).toBeVisible();
+  await a.getByRole('button', { name: 'Settings' }).click();
+  await a.getByRole('switch', { name: 'Reduce motion' }).click();
+  await b.reload();
+  await expect(b.getByRole('heading', { name: 'You got it!' })).toBeVisible();
+  await expect(b.getByRole('img', { name: 'Streak: 1 day' })).toBeVisible();
+});
+
+test('the win celebration plays once, not again when coming back to the mode', async ({ page }) => {
+  await openAt(page, '/classic');
+  await closeHelp(page);
+  await guess(page, 'Merkel');
+  await expect(page.locator('[class*="fall"]').first()).toBeAttached();
+  await page.getByRole('link', { name: 'Succession', exact: true }).click();
+  await closeHelp(page);
+  await page.getByRole('link', { name: /^Classic/ }).click();
+  await expect(page.getByRole('heading', { name: 'You got it!' })).toBeVisible();
+  await expect(page.locator('[class*="fall"]')).toHaveCount(0);
+  await expect(page.locator('[class*="flip"]')).toHaveCount(0);
+});

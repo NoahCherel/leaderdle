@@ -13,7 +13,14 @@ const TYPES = {
 };
 
 createServer((req, res) => {
-  const path = normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname)).replace(/^(\.\.[/\\])+/, '');
+  let path;
+  try {
+    path = normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname)).replace(/^(\.\.[/\\])+/, '');
+  } catch {
+    res.writeHead(400, { 'Content-Type': 'text/plain' });
+    res.end('Bad request');
+    return;
+  }
   let file = join(root, path);
   if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
   let status = 200;

@@ -24,14 +24,19 @@ async function getJson(url: string, fetchImpl: typeof fetch): Promise<unknown> {
  */
 export async function loadGame(n: number, saved: GameState, fetchImpl: typeof fetch = fetch): Promise<LoadResult> {
   try {
-    const leadersRaw = await getJson(`${BASE}/data/leaders.json`, fetchImpl);
+    // Both files are requested at once: one round trip instead of two before the first render.
+    const savedPuzzle = saved.days[n]?.puzzle;
+    const [leadersRaw, dayRaw] = await Promise.all([
+      getJson(`${BASE}/data/leaders.json`, fetchImpl),
+      savedPuzzle ? Promise.resolve(null) : getJson(`${BASE}/data/days/${n}.json`, fetchImpl),
+    ]);
     const leadersParsed = LeaderFileSchema.safeParse(leadersRaw);
     if (!leadersParsed.success) return { ok: false, kind: 'data' };
     const leaders = leadersParsed.data.leaders as Leader[];
 
-    let puzzle = saved.days[n]?.puzzle;
+    let puzzle = savedPuzzle;
     if (!puzzle) {
-      const parsed = DayPuzzleSchema.safeParse(await getJson(`${BASE}/data/days/${n}.json`, fetchImpl));
+      const parsed = DayPuzzleSchema.safeParse(dayRaw);
       if (!parsed.success || parsed.data.n !== n) return { ok: false, kind: 'data' };
       puzzle = parsed.data;
     }

@@ -45,3 +45,9 @@ test('a started game reloads offline thanks to the service worker', async ({ pag
   await page.getByRole('combobox').press('Enter');
   await expect(page.getByRole('heading', { name: 'You got it!' })).toBeVisible();
 });
+
+test('a malformed URL gets a 400 and the server keeps running', async ({ request }) => {
+  const bad = await request.get('/%E0%A4%A');
+  expect(bad.status()).toBe(400);
+  expect((await request.get('/about')).status()).toBe(200);
+});

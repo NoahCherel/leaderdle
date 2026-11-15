@@ -45,12 +45,16 @@ export const DayPuzzleSchema = z.object({
     beforeYears: z.string(),
     afterYears: z.string(),
   }),
-  timeline: z.object({
-    /** Correct order, earliest first. */
-    order: five,
-    /** Order shown at the start. */
-    start: five,
-  }),
+  timeline: z
+    .object({
+      /** Correct order, earliest first. */
+      order: five,
+      /** Order shown at the start. */
+      start: five,
+    })
+    .refine((t) => new Set(t.order).size === 5 && [...t.start].sort().join() === [...t.order].sort().join(), {
+      message: 'Timeline start must be the same five distinct cards as order',
+    }),
 });
 
 export type DayPuzzle = z.infer<typeof DayPuzzleSchema>;

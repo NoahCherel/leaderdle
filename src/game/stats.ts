@@ -37,6 +37,11 @@ export function recordStreak(streak: Streak, puzzle: number): Streak {
   return { n: (streak.last === puzzle - 1 ? streak.n : 0) + 1, last: puzzle };
 }
 
+/** Win streak shown in the stats: still counts the day after the last game, 0 after a missed day. */
+export function currentWinStreak(stats: ModeStats, puzzle: number): number {
+  return stats.last === puzzle || stats.last === puzzle - 1 ? stats.cur : 0;
+}
+
 /** Still counts until the end of the next day, so today's game can extend it. */
 export function currentStreak(streak: Streak, puzzle: number): number {
   return streak.last === puzzle || streak.last === puzzle - 1 ? streak.n : 0;

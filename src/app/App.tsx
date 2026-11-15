@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, Switch, useLocation } from 'wouter';
 import { ConsentBanner, Header, Toast } from '../components/Chrome';
 import { Modals } from '../components/Modals';
@@ -8,7 +8,43 @@ import { ErrorScreen, Page } from '../screens/Pages';
 import { Succession } from '../screens/Succession';
 import { Summary } from '../screens/Summary';
 import { Timeline } from '../screens/Timeline';
+import { LAUNCH_DATE } from '../config';
+import { puzzleNumber } from '../game/dates';
 import { useApp } from './context';
+
+/**
+ * After local midnight, an open tab or installed app keeps the game in progress (PASSATION §12)
+ * but offers the new puzzles.
+ */
+function NewDayBanner() {
+  const { n, frozen } = useApp();
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (frozen) return;
+    const check = () => {
+      if (puzzleNumber(new Date(), LAUNCH_DATE) > n) setReady(true);
+    };
+    const id = window.setInterval(check, 30_000);
+    document.addEventListener('visibilitychange', check);
+    window.addEventListener('focus', check);
+    return () => {
+      window.clearInterval(id);
+      document.removeEventListener('visibilitychange', check);
+      window.removeEventListener('focus', check);
+    };
+  }, [n, frozen]);
+  if (!ready) return null;
+  return (
+    <div className="page" style={{ paddingTop: 0, paddingBottom: 0 }}>
+      <p role="status" className="card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, padding: '12px 16px', boxShadow: 'var(--sh-sm)', fontWeight: 700 }}>
+        New puzzles are ready.
+        <button type="button" className="btn" style={{ ['--btn-bg' as string]: 'var(--g)', height: 44 }} onClick={() => window.location.reload()}>
+          Load them
+        </button>
+      </p>
+    </div>
+  );
+}
 
 const TITLES: Record<string, string> = {
   '/': 'Leaderdle: guess the world leader',
@@ -35,18 +71,20 @@ export function useThemeClasses(settings: { light: boolean; cb: boolean; reduce:
 }
 
 export function App() {
-  const { state } = useApp();
+  const { state, clearFresh } = useApp();
   const [path] = useLocation();
   useThemeClasses(state.settings);
 
   useEffect(() => {
     document.title = TITLES[path] ?? 'Page not found · Leaderdle';
     window.scrollTo(0, 0);
-  }, [path]);
+    clearFresh();
+  }, [path, clearFresh]);
 
   return (
     <>
       <Header />
+      <NewDayBanner />
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/classic" component={Classic} />

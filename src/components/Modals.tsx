@@ -1,4 +1,5 @@
 import { useApp } from '../app/context';
+import { currentWinStreak } from '../game/stats';
 import { MAX, MODE_NAMES, MODES, type Mode } from '../game/types';
 import { MODE_COLOR, Modal, Toast } from './Chrome';
 import { IconCheck, IconUp, IconWave } from './icons';
@@ -81,7 +82,7 @@ function StatsBody() {
   const { state, n, modal, setStatTab } = useApp();
   const tab = modal.tab;
   const h = state.stats[tab];
-  const cur = h.last === n || h.last === n - 1 ? h.cur : 0;
+  const cur = currentWinStreak(h, n);
   const top = Math.max(1, ...Object.values(h.dist));
   const pct = h.played ? `${Math.round((100 * h.wins) / h.played)}%` : '0%';
   return (

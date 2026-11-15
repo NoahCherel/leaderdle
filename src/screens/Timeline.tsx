@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { useApp } from '../app/context';
 import { IconCheck, IconDown, IconGrip, IconUp } from '../components/icons';
 import { shareTimeline } from '../game/share';
-import { moveFree, swap, target } from '../game/timeline';
+import { checkOrder, moveFree, swap, target } from '../game/timeline';
 import type { Leader } from '../game/types';
 import { GameLayout, OrderCard, Result, ResumedBanner, TitleRow, gameStyles as s, leftLabel } from './GameParts';
 
@@ -64,6 +64,8 @@ export function Timeline() {
   const order = day.order;
   const locked = st.locked;
   const sorted = day.puzzle.timeline.order;
+  // The order already checked would cost a check for nothing.
+  const unchanged = day.checked?.join() === order.join();
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -103,8 +105,7 @@ export function Timeline() {
   };
 
   const check = () => {
-    const row = order.map((id, i) => (id === sorted[i] ? 1 : 0));
-    const right = row.filter(Boolean).length;
+    const right = checkOrder(order, sorted).filter(Boolean).length;
     dispatch({ type: 'check', n });
     markFresh('timeline', String(day.checks.length + 1));
     if (right < 5 && day.checks.length + 1 < 3) flash(`${right} of 5 in the right spot`);
@@ -149,9 +150,16 @@ export function Timeline() {
           </SortableContext>
         </DndContext>
         {!st.done && (
-          <button type="button" className="btn btn--lg" style={{ ['--btn-bg' as string]: 'var(--m3)' }} onClick={check}>
-            Check my order
-          </button>
+          <>
+            <button type="button" className="btn btn--lg" style={{ ['--btn-bg' as string]: 'var(--m3)' }} onClick={check} disabled={unchanged} aria-describedby={unchanged ? 'check-hint' : undefined}>
+              Check my order
+            </button>
+            {unchanged && (
+              <p id="check-hint" className="muted" style={{ textAlign: 'center', fontSize: 13 }}>
+                Move a card to check again.
+              </p>
+            )}
+          </>
         )}
       </div>
     </GameLayout>

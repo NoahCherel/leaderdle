@@ -3,7 +3,7 @@ import type { DayPuzzle } from '../data/schema';
 import { createSearch } from '../game/search';
 import type { Leader, Mode } from '../game/types';
 import { dayStatus, reducer, type Action, type DayRecord, type GameState } from '../store/state';
-import type { Store } from '../store/storage';
+import { STORAGE_KEY, type Store } from '../store/storage';
 
 export type ModalKind = 'help' | 'stats' | 'settings';
 
@@ -40,6 +40,8 @@ export interface AppValue {
   /** Last guess or check made in this session, to animate only that one. */
   fresh: { mode: Mode; id: string } | null;
   markFresh: (mode: Mode, id: string) => void;
+  /** Called on navigation, so animations play once and not again when coming back. */
+  clearFresh: () => void;
 }
 
 const Ctx = createContext<AppValue | null>(null);
@@ -72,6 +74,16 @@ export function AppProvider({ leaders, puzzle, initial, store, frozen = false, s
     if (!frozen) store?.save(state);
   }, [state, store, frozen]);
 
+  // Another tab saved: take its state, so this tab never writes an older copy over it.
+  useEffect(() => {
+    if (frozen || !store) return;
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY) rawDispatch({ type: 'replace', state: store.load(), puzzle });
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [frozen, store, puzzle]);
+
   const index = useMemo(() => new Map(leaders.map((l) => [l.id, l])), [leaders]);
   const byId = useCallback((id: string) => {
     const l = index.get(id);
@@ -96,13 +108,14 @@ export function AppProvider({ leaders, puzzle, initial, store, frozen = false, s
 
   const [fresh, setFresh] = useState<AppValue['fresh']>(null);
   const markFresh = useCallback((mode: Mode, id: string) => setFresh({ mode, id }), []);
+  const clearFresh = useCallback(() => setFresh(null), []);
 
   const day = state.days[n]!;
   const status = useMemo(() => dayStatus(day), [day]);
 
   const value: AppValue = {
     leaders, byId, search, n, state, dispatch: rawDispatch, day, status, frozen, scene, resumed,
-    modal, openModal, closeModal, setStatTab, toast, flash, fresh, markFresh,
+    modal, openModal, closeModal, setStatTab, toast, flash, fresh, markFresh, clearFresh,
   };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
