@@ -34,11 +34,35 @@ export interface RawHolder {
   article?: string;
 }
 
+/** A state an office belongs to, with its dates. */
+export interface RawState {
+  id: string;
+  label: string;
+  sovereign: boolean;
+  iso2?: string;
+  iso3?: string;
+  continents: string[];
+  inception?: string;
+  dissolved?: string;
+}
+
+/** National office found through the class tree (subclass of head of state/government with a jurisdiction). */
+export interface RawTreeOffice {
+  office: string;
+  label: string;
+  countries: string[];
+  kinds: Array<'state' | 'gov'>;
+}
+
 export interface RawData {
   countries: RawCountry[];
   holders: RawHolder[];
   aliases: Record<string, string[]>;
   settlements: string[];
+  states?: RawState[];
+  treeOffices?: RawTreeOffice[];
+  /** Generic titles ("prime minister", "president"): never an office of a given country. */
+  generic?: string[];
 }
 
 /** Hand corrections, kept in data/overrides.json. Keys are Wikidata ids. */
@@ -58,6 +82,10 @@ export interface Overrides {
   /** Person id → country id, when someone led several countries. */
   countries?: Record<string, string>;
   roles?: Record<string, Role>;
+  /** Person id → terms checked by hand, replacing Wikidata's (first start, total and age follow). */
+  terms?: Record<string, Term[]>;
+  /** Office id → name used in descriptions, when Wikidata's label is wrong. */
+  officeNames?: Record<string, string>;
   blurbs?: Record<string, string>;
   excludeOffices?: string[];
   excludeCountries?: string[];
@@ -82,6 +110,8 @@ export interface Options {
 export interface OfficeOut {
   label: string;
   country: string;
+  /** Country name as shown in the game, to match the answer's country. */
+  countryName: string;
   kind: Role;
   holders: Array<{ id: string; start: string; end: string | null }>;
 }
@@ -117,7 +147,10 @@ const CONTINENTS: Record<string, Continent | null> = {
 const CONTINENT_ORDER: Continent[] = ['Europe', 'Asia', 'Africa', 'North America', 'South America', 'Oceania'];
 
 /** Representatives and ex officio titles, not heads of state or government in their own right. */
-const NOT_HEAD = /^(governor|governor-general|reichsstatthalter|list of governors|high commissioner|resident-general)|co-prince/i;
+const NOT_HEAD =
+  /^(governor|governor-general|reichsstatthalter|list of governors|high commissioner|resident-general)|co-prince|acting|interim|caretaker|deputy|vice[- ]|emeritus|designate|in exile|consort|secretary|communist party|paramount leader|imperial house|pretender|region|province|provincial|district|intendant|traditional chief|olympic|comitee|committee|shura council|landesbevollmächtigter|İK|club/i;
+/** Federated republics of the Soviet Union are not sovereign states. */
+const NOT_STATE = /Soviet Socialist Republic/;
 
 const day = (iso: string) => iso.slice(0, 10);
 const time = (iso: string) => Date.parse(`${day(iso)}T00:00:00Z`);
@@ -140,13 +173,13 @@ const age = (birth: string, at: string) => {
   return y;
 };
 
-/** Merges overlapping or touching intervals. */
-function mergeTerms(terms: Term[]): Term[] {
+/** Merges overlapping or touching intervals; with a tolerance, also intervals that many days apart. */
+function mergeTerms(terms: Term[], toleranceDays = 0): Term[] {
   const sorted = [...terms].sort((a, b) => a.start.localeCompare(b.start));
   const out: Term[] = [];
   for (const t of sorted) {
     const last = out[out.length - 1];
-    if (last && (last.end === null || t.start <= last.end)) {
+    if (last && (last.end === null || time(t.start) <= time(last.end) + toleranceDays * DAY_MS)) {
       if (last.end !== null && (t.end === null || t.end > last.end)) last.end = t.end;
     } else out.push({ start: t.start, end: t.end });
   }
@@ -171,6 +204,7 @@ function overlapDays(a: Term[], b: Term[], today: Date): number {
 
 interface PersonTerm extends Term {
   office: string;
+  country: string;
 }
 
 export function buildDataset(raw: RawData, ov: Overrides, opts: Options) {
@@ -179,7 +213,11 @@ export function buildDataset(raw: RawData, ov: Overrides, opts: Options) {
   const excludedCountries = new Set(ov.excludeCountries ?? []);
 
   // Countries.
-  const countries = new Map<string, { label: string; sovereign: boolean; iso2?: string; iso3?: string; continents: Set<string> }>();
+  const countries = new Map<string, { label: string; sovereign: boolean; iso2?: string; iso3?: string; continents: Set<string>; inception?: string; dissolved?: string }>();
+  for (const s of raw.states ?? []) {
+    countries.set(s.id, { label: s.label, sovereign: s.sovereign, iso2: s.iso2, iso3: s.iso3, continents: new Set(s.continents), inception: s.inception, dissolved: s.dissolved });
+    if (NOT_STATE.test(s.label) && !s.sovereign) excludedCountries.add(s.id);
+  }
   for (const c of raw.countries) {
     const cur = countries.get(c.country) ?? { label: c.countryLabel, sovereign: c.sovereign, iso2: c.iso2, iso3: c.iso3, continents: new Set<string>() };
     if (c.continentLabel) cur.continents.add(c.continentLabel);
@@ -203,9 +241,35 @@ export function buildDataset(raw: RawData, ov: Overrides, opts: Options) {
     cur.countries.add(c.country);
     offices.set(c.office, cur);
   }
-  for (const id of [...offices.keys()]) {
-    if (NOT_HEAD.test(offices.get(id)!.label) || ov.excludeOffices?.includes(id)) offices.delete(id);
+  for (const o of raw.treeOffices ?? []) {
+    const cs = o.countries.filter((c) => !excludedCountries.has(c));
+    if (!cs.length) continue;
+    const cur = offices.get(o.office) ?? { label: o.label, kinds: new Set(), countries: new Set() };
+    for (const k of o.kinds) cur.kinds.add(k);
+    for (const c of cs) cur.countries.add(c);
+    offices.set(o.office, cur);
   }
+  const generic = new Set(raw.generic ?? []);
+  for (const id of [...offices.keys()]) {
+    if (generic.has(id) || NOT_HEAD.test(offices.get(id)!.label) || ov.excludeOffices?.includes(id)) offices.delete(id);
+  }
+  /** The state existed at that date (a year of slack on the start for transitions). */
+  const alive = (c: string, start: string) => {
+    const s = countries.get(c);
+    return !!s && (!s.inception || time(s.inception) <= time(start) + 366 * DAY_MS) && (!s.dissolved || time(s.dissolved) >= time(start));
+  };
+  /** Country of one term. An office shared by several states belongs to the one alive at the time, the narrowest first. */
+  const termCountry = (office: string, start: string) => {
+    if (ov.countryOfOffice?.[office]) return ov.countryOfOffice[office]!;
+    const list = [...offices.get(office)!.countries];
+    if (list.length === 1) return list[0]!;
+    const life = (c: string) => {
+      const s = countries.get(c)!;
+      return (s.dissolved ? time(s.dissolved) : today.getTime()) - (s.inception ? time(s.inception) : -1e15);
+    };
+    const fit = list.filter((c) => alive(c, start)).sort((a, b) => life(a) - life(b));
+    return fit[0] ?? list.find((c) => countries.get(c)?.sovereign) ?? list[0]!;
+  };
   const officeCountry = (id: string) => {
     if (ov.countryOfOffice?.[id]) return ov.countryOfOffice[id]!;
     const list = [...offices.get(id)!.countries];
@@ -239,7 +303,9 @@ export function buildDataset(raw: RawData, ov: Overrides, opts: Options) {
       p.flags.add('term ends before it starts');
       continue;
     }
-    p.terms.push({ office: h.office, start: day(h.start), end });
+    const country = termCountry(h.office, day(h.start));
+    if (!alive(country, day(h.start))) p.flags.add('term outside country dates');
+    p.terms.push({ office: h.office, country, start: day(h.start), end });
     people.set(h.person, p);
   }
 
@@ -256,7 +322,9 @@ export function buildDataset(raw: RawData, ov: Overrides, opts: Options) {
 
     // Days per office, per country, per role kind.
     const byOffice = new Map<string, PersonTerm[]>();
-    for (const t of p.terms) byOffice.set(t.office, [...(byOffice.get(t.office) ?? []), t]);
+    // A unit is one office in one state.
+    const unit = (t: PersonTerm) => `${t.office}|${t.country}`;
+    for (const t of p.terms) byOffice.set(unit(t), [...(byOffice.get(unit(t)) ?? []), t]);
     const officeDays = [...byOffice].map(([office, ts]) => ({ office, days: spanDays(ts, today) })).sort((a, b) => b.days - a.days);
     const total = (pick: (office: string) => string) => {
       const m = new Map<string, number>();
@@ -264,14 +332,16 @@ export function buildDataset(raw: RawData, ov: Overrides, opts: Options) {
       return [...m].sort((a, b) => b[1] - a[1]);
     };
 
-    const resolve = (office: string) => ov.mergeCountries?.[officeCountry(office)]?.into ?? officeCountry(office);
+    const unitCountry = (u: string) => u.split('|')[1]!;
+    const unitOffice = (u: string) => u.split('|')[0]!;
+    const resolve = (u: string) => ov.mergeCountries?.[unitCountry(u)]?.into ?? unitCountry(u);
     const byCountry = total(resolve);
     const preferred = byCountry.find(([c, d]) => ov.preferCountries?.includes(c) && d >= 0.9 * byCountry[0]![1]);
     if (byCountry.length > 1 && !ov.countries?.[id] && !preferred) flags.add('several countries');
     const countryId = ov.countries?.[id] ?? preferred?.[0] ?? byCountry[0]![0];
     const country = countries.get(countryId)!;
 
-    const kinds = new Set(officeDays.map((o) => officeKind(o.office)));
+    const kinds = new Set(officeDays.map((o) => officeKind(unitOffice(o.office))));
     let role: Role;
     if (kinds.has('both')) role = 'both';
     else if (kinds.size > 1) {
@@ -280,7 +350,7 @@ export function buildDataset(raw: RawData, ov: Overrides, opts: Options) {
       const both = overlapDays(of('state'), of('gov'), today);
       if (both >= 0.5 * spanDays(p.terms, today)) role = 'both';
       else {
-        role = total(officeKind)[0]![0] as Role;
+        role = total((u) => officeKind(unitOffice(u)))[0]![0] as Role;
         flags.add('held state and government offices');
       }
     } else role = [...kinds][0]!;
@@ -300,7 +370,7 @@ export function buildDataset(raw: RawData, ov: Overrides, opts: Options) {
       countryCode = country.label.replace(/[^A-Za-z]/g, '').slice(0, 3).toUpperCase().padEnd(3, 'X');
     }
 
-    const terms = mergeTerms(p.terms);
+    const terms = ov.terms?.[id] ? mergeTerms(ov.terms[id]!) : mergeTerms(p.terms);
     const first = terms[0]!.start;
     const name = ov.names?.[id] ?? displayName(p.label, p.article);
     const ageAtStart = p.birth ? age(p.birth, first) : null;
@@ -310,12 +380,12 @@ export function buildDataset(raw: RawData, ov: Overrides, opts: Options) {
 
     const main = (officeDays.find((o) => resolve(o.office) === countryId) ?? officeDays[0]!).office;
     const mainTerms = mergeTerms(byOffice.get(main)!);
-    const officeLabel = offices.get(main)!.label;
-    const merged = ov.mergeCountries?.[officeCountry(main)];
+    const officeLabel = ov.officeNames?.[unitOffice(main)] ?? offices.get(unitOffice(main))!.label;
+    const merged = ov.mergeCountries?.[unitCountry(main)];
     const from = mainTerms[0]!.start.slice(0, 4);
     const lastEnd = mainTerms[mainTerms.length - 1]!.end;
     const generic = role === 'both' ? 'Head of state and government' : role === 'state' ? 'Head of state' : 'Head of government';
-    const title = /^list of/i.test(officeLabel) ? `${generic} of ${country.label}` : capitalize(officeLabel);
+    const title = /^(list of|Q\d+$)/i.test(officeLabel) ? `${generic} of ${country.label}` : capitalize(officeLabel);
     const blurb = ov.blurbs?.[id] ?? (lastEnd === null ? `${title} since ${from}.` : from === lastEnd.slice(0, 4) ? `${title} in ${from}.` : `${title} from ${from} to ${lastEnd.slice(0, 4)}.`);
 
     const answerable = !removeAnswer.has(id) && (addAnswer.has(id) || (p.sitelinks >= opts.answerableSitelinks && !!p.article && ageAtStart !== null));
@@ -357,11 +427,14 @@ export function buildDataset(raw: RawData, ov: Overrides, opts: Options) {
     const holders: OfficeOut['holders'] = [];
     for (const [id, p] of people) {
       if (excluded.has(id)) continue;
-      for (const t of mergeTerms(p.terms.filter((t) => t.office === office))) holders.push({ id, start: t.start, end: t.end });
+      // Wikidata often splits one tenure by government or election: join terms a month apart.
+      for (const t of mergeTerms(p.terms.filter((t) => t.office === office), 31)) holders.push({ id, start: t.start, end: t.end });
     }
     if (!holders.length) continue;
     holders.sort((a, b) => a.start.localeCompare(b.start) || (a.end ?? todayIso).localeCompare(b.end ?? todayIso));
-    officesOut[office] = { label: info.label, country: officeCountry(office), kind: officeKind(office), holders };
+    const c = officeCountry(office);
+    const shown = ov.mergeCountries?.[c]?.into ?? c;
+    officesOut[office] = { label: info.label, country: c, countryName: ov.countryNames?.[shown] ?? countries.get(shown)?.label ?? shown, kind: officeKind(office), holders };
   }
 
   return { leaders, offices: officesOut, review };

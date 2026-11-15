@@ -15,7 +15,7 @@ const OFFICES: Record<string, OfficeOut> = Object.fromEntries(
   COUNTRIES.map((c, k) => [
     `O${k}`,
     {
-      label: `Prime Minister of ${c}`, country: c, kind: 'gov' as const,
+      label: `Prime Minister of ${c}`, country: c, countryName: c, kind: 'gov' as const,
       holders: LEADERS.filter((_, i) => i % 4 === k).map((l) => ({ id: l.id, start: `${l.tookOffice}-01-01`, end: `${l.tookOffice + 4}-01-01` })),
     },
   ]),
@@ -36,14 +36,38 @@ describe('successionCandidates', () => {
   });
 
   it('skips overlapping terms (collective or co-held offices)', () => {
-    const offices = { X: { label: 'Council', country: 'Alpha', kind: 'gov' as const, holders: [
+    const offices = { X: { label: 'Council', country: 'Alpha', countryName: 'Alpha', kind: 'gov' as const, holders: [
       { id: 'Q0', start: '1900-01-01', end: '1910-01-01' }, { id: 'Q4', start: '1902-01-01', end: '1906-01-01' }, { id: 'Q8', start: '1906-01-01', end: '1912-01-01' },
     ] } };
     expect(successionCandidates(LEADERS, offices)).toEqual([]);
   });
 
+  it('skips chains with a gap: someone else governed in between', () => {
+    const offices = { X: { label: 'PM', country: 'Alpha', countryName: 'Alpha', kind: 'gov' as const, holders: [
+      { id: 'Q0', start: '1900-01-01', end: '1904-01-01' }, { id: 'Q4', start: '1906-01-01', end: '1908-01-01' }, { id: 'Q8', start: '1908-01-01', end: '1912-01-01' },
+    ] } };
+    expect(successionCandidates(LEADERS, offices)).toEqual([]);
+  });
+
+  it('skips chains when another holder overlaps them (rival or exiled government)', () => {
+    const offices = { X: { label: 'President', country: 'Alpha', countryName: 'Alpha', kind: 'gov' as const, holders: [
+      { id: 'Q12', start: '1880-01-01', end: '1904-01-01' },
+      { id: 'Q0', start: '1890-01-01', end: '1904-01-01' },
+      { id: 'Q4', start: '1904-01-01', end: '1908-01-01' },
+      { id: 'Q8', start: '1908-01-01', end: '1912-01-01' },
+    ] } };
+    expect(successionCandidates(LEADERS, offices).map((c) => c.answer)).not.toContain('Q4');
+  });
+
+  it('only uses an office of the answer’s own country', () => {
+    const offices = { X: { label: 'Monarch of Beta', country: 'Beta', countryName: 'Beta', kind: 'gov' as const, holders: [
+      { id: 'Q0', start: '1900-01-01', end: '1904-01-01' }, { id: 'Q4', start: '1904-01-01', end: '1908-01-01' }, { id: 'Q8', start: '1908-01-01', end: '1912-01-01' },
+    ] } };
+    expect(successionCandidates(LEADERS, offices)).toEqual([]);
+  });
+
   it('shows "present" for a successor still in office', () => {
-    const offices = { X: { label: 'PM', country: 'Alpha', kind: 'gov' as const, holders: [
+    const offices = { X: { label: 'PM', country: 'Alpha', countryName: 'Alpha', kind: 'gov' as const, holders: [
       { id: 'Q0', start: '1900-01-01', end: '1904-01-01' }, { id: 'Q4', start: '1904-01-01', end: '1908-01-01' }, { id: 'Q8', start: '1908-01-01', end: null },
     ] } };
     expect(successionCandidates(LEADERS, offices)[0]!.afterYears).toBe('1908 – present');

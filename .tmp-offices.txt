@@ -1,0 +1,245 @@
+244
+Acting President of Pakistan [Pakistan] state
+Acting President of Poland [Poland] state
+Acting President of Russia [Russia] state
+Acting Prime Minister [Estonia] gov
+Acting Prime Minister of Japan [Japan] gov
+Asantehemaa [Ashanti Empire] state
+Ban [Kingdom of Hungary] state
+Caretaker Prime Minister of Pakistan [Pakistan] gov
+Chairman (President) of Bulgaria [Bulgaria] state
+Chairman of the Cabinet of the Executive Ministers of Turkey [Turkey] gov
+Chairman of the Council of Ministers of the Armenian SSR [Armenian Soviet Socialist Republic] gov
+Chairman of the Council of Ministers of the Azerbaijan SSR [Azerbaijan Soviet Socialist Republic] gov
+Chairman of the Council of Ministers of the Hungarian People's Republic [Hungarian People's Republic] gov
+Chairman of the Council of Ministers of the Kazakh SSR [Kazakh Soviet Socialist Republic] gov
+Chairman of the Council of Ministers of the People's Republic of Bulgaria [People's Republic of Bulgaria] gov
+Chairman of the Council of People's Commissars of the Armenian SSR [Armenian Soviet Socialist Republic] gov
+Chairman of the Council of People's Commissars of the Azerbaijan SSR [Azerbaijan Soviet Socialist Republic] gov
+Chairman of the Council of State [Vietnam] state
+Chairman of the National Committee for the Salvation of the People [Mali] state
+Chairman of the Presidency of Bosnia and Herzegovina [Bosnia and Herzegovina] state
+Chairman of the Presidium of the Supreme Soviet of the Armenian SSR [Armenian Soviet Socialist Republic] state
+Chairman of the Presidium of the Supreme Soviet of the Kazakh SSR [Kazakh Soviet Socialist Republic] state
+Chairman of the Presidium of the Supreme Soviet of the RSFSR [Russian Soviet Federative Socialist Republic] state
+Chairman of the Presidium of the Supreme Soviet of the Soviet Union [Soviet Union] state
+Chairman of the Presidium of the Supreme Soviet of the Uzbek SSR [Uzbek Soviet Socialist Republic] state
+Chairman of the Revolutionary Council of Afghanistan [Afghanistan] state
+Chairman of the Supreme Soviet of the Russian Federation [Russian Soviet Federative Socialist Republic] state
+Chairperson of the Presidium of the Great National Assembly [Romania] state
+Chairperson of the Presidium of the Supreme Soviet of the Azerbaijan Soviet Socialist Republic [Azerbaijan Soviet Socialist Republic] state
+Chancellor of Germany [Germany/Nazi Germany/Weimar Republic/German Empire] gov
+Co-Monarch of Portugal [Kingdom of Portugal] state
+Co-Prince of Andorra [Andorra] state
+Council of Ministers of the Byelorussian SSR [Byelorussian Soviet Socialist Republic] gov
+Custodian of the Two Holy Mosques [Saudi Arabia] state+gov
+Deputy Prime Minister of Finland [Finland] gov
+Emperor of Ethiopia [Ethiopian Empire] state
+First Secretary of the Armenian Communist Party [Armenian Soviet Socialist Republic] state
+First Secretary of the Central Committee of the Communist Party of Azerbaijan [Azerbaijan Soviet Socialist Republic] state
+First Secretary of the Central Committee of the Communist Party of Kazakhstan [Kazakh Soviet Socialist Republic] state
+First Secretary of the Communist Party of Cuba [Cuba] state
+General Secretary of the Chinese Communist Party [People's Republic of China] state
+General Secretary of the Communist Party of Vietnam [Vietnam] state
+German Emperor [German Empire] state
+Governor of Liechtenstein [Liechtenstein] gov
+Great President of the Republic of China [Republic of China] state
+Head of Government of Liechtenstein [Liechtenstein] gov
+Head of State of Spain [Spain] state
+Head of the Central Rada of Ukraine [Ukrainian People's Republic] state
+Head of the Imperial House of Brazil [Brazil] state
+High Transitional Authority [Madagascar] state
+Imam of Saudi Arabia [Saudi Arabia] state
+Imperial chancellor [German Empire] gov
+Interim President of the Portuguese Republic [Portugal] state
+Interim and Acting President of Israel [Israel] state
+Khan of Khiva [Khanate of Khiva] state
+King of Afghanistan [Kingdom of Afghanistan] state
+King of Albania [Albania] state
+King of Bahrain [Bahrain] state
+King of Denmark [Kingdom of Denmark] state
+King of Hejaz [Kingdom of Hejaz] state
+King of Japan [feudal Japan] state
+King of Judea [Judea] state
+King of Laos [Kingdom of Laos] state
+King of Manipur [Manipur State] state
+King of Nejd [Saudi Arabia] state
+King of Poland [Polish–Lithuanian Commonwealth] state
+King of Portugal and the Algarves [Kingdom of Portugal] state
+King of Saudi Arabia [Saudi Arabia] state
+King of Sena [Sena kingdom] state
+King of Sweden [Sweden] state
+King of Yugoslavia [Kingdom of Yugoslavia/Kingdom of Serbs, Croats and Slovenes] state
+King of the Dervish Kingdom [North East State of Somalia] state
+King of the United Kingdom [United Kingdom of Great Britain and Ireland] state
+King-Grand Duke [Luxembourg/Kingdom of the Netherlands] state
+Kyabazinga of Busoga [Busoga] state
+Landesbevollmächtigter [Germany] gov
+Leader of the Nation of Hungary [Kingdom of Hungary] state
+Maharaja [India] state
+Maharaja of Bharatpur [Bharatpur State] state
+Maharaja of Bhavnagar [Bhavnagar State] state
+Maharaja of Bikaner [Bikaner State] state
+Maharaja of Jodhpur [Kingdom of Marwar] state
+Maharaja of Mysore [Kingdom of Mysore] state
+Maharaja of Travancore [Kingdom of Thiruvithamkoor] state
+Maharana [British Raj] state
+Maharana of Mewar [Kingdom of Mewar] state
+Minister President of Prussia [Prussia] gov
+Monarch of Bulgaria [Bulgaria] state
+Monarch of Jordan [Jordan] state
+Monarch of Laos [Laos] state
+Monarch of Luxembourg [Luxembourg] state
+Monarch of Romania [Kingdom of Romania] state
+Monarchs of Austria-Hungary [Austria–Hungary] state
+Negus [Ethiopia] state
+Padishah [Persian Empire] state
+Pandya King [Pandya Kingdom] state
+Premier of Belize [Belize] gov
+Premier of British Honduras [Belize] gov
+Premier of Dominica [Dominica] gov
+Premier of Jamaica [Jamaica] gov
+Premier of the Cabinet [Republic of China] gov
+Premier of the Soviet Union [Soviet Union] gov
+Presidency of the Republic of Bosnia and Herzegovina [Republic of Bosnia and Herzegovina] state
+President of Cambodia [Cambodia] state
+President of Czechoslovakia [Czechoslovakia] state
+President of Dahomey [Republic of Dahomey] state
+President of Dáil Éireann [Irish Republic] gov
+President of Gabala İK [Azerbaijan] state
+President of Ichkeria [Chechen Republic of Ichkeria] state
+President of North Korea [North Korea] state
+President of Rhodesia [Rhodesia] state
+President of South Vietnam [South Vietnam] state
+President of South Yemen [South Yemen] state
+President of Spain's Olympic Comitee [Spain] state
+President of Sudan [Sudan] state
+President of Tanganyika [Tanganyika] state
+President of Transvaal [South African Republic] state
+President of Yemen Arab Republic [Yemen Arab Republic] state
+President of Yugoslavia [Socialist Federal Republic of Yugoslavia] state
+President of Zaire [Zaire] state
+President of the Azerbaijan SSR [Azerbaijan Soviet Socialist Republic] state
+President of the Brazilian Council of Ministers [Brazil] gov
+President of the Council [France] gov
+President of the Council of Ministers [Spain] gov
+President of the Executive Council of the Irish Free State [Irish Free State] gov
+President of the Federal Republic of Yugoslavia [Socialist Federal Republic of Yugoslavia] state
+President of the Governing Council of Iraq [Iraq] state
+President of the Irish Republic [Irish Republic] gov+state
+President of the Khmer Republic [Khmer Republic] state
+President of the National Government of the Republic of China [Republic of China] state
+President of the Presidential Council of the Government of Peace and Unity [Sudan] state
+President of the Provisional State Council [Israel] state
+President of the Republic [First Hungarian Republic] state
+President of the Shura Council of Saudi Arabia [Saudi Arabia] state
+President of the Ukrainian SSR [Ukrainian Soviet Socialist Republic] state
+President-Regent [Estonia] state+gov
+Prime Minister and Minister of the Interior of Egypt [Egypt] gov
+Prime Minister in duties of the President [Estonia] state
+Prime Minister of Angola [Angola] gov
+Prime Minister of Artsakh [Republic of Artsakh] gov
+Prime Minister of Benin [Benin] gov
+Prime Minister of Botswana [Botswana] gov
+Prime Minister of Brunei [Brunei] gov
+Prime Minister of Chad [Chad] gov
+Prime Minister of Comoros [Comoros] gov
+Prime Minister of Czechoslovakia [Czechoslovakia] gov
+Prime Minister of East Germany [East Germany] gov
+Prime Minister of Ghana [Ghana] gov
+Prime Minister of Iran [Iran] gov
+Prime Minister of Kenya [Kenya] gov
+Prime Minister of Myanmar [Myanmar] gov
+Prime Minister of Nigeria [Nigeria] gov
+Prime Minister of North Korea [North Korea] gov
+Prime Minister of Rhodesia [Rhodesia] gov
+Prime Minister of Senegal [Senegal] gov
+Prime Minister of Seychelles [Seychelles] gov
+Prime Minister of South Africa [Union of South Africa] gov
+Prime Minister of South Korea [South Korea] gov
+Prime Minister of South Yemen [South Yemen] gov
+Prime Minister of Sri Lanka [Sri Lanka] gov
+Prime Minister of Suriname [Suriname] gov
+Prime Minister of Syria [Syria] gov
+Prime Minister of Tanzania [Tanzania] gov
+Prime Minister of The Gambia [The Gambia] gov
+Prime Minister of Turkey [Turkey] gov
+Prime Minister of Turkmenistan [Turkmenistan] gov
+Prime Minister of Western Samoa [Samoa] gov
+Prime Minister of Yemen Arab Republic [Yemen Arab Republic] gov
+Prime Minister of Zaire [Zaire] gov
+Prime Minister of Zambia [Zambia] gov
+Prime Minister of Zimbabwe Rhodesia [Zimbabwe Rhodesia] gov
+Prime Minister of Zimbabwe [Zimbabwe] gov
+Prime Minister of the Federation of Rhodesia and Nyasaland [Federation of Rhodesia and Nyasaland] gov
+Prime Minister of the Government of Peace and Unity [Sudan] gov
+Prime Minister of the Kingdom of Italy [Kingdom of Italy] gov
+Prime Minister of the Maldives [Maldives] gov
+Prime Minister of the Netherlands Antilles [Netherlands Antilles] gov
+Prime Minister of the Philippines [Philippines] gov
+Prime minister of Rwenzururu [Rwenzururu Kingdom] gov
+Prince of Romania [Romania] state
+Q109937737 [Estonian Soviet Socialist Republic] gov
+Q110205573 [France] state
+Q136527246 [Ivory Coast] state
+Q139905899 [Uruguay] state
+Q140089326 [Netherlands Antilles] gov
+Q140983822 [Republic of China] state
+Q28533004 [Canada] state
+Q43189773 [Spain] gov
+Q43190099 [Spain] gov
+Q6085561 [Chile] gov
+Q87648394 [Spain] state
+Q97772163 [Ukrainian People's Republic] gov
+Queen Consort of Bavaria [Kingdom of Bavaria] state
+Queen Consort of Bulgaria [Kingdom of Bulgaria] state
+Queen of Italy [Kingdom of Italy] state
+Queen of Mauritius [Mauritius] state
+Queen of the United Kingdom [United Kingdom of Great Britain and Ireland] state
+State Elder [Estonia] state
+State President of South Africa [South Africa] state
+Sub-district head [Indonesia] gov
+Sultan of Agadez [Sultanate of Agadez] state
+Sultan of Kedah [Kedah Sultanate] state
+Sultan of Pelalawan [Sultanate of Pelalawan] state
+Sultan of Qu'alti [Qu'aiti Sultanate] state
+Sultan of Tafilalt [Morocco] state
+Sultan of Zanzibar [Sultanate of Zanzibar] state
+Supreme Director of Chile [Chile] state+gov
+Supreme Leader of Iran [Iran] state
+Supreme Ruler of Russia [Russia] state
+Traditional chief in the Republic of Congo [Republic of the Congo] state
+caudillo of Spain [Spain/Nationalist zone] state
+chairman of the Presidium of the Supreme Soviet of the Estonian Soviet Socialist Republic [Estonian Soviet Socialist Republic] state
+chief of state (Poland) [Second Polish Republic] state
+head of government of France [France] gov
+head of government of Spain [Spain] gov
+head of state of Romania [Romania/Kingdom of Romania/Socialist Republic of Romania/Romanian People's Republic] state
+head of the region (Russia) [Russia] state
+intendant [Chile] gov
+king emeritus of Spain [Spain] state
+king of Armenia [Armenia] state
+monarch of Barbados [Barbados] state
+monarch of Iceland [Kingdom of Iceland] state
+monarch of Trinidad and Tobago [Trinidad and Tobago] state
+monarch of the Dominion of Ceylon [Dominion of Ceylon] state
+monarch of the Dominion of Fiji [Dominion of Fiji] state
+monarch of the Dominion of Pakistan [Dominion of Pakistan] state
+monarch of the Federation of Nigeria [Federation of Nigeria] state
+monarch of the Kingdom of Toro [Tooro Kingdom] state
+monarch of the State of Malta [State of Malta] state
+monarch of the Union of South Africa [Union of South Africa] state
+monarch of the commonwealth realm of Ghana [Dominion of Ghana] state
+monarch of the commonwealth realm of Guyana [Commonwealth realm of Guyana] state
+monarch of the commonwealth realm of Kenya [Kenya (1963–1964)] state
+monarch of the commonwealth realm of Mauritius [Commonwealth realm of Mauritius] state
+monarch of the commonwealth realm of Sierra Leone [Commonwealth realm of Sierra Leone] state
+monarch of the commonwealth realm of Uganda [Commonwealth realm of Uganda] state
+monarch of the commonwealth realm of the Gambia [Commonwealth realm of the Gambia] state
+paramount leader of the People's Republic of China [People's Republic of China] state
+president of Italian region [Italy] state
+president of the Second Republic of Spain [Second Spanish Republic] state
+province president [Italy] state
+secretary of State of Spain [Spain] gov
+state president of the protectorate of Bohemia and Moravia [Protectorate of Bohemia and Moravia] state
+sultan of Morocco [Morocco] state

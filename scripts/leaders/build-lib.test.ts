@@ -1,4 +1,4 @@
-import { buildDataset, displayName, type Overrides, type RawCountry, type RawHolder } from './build-lib.ts';
+import { buildDataset, displayName, type Overrides, type RawCountry, type RawHolder, type RawTreeOffice } from './build-lib.ts';
 
 const TODAY = new Date(Date.UTC(2026, 10, 15));
 
@@ -183,6 +183,77 @@ describe('buildDataset', () => {
     };
     expect(build([holder({ office: 'Qd' })], [dk], ov).leaders[0]).toMatchObject({ country: 'Denmark', countryCode: 'DNK', iso2: 'dk', continent: 'Europe' });
     expect(() => build([holder({ office: 'Qd' })], [dk], { mergeCountries: { Q756617: { into: 'Q35' } } })).toThrow(/Q35/);
+  });
+
+  describe('offices found through the class tree', () => {
+    const italy = [country({ country: 'Q38', countryLabel: 'Italy', iso2: 'IT', iso3: 'ITA', office: 'Q796897', officeLabel: 'Prime Minister of Italy' })];
+    const states = [
+      { id: 'Q172579', label: 'Kingdom of Italy', sovereign: false, continents: ['Europe'], inception: '1861-03-17T00:00:00Z', dissolved: '1946-06-10T00:00:00Z' },
+      { id: 'Q38', label: 'Italy', sovereign: true, iso2: 'IT', iso3: 'ITA', continents: ['Europe'], inception: '1946-06-02T00:00:00Z' },
+      { id: 'Q1775277', label: 'Dominion of India', sovereign: false, continents: ['Asia'], inception: '1947-08-15T00:00:00Z', dissolved: '1950-01-26T00:00:00Z' },
+      { id: 'Q15180', label: 'Soviet Union', sovereign: false, continents: ['Europe'] },
+      { id: 'Q132856', label: 'Armenian Soviet Socialist Republic', sovereign: false, continents: ['Asia'] },
+    ];
+    const tree: RawTreeOffice[] = [
+      { office: 'Q25160174', label: 'Prime Minister of the Kingdom of Italy', countries: ['Q172579'], kinds: ['gov'] },
+      { office: 'Qsec', label: 'General Secretary of the Communist Party of the Soviet Union', countries: ['Q15180'], kinds: ['state'] },
+      { office: 'Qact', label: 'Acting President of Italy', countries: ['Q38'], kinds: ['state'] },
+      { office: 'Qarm', label: 'Chairman of the Council of Ministers of the Armenian SSR', countries: ['Q132856'], kinds: ['gov'] },
+      { office: 'Qchan', label: 'Chancellor', countries: ['Q38', 'Q172579'], kinds: ['gov'] },
+    ];
+    const india = country({ country: 'Q1775277', countryLabel: 'Dominion of India', sovereign: false, iso2: undefined, iso3: undefined, continentLabel: 'Asia', office: 'Q14212', officeLabel: 'prime minister' });
+    const run = (holders: RawHolder[]) =>
+      buildDataset({ countries: [...italy, india], holders, aliases: {}, settlements: [], states, treeOffices: tree, generic: ['Q14212'] }, {}, { today: TODAY, minSitelinks: 0, answerableSitelinks: 100 });
+    const mussolini = (p: Partial<RawHolder>) => holder({ person: 'Q23559', personLabel: 'Benito Mussolini', birth: '1883-07-29T00:00:00Z', article: undefined, ...p });
+
+    it('ignores generic titles even when a state declares them (Mussolini was never PM of India)', () => {
+      const { leaders } = run([
+        mussolini({ office: 'Q25160174', start: '1922-10-31T00:00:00Z', end: '1943-07-25T00:00:00Z' }),
+        mussolini({ office: 'Q14212', start: '1943-09-23T00:00:00Z', end: '1945-04-28T00:00:00Z' }),
+      ]);
+      expect(leaders[0]).toMatchObject({ country: 'Kingdom of Italy', tookOffice: 1922, yearsInOffice: 20, blurb: 'Prime Minister of the Kingdom of Italy from 1922 to 1943.' });
+    });
+
+    it('skips party posts, acting offices and federated Soviet republics', () => {
+      const { leaders } = run([
+        holder({ office: 'Qsec', person: 'Q1' }),
+        holder({ office: 'Qact', person: 'Q2' }),
+        holder({ office: 'Qarm', person: 'Q3' }),
+      ]);
+      expect(leaders).toEqual([]);
+    });
+
+    it('an office shared by several states belongs to the one that existed at the time', () => {
+      const { leaders } = run([
+        holder({ office: 'Qchan', person: 'Qold', start: '1930-01-01T00:00:00Z', end: '1932-01-01T00:00:00Z' }),
+        holder({ office: 'Qchan', person: 'Qnew', start: '1990-01-01T00:00:00Z', end: '1992-01-01T00:00:00Z' }),
+      ]);
+      expect(leaders.map((l) => [l.id, l.country])).toEqual([['Qold', 'Kingdom of Italy'], ['Qnew', 'Italy']]);
+    });
+
+    it('flags a term outside the life of its state', () => {
+      const { review } = run([mussolini({ office: 'Q25160174', start: '1950-01-01T00:00:00Z', end: '1951-01-01T00:00:00Z' })]);
+      expect(review[0]!.flags).toContain('term outside country dates');
+    });
+  });
+
+  it('never puts a bare Wikidata id or a bad label in the description', () => {
+    const countries = [country({ office: 'Q999', officeLabel: 'Q999' }), country({ office: 'Q998', officeLabel: 'Padre y esposo', kind: 'state' })];
+    const res = build([holder({ office: 'Q999' }), holder({ office: 'Q998', person: 'Q2' })], countries, { officeNames: { Q998: 'President of Germany' } });
+    expect(res.leaders.map((l) => l.blurb)).toEqual(['Head of government of Germany from 2005 to 2021.', 'President of Germany from 2005 to 2021.']);
+  });
+
+  it('replaces the terms of a leader by hand when Wikidata is wrong', () => {
+    const { leaders } = build([holder({})], GERMANY, { terms: { Q567: [{ start: '2004-01-01', end: '2021-12-08' }] } });
+    expect(leaders[0]).toMatchObject({ tookOffice: 2004, yearsInOffice: 17, terms: [{ start: '2004-01-01', end: '2021-12-08' }] });
+  });
+
+  it('joins terms of one office a few days apart, and names the office’s country', () => {
+    const { offices } = build([
+      holder({ start: '2018-06-02T00:00:00Z', end: '2019-04-28T00:00:00Z' }),
+      holder({ start: '2019-05-10T00:00:00Z', end: '2023-11-17T00:00:00Z' }),
+    ]);
+    expect(offices.Q4970706).toMatchObject({ countryName: 'Germany', holders: [{ id: 'Q567', start: '2018-06-02', end: '2023-11-17' }] });
   });
 
   it('lists office holders in order for Succession', () => {

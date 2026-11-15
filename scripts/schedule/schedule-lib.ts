@@ -67,6 +67,15 @@ export function successionCandidates(leaders: Leader[], offices: Record<string, 
       if (new Set([b.id, m.id, a.id]).size < 3) continue;
       if (!b.end || !m.end) continue;
       if (t(b.end) > t(m.start) + 31 * DAY || t(m.end) > t(a.start) + 31 * DAY) continue;
+      // No gap either: a gap means someone else (often an interim government) governed in between.
+      if (t(m.start) - t(b.end) > 31 * DAY || t(a.start) - t(m.end) > 31 * DAY) continue;
+      // Nobody else may hold the office during the chain (rival, exiled or collective holders).
+      const from = t(b.end) - 31 * DAY;
+      const to = t(a.start) + 31 * DAY;
+      const rival = h.some((x, k) => k !== i - 1 && k !== i && k !== i + 1 && t(x.start) < to && (x.end ? t(x.end) : Infinity) > from);
+      if (rival) continue;
+      // The office must belong to the answer's country (not a realm sharing the same monarch).
+      if (byId.get(m.id)!.country !== office.countryName) continue;
       const key = `${b.id}>${m.id}>${a.id}`;
       if (seen.has(key)) continue;
       seen.add(key);

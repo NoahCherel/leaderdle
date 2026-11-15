@@ -12,6 +12,9 @@ const raw: RawData = {
   holders: read('data/raw/holders.json'),
   aliases: read('data/raw/aliases.json'),
   settlements: read('data/raw/settlements.json'),
+  states: read('data/raw/states.json'),
+  treeOffices: read('data/raw/office-tree.json').offices,
+  generic: read('data/raw/office-tree.json').generic,
 };
 const overrides: Overrides = read('data/overrides.json');
 const opts = { today: new Date(), minSitelinks: arg('min', 25), answerableSitelinks: arg('answer', 90) };
