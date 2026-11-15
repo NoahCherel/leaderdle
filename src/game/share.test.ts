@@ -1,4 +1,4 @@
-import { classicEmoji, shareClassic, shareDay, shareSuccession, shareTimeline, shareLetters } from './share';
+import { classicEmoji, shareClassic, shareDay, shareSuccession, shareTimeline, shareLetters, shareMayhem } from './share';
 import type { Direction, TileState } from './types';
 
 const row = (spec: string) =>
@@ -53,5 +53,24 @@ describe('bonus and day share text (brief §7)', () => {
         timeline: { won: false, used: 3 },
       }),
     ).toBe('Leaderdle #128\nClassic 4/8 · Letters 3/6 · Succession 2/5 · Timeline X/3\nleaderdle.com');
+  });
+});
+
+describe('Leader Mayhem share text', () => {
+  const picks = [
+    { name: 'Jawaharlal Nehru', year: 1947 },
+    { name: 'Winston Churchill', year: 1940 },
+    { name: 'Ludwig Erhard', year: 1963 },
+    { name: 'Nelson Mandela', year: 1994 },
+    { name: 'Angela Merkel', year: 2005 },
+  ];
+  it('gives the result and the five picks with their year, and no rating', () => {
+    expect(shareMayhem('champion', picks)).toBe(
+      "Leaderdle · Leader Mayhem\n🏆 Champion\nEDU: Jawaharlal Nehru ('47)\nWAR: Winston Churchill ('40)\nECO: Ludwig Erhard ('63)\nDOM: Nelson Mandela ('94)\nFOR: Angela Merkel ('05)\nleaderdle.com/mayhem",
+    );
+  });
+  it('says how far a losing government went', () => {
+    expect(shareMayhem('semi', picks).split('\n')[1]).toBe('Out in the semi-final');
+    expect(shareMayhem('final', picks).split('\n')[1]).toBe('🥈 Runner-up');
   });
 });

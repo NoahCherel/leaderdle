@@ -10,6 +10,7 @@ const widths = (flag('widths')?.split('=')[1] ?? '1280,360').split(',').map(Numb
 const theme = flag('theme')?.split('=')[1];
 const cb = !!flag('colorblind');
 const ALL = [
+  'm-intro', 'm-draft', 'm-ready', 'm-match', 'm-end',
   'l-empty', 'l-progress', 'l-won', 'l-lost',
   'home-first', 'home-progress', 'home-done', 'home-complete', 'empty', 'progress', 'resumed', 'suggest', 'nomatch',
   'hint', 'hint-used', 'won', 'won-hint', 'lost', 'help', 'stats', 'settings', 's-empty', 's-progress', 's-won', 's-lost',

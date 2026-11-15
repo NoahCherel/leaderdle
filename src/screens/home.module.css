@@ -131,6 +131,12 @@
   color: var(--ground);
 }
 
+/* The bonus game sits apart from the day's four. */
+.bonus {
+  border-top: 1px dashed var(--line);
+  border-bottom: 1px dashed var(--line);
+}
+
 /* Side column: plain figures, no boxes. */
 .side {
   display: flex;

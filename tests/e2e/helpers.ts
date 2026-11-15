@@ -3,10 +3,12 @@ import { readFileSync } from 'node:fs';
 
 const SAMPLE_LEADERS = readFileSync('src/dev/sample-leaders.json', 'utf8');
 const SAMPLE_DAY = readFileSync('src/dev/sample-day-128.json', 'utf8');
+const SAMPLE_MAYHEM = readFileSync('src/dev/sample-mayhem.json', 'utf8');
 
 /** Serves the prototype sample data (puzzle #128: Angela Merkel) instead of the real schedule. */
 export async function useSampleData(target: Page | BrowserContext) {
   await target.route(/\/data\/leaders\.json$/, (route) => route.fulfill({ contentType: 'application/json', body: SAMPLE_LEADERS }));
+  await target.route(/\/data\/mayhem\.json$/, (route) => route.fulfill({ contentType: 'application/json', body: SAMPLE_MAYHEM }));
   await target.route(/\/data\/days\/\d+\.json$/, (route) =>
     route.request().url().endsWith('/128.json')
       ? route.fulfill({ contentType: 'application/json', body: SAMPLE_DAY })

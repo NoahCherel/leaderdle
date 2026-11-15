@@ -1,4 +1,5 @@
 import type { LetterState } from './letters';
+import { OUTCOME_TEXT, PORTFOLIOS, PORTFOLIO_SHORT, type Outcome } from './mayhem';
 import { MAX, MODE_NAMES, MODES, type Direction, type Mode, type TileState } from './types';
 
 const SITE = 'leaderdle.com';
@@ -45,4 +46,12 @@ export function dayLine(scores: Record<Mode, Score>): string {
 
 export function shareDay(n: number, scores: Record<Mode, Score>): string {
   return [`Leaderdle #${n}`, dayLine(scores), SITE].join('\n');
+}
+
+const MEDAL: Partial<Record<Outcome, string>> = { champion: '🏆 ', final: '🥈 ' };
+
+/** The government as drafted: who held what, and the year. Ratings stay out of it. */
+export function shareMayhem(outcome: Outcome, picks: ReadonlyArray<{ name: string; year: number }>): string {
+  const lines = PORTFOLIOS.map((p, i) => PORTFOLIO_SHORT[p] + ': ' + picks[i]!.name + " ('" + String(picks[i]!.year).slice(-2) + ')');
+  return ['Leaderdle · Leader Mayhem', (MEDAL[outcome] ?? '') + OUTCOME_TEXT[outcome], ...lines, SITE + '/mayhem'].join('\n');
 }

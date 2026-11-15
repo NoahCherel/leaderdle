@@ -9,6 +9,7 @@ const ROUTES = {
   letters: 'Letters · Leaderdle',
   succession: 'Succession · Leaderdle',
   timeline: 'Timeline · Leaderdle',
+  mayhem: 'Leader Mayhem · Leaderdle',
   summary: 'Today’s summary · Leaderdle',
   about: 'About · Leaderdle',
   'how-we-pick': 'How we pick and describe leaders · Leaderdle',

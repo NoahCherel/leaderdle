@@ -2,15 +2,16 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useApp } from '../app/context';
 import { currentStreak } from '../game/stats';
-import { MODE_NAMES, MODES, type Mode } from '../game/types';
+import { MODE_NAMES, MODES, type Mode, type Topic } from '../game/types';
 import { IconHelp, IconSettings, IconStats } from './icons';
 import s from './ui.module.css';
 
-/** Mode shown on the current route, or Classic elsewhere. */
-export function useRouteMode(): Mode {
+/** Game shown on the current route, or Classic elsewhere. */
+export function useRouteMode(): Topic {
   const [path] = useLocation();
-  const m = path.replace(/^\//, '') as Mode;
-  return MODES.includes(m) ? m : 'classic';
+  const m = path.replace(/^\//, '');
+  if (m === 'mayhem') return m;
+  return MODES.includes(m as Mode) ? (m as Mode) : 'classic';
 }
 
 export function Header() {
@@ -42,7 +43,7 @@ export function Header() {
   );
 }
 
-export function ModePills({ current }: { current: Mode }) {
+export function ModePills({ current }: { current: Topic }) {
   const { status } = useApp();
   return (
     <nav aria-label="Game modes" className={s.pills}>
@@ -56,6 +57,10 @@ export function ModePills({ current }: { current: Mode }) {
           </Link>
         );
       })}
+      <Link href="/mayhem" className={`${s.pill} ${s.pillBonus} ${current === 'mayhem' ? s.pillOn : ''}`} aria-current={current === 'mayhem' ? 'page' : undefined}>
+        <span aria-hidden="true" className={`${s.pillDot} ${s.pillDotBonus}`} />
+        Mayhem
+      </Link>
     </nav>
   );
 }

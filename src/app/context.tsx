@@ -1,7 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState, type ReactNode } from 'react';
 import type { DayPuzzle } from '../data/schema';
 import { createSearch } from '../game/search';
-import type { Leader, Mode } from '../game/types';
+import { loadMayhem, type MayhemResult } from '../data/loader';
+import type { MayhemData } from '../game/mayhem';
+import type { Leader, Mode, Topic } from '../game/types';
 import { dayStatus, reducer, type Action, type DayRecord, type GameState } from '../store/state';
 import { STORAGE_KEY, type Store } from '../store/storage';
 
@@ -31,8 +33,10 @@ export interface AppValue {
   scene: SceneOverrides;
   /** The page was loaded with today's games already started. */
   resumed: boolean;
-  modal: { kind: ModalKind | null; mode: Mode; tab: Mode };
-  openModal: (kind: ModalKind, mode?: Mode) => void;
+  modal: { kind: ModalKind | null; mode: Topic; tab: Mode };
+  openModal: (kind: ModalKind, mode?: Topic) => void;
+  /** Leader Mayhem ratings, fetched the first time the mode is opened. */
+  loadMayhemData: () => Promise<MayhemResult>;
   closeModal: () => void;
   setStatTab: (m: Mode) => void;
   toast: string;
@@ -59,15 +63,17 @@ interface Props {
   store: Store | null;
   frozen?: boolean;
   scene?: SceneOverrides;
+  /** Ratings already in hand (capture scenes, tests): nothing is fetched. */
+  mayhem?: MayhemData;
   children: ReactNode;
 }
 
-export function AppProvider({ leaders, puzzle, initial, store, frozen = false, scene = {}, children }: Props) {
+export function AppProvider({ leaders, puzzle, initial, store, frozen = false, scene = {}, mayhem, children }: Props) {
   const [state, rawDispatch] = useReducer(reducer, initial, (s) => reducer(s, { type: 'start', puzzle }));
   const n = puzzle.n;
   const [resumed] = useState(() => {
     const d = initial.days[n];
-    return !frozen && !!d && d.classic.length + d.succession.length + d.checks.length > 0;
+    return !frozen && !!d && d.classic.length + d.letters.length + d.succession.length + d.checks.length > 0;
   });
 
   useEffect(() => {
@@ -93,7 +99,16 @@ export function AppProvider({ leaders, puzzle, initial, store, frozen = false, s
   const search = useMemo(() => createSearch(leaders), [leaders]);
 
   const [modal, setModal] = useState<AppValue['modal']>({ kind: scene.modal ?? null, mode: 'classic', tab: 'classic' });
-  const openModal = useCallback((kind: ModalKind, mode: Mode = 'classic') => setModal({ kind, mode, tab: mode }), []);
+  const openModal = useCallback((kind: ModalKind, mode: Topic = 'classic') => setModal({ kind, mode, tab: mode === 'mayhem' ? 'classic' : mode }), []);
+
+  // Only a successful load is kept: a failure can be retried.
+  const mayhemCache = useRef<MayhemResult | null>(mayhem ? { ok: true, data: mayhem } : null);
+  const loadMayhemData = useCallback(async () => {
+    if (mayhemCache.current) return mayhemCache.current;
+    const result = await loadMayhem(leaders);
+    if (result.ok) mayhemCache.current = result;
+    return result;
+  }, [leaders]);
   const closeModal = useCallback(() => setModal((m) => ({ ...m, kind: null })), []);
   const setStatTab = useCallback((tab: Mode) => setModal((m) => ({ ...m, tab })), []);
 
@@ -115,7 +130,7 @@ export function AppProvider({ leaders, puzzle, initial, store, frozen = false, s
 
   const value: AppValue = {
     leaders, byId, search, n, state, dispatch: rawDispatch, day, status, frozen, scene, resumed,
-    modal, openModal, closeModal, setStatTab, toast, flash, fresh, markFresh, clearFresh,
+    modal, openModal, closeModal, setStatTab, loadMayhemData, toast, flash, fresh, markFresh, clearFresh,
   };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

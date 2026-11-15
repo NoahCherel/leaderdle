@@ -7,6 +7,8 @@ import { App } from '../app/App';
 import { AppProvider, type SceneOverrides } from '../app/context';
 import { LeaderFileSchema, type DayPuzzle } from '../data/schema';
 import sampleLeaders from './sample-leaders.json';
+import sampleMayhem from './sample-mayhem.json';
+import { buildCells, newRun, offered, pick, playNext, type MayhemData, type MayhemRun } from '../game/mayhem';
 import type { Leader } from '../game/types';
 import { ErrorScreen } from '../screens/Pages';
 import { initialState, reducer, type Action, type GameState } from '../store/state';
@@ -39,6 +41,16 @@ interface Scene {
   ui?: SceneOverrides;
   consent?: boolean;
   error?: 'offline' | 'data';
+  /** Leader Mayhem: picks to make (first leader on offer, first free portfolio) and matches to play. */
+  mayhem?: { picks: number; matches: number };
+}
+
+/** A Leader Mayhem run from seed 8, played the simple way, for the capture scenes. */
+function mayhemRun(data: MayhemData, picks: number, matches: number): MayhemRun {
+  let run = newRun(8, data);
+  for (let i = 0; i < picks; i++) run = pick(run, offered(run, data)[0]!, run.team.indexOf(null), data);
+  for (let i = 0; i < matches && !run.done; i++) run = playNext(run, data);
+  return run;
 }
 
 const SCENES: Record<string, Scene> = {
@@ -57,6 +69,11 @@ const SCENES: Record<string, Scene> = {
   won: { path: '/classic', actions: c(four) },
   'won-hint': { path: '/classic', actions: [...c(three), { type: 'hint', n: N }, ...c(['mer'])] },
   lost: { path: '/classic', actions: c(['lky', 'tha', 'man', 'ard', 'chu', 'oba', 'bla', 'koh']) },
+  'm-intro': { path: '/mayhem' },
+  'm-draft': { path: '/mayhem', mayhem: { picks: 2, matches: 0 } },
+  'm-ready': { path: '/mayhem', mayhem: { picks: 5, matches: 0 } },
+  'm-match': { path: '/mayhem', mayhem: { picks: 5, matches: 1 } },
+  'm-end': { path: '/mayhem', mayhem: { picks: 5, matches: 3 } },
   'l-empty': { path: '/letters' },
   'l-progress': { path: '/letters', actions: lg(['STERN', 'ABOUT', 'MAMBO']) },
   'l-won': { path: '/letters', actions: lg(['STERN', 'ABOUT', 'OBAMA']) },
@@ -106,9 +123,12 @@ export async function renderScene(params: URLSearchParams) {
     helpSeen: { classic: true },
   };
   state = [{ type: 'start', puzzle: PUZZLE } as Action, ...(scene.actions ?? [])].reduce(reducer, state);
+  const leaders = file.leaders as Leader[];
+  const mayhem: MayhemData = { leaders, ratings: sampleMayhem.ratings, cells: buildCells(leaders, sampleMayhem.ratings, new Date(2026, 10, 15)) };
+  if (scene.mayhem) state = reducer(state, { type: 'mayhem', run: mayhemRun(mayhem, scene.mayhem.picks, scene.mayhem.matches), total: 0 });
 
   return (
-    <AppProvider leaders={file.leaders as Leader[]} puzzle={PUZZLE} initial={state} store={null} frozen scene={scene.ui ?? {}}>
+    <AppProvider leaders={leaders} puzzle={PUZZLE} initial={state} store={null} frozen scene={scene.ui ?? {}} mayhem={mayhem}>
       <App />
     </AppProvider>
   );

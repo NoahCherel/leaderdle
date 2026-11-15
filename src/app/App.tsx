@@ -5,6 +5,7 @@ import { Modals } from '../components/Modals';
 import { Classic } from '../screens/Classic';
 import { Home } from '../screens/Home';
 import { Letters } from '../screens/Letters';
+import { Mayhem } from '../screens/Mayhem';
 import { ErrorScreen, Page } from '../screens/Pages';
 import { Succession } from '../screens/Succession';
 import { Summary } from '../screens/Summary';
@@ -53,6 +54,7 @@ const TITLES: Record<string, string> = {
   '/letters': 'Letters · Leaderdle',
   '/succession': 'Succession · Leaderdle',
   '/timeline': 'Timeline · Leaderdle',
+  '/mayhem': 'Leader Mayhem · Leaderdle',
   '/summary': 'Today’s summary · Leaderdle',
   '/about': 'About · Leaderdle',
   '/how-we-pick': 'How we pick and describe leaders · Leaderdle',
@@ -94,6 +96,7 @@ export function App() {
         <Route path="/letters" component={Letters} />
         <Route path="/succession" component={Succession} />
         <Route path="/timeline" component={Timeline} />
+        <Route path="/mayhem" component={Mayhem} />
         <Route path="/summary" component={Summary} />
         <Route path="/about">{() => <Page slug="about" />}</Route>
         <Route path="/how-we-pick">{() => <Page slug="how-we-pick" />}</Route>

@@ -1,6 +1,6 @@
 import { useApp } from '../app/context';
 import { currentWinStreak } from '../game/stats';
-import { MAX, MODE_NAMES, MODES, type Mode } from '../game/types';
+import { MAX, MODE_NAMES, MODES, type Topic } from '../game/types';
 import { Modal, Toast } from './Chrome';
 import { IconCheck, IconUp, IconWave } from './icons';
 import s from './ui.module.css';
@@ -48,7 +48,19 @@ function Mini({ cells }: { cells: Array<string | null> }) {
   );
 }
 
-function HelpBody({ mode }: { mode: Mode }) {
+function HelpBody({ mode }: { mode: Topic }) {
+  if (mode === 'mayhem') {
+    return (
+      <>
+        <p>Form a government of five leaders, one per portfolio: Education, War, Economy, Domestic and Foreign.</p>
+        <p>Each round draws a decade and a country. Choose one of the leaders in office then, and give them a portfolio. You may ask once for another country and once for another decade.</p>
+        <p>Your government then plays a quarter-final, a semi-final and a final. A match is five duels, portfolio against portfolio. The better rated leader usually wins a duel, not always. Three duels take the match.</p>
+        <p className="muted">
+          Each leader has a hidden rating from 1 to 10 in each portfolio. It is our own judgement of the weight they carried in that field, whatever their aims: not a fact, and not a moral verdict. Education also covers science and culture.
+        </p>
+      </>
+    );
+  }
   if (mode === 'succession') {
     return (
       <>
@@ -221,7 +233,7 @@ function SettingsBody() {
 
 export function Modals() {
   const { modal, closeModal } = useApp();
-  const title = modal.kind === 'help' ? `How to play ${MODE_NAMES[modal.mode]}` : modal.kind === 'stats' ? 'Your stats' : 'Settings';
+  const title = modal.kind === 'help' ? `How to play ${modal.mode === 'mayhem' ? 'Leader Mayhem' : MODE_NAMES[modal.mode]}` : modal.kind === 'stats' ? 'Your stats' : 'Settings';
   const close = modal.kind === 'help' ? 'Got it' : modal.kind === 'stats' ? 'Close' : 'Done';
   return (
     <Modal open={modal.kind !== null} onClose={closeModal} titleId="modal-title">

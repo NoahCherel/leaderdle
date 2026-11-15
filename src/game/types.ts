@@ -1,5 +1,7 @@
 export type Role = 'state' | 'gov' | 'both';
 export type Mode = 'classic' | 'letters' | 'succession' | 'timeline';
+/** A page with its own rules: the four daily games, and the Leader Mayhem bonus. */
+export type Topic = Mode | 'mayhem';
 export const MODES: readonly Mode[] = ['classic', 'letters', 'succession', 'timeline'];
 export const MAX: Record<Mode, number> = { classic: 8, letters: 6, succession: 5, timeline: 3 };
 export const MODE_NAMES: Record<Mode, string> = { classic: 'Classic', letters: 'Letters', succession: 'Succession', timeline: 'Timeline' };

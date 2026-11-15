@@ -35,6 +35,7 @@ export function Home() {
   const played = MODES.reduce((sum, m) => sum + state.stats[m].played, 0);
   const wins = MODES.reduce((sum, m) => sum + state.stats[m].wins, 0);
   // A stored day can name a leader who has left the list since: then the line is simply not shown.
+  const mayhem = state.mayhem.stats;
   const yesterdayId = state.days[n - 1]?.puzzle.classic.answer;
   const yesterday = yesterdayId ? leaders.find((l) => l.id === yesterdayId) : undefined;
 
@@ -88,6 +89,19 @@ export function Home() {
             );
           })}
         </ol>
+
+        <section aria-label="Bonus" className={s.bonus}>
+          <Link href="/mayhem" className={s.row}>
+            <span aria-hidden="true" className={`eyebrow ${s.idx}`}>
+              +
+            </span>
+            <span className={s.what}>
+              <strong className="title">Leader Mayhem</strong>
+              <span className={s.rule}>Draft a government of five and take it through a tournament. As often as you like.</span>
+            </span>
+            <span className={`eyebrow ${s.state}`}>{mayhem.titles ? `${mayhem.titles} ${mayhem.titles === 1 ? 'title' : 'titles'}` : 'Bonus'}</span>
+          </Link>
+        </section>
       </main>
       <aside className={s.aside}>
         <section aria-label="Your record" className={s.side}>

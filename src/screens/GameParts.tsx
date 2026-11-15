@@ -8,15 +8,16 @@ import { ROLE_LABEL } from '../game/compare';
 import { score } from '../game/share';
 import { currentStreak } from '../game/stats';
 import { isInOffice, termSpan, yearsInOffice } from '../game/tenure';
-import { MAX, MODE_NAMES, MODES, type Leader, type Mode } from '../game/types';
+import { MAX, MODE_NAMES, MODES, type Leader, type Mode, type Topic } from '../game/types';
 import s from './game.module.css';
 
 /** Two columns on desktop (game + 300 × 600 ad), one column below 1000 px. */
-export function GameLayout({ mode, children }: { mode: Mode; children: ReactNode }) {
+export function GameLayout({ mode, children }: { mode: Topic; children: ReactNode }) {
   const { state, dispatch, openModal, frozen } = useApp();
   // The rules open by themselves on the very first game only: each game states its own rule on the page.
   // Classic is the exception, its tile colors need the legend, so it always opens once.
-  const seen = mode === 'classic' ? !!state.helpSeen.classic : Object.keys(state.helpSeen).length > 0;
+  // Leader Mayhem explains itself on its opening page.
+  const seen = mode === 'mayhem' || (mode === 'classic' ? !!state.helpSeen.classic : Object.keys(state.helpSeen).length > 0);
   useEffect(() => {
     if (seen || frozen) return;
     dispatch({ type: 'helpSeen', mode });

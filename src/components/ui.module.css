@@ -81,6 +81,15 @@
   color: var(--text);
   border-bottom-color: var(--accent);
 }
+/* The bonus tab stands apart from the day's four games. */
+.pillBonus {
+  margin-left: auto;
+  font-style: italic;
+}
+/* Same place as the other tabs' state mark, but dashed: a bonus has no state for the day. */
+.pillDotBonus {
+  border-style: dashed;
+}
 .pillDot {
   width: 12px;
   height: 12px;
