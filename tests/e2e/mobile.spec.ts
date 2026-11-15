@@ -65,19 +65,22 @@ test('Timeline: keyboard drag with space and arrows', async ({ page }) => {
   await expect(cards(page).first()).toContainText('Lee Kuan Yew');
 });
 
-test('the cookie banner never covers the game: content scrolls above it, it steps aside while typing', async ({ page }) => {
+test('the cookie banner sits in the page and never covers the game or its keyboard', async ({ page }) => {
   await openAt(page, '/');
   const banner = page.getByRole('region', { name: 'Cookie consent' });
   await expect(banner).toBeVisible();
-  // The last thing on the page can be scrolled above the banner.
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  const ad = await page.getByLabel('Advertisement').last().boundingBox();
-  const bar = await banner.boundingBox();
-  expect(ad!.y + ad!.height).toBeLessThanOrEqual(bar!.y);
   await page.getByRole('link', { name: 'Play: Classic' }).click();
   await page.getByRole('button', { name: 'Got it' }).click();
-  await page.getByRole('combobox').click();
-  await expect(banner).toBeHidden();
+  const below = async (name: string, locator: ReturnType<typeof page.locator>) => {
+    const bar = (await banner.boundingBox())!;
+    const box = (await locator.boundingBox())!;
+    expect(box.y, name).toBeGreaterThanOrEqual(bar.y + bar.height);
+  };
+  await below('name field', page.getByRole('combobox'));
+  await page.getByRole('link', { name: 'Letters' }).click();
+  await below('board', page.getByRole('group', { name: /^Guess 1/ }));
+  await below('keyboard', page.getByRole('group', { name: 'Keyboard' }));
+  expect(await banner.evaluate((el) => getComputedStyle(el).position)).toBe('static');
 });
 
 test('Letters on a phone: the whole board and keyboard fit the screen width, keys are tappable', async ({ page }) => {

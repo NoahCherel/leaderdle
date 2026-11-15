@@ -162,7 +162,7 @@ interface ResultProps {
   won: boolean;
   used: number;
   scoreLine: string;
-  /** Animate confetti: the game was won just now. */
+  /** Stamp the result in: the game was won just now. */
   celebrate: boolean;
   grid: GridCell[][];
   shareText: string;

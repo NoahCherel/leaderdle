@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useApp } from '../app/context';
 import { currentStreak } from '../game/stats';
@@ -115,60 +115,24 @@ export function Toast({ inDialog = false }: { inDialog?: boolean }) {
 }
 
 /**
- * Cookie choice. It must never cover the game (PASSATION §8): the page keeps room for it at the
- * bottom, and on phones it steps aside while a field is being typed in (keyboard open).
+ * Cookie choice. It sits in the page, under the header, so it can never cover the game,
+ * the keyboard or a suggestion list (PASSATION §8), on any screen size.
  */
 export function ConsentBanner() {
   const { state, dispatch } = useApp();
-  const ref = useRef<HTMLDivElement>(null);
-  const [typing, setTyping] = useState(false);
-  const open = state.consent === null;
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const el = ref.current;
-    if (!open || !el || typing) {
-      root.style.removeProperty('--consent-h');
-      return;
-    }
-    const update = () => root.style.setProperty('--consent-h', `${el.offsetHeight + 24}px`);
-    update();
-    const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(update) : null;
-    ro?.observe(el);
-    return () => {
-      ro?.disconnect();
-      root.style.removeProperty('--consent-h');
-    };
-  }, [open, typing]);
-
-  useEffect(() => {
-    if (!open) return;
-    const phone = window.matchMedia('(max-width: 619.98px)');
-    const sync = () => {
-      const a = document.activeElement;
-      setTyping(phone.matches && !!a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA'));
-    };
-    // On focusout the next element is not focused yet: check once it is.
-    const later = () => window.setTimeout(sync, 0);
-    document.addEventListener('focusin', sync);
-    document.addEventListener('focusout', later);
-    return () => {
-      document.removeEventListener('focusin', sync);
-      document.removeEventListener('focusout', later);
-    };
-  }, [open]);
-
-  if (!open || typing) return null;
+  if (state.consent !== null) return null;
   return (
-    <div ref={ref} role="region" aria-label="Cookie consent" className={s.consent}>
-      <p>Cookies help us show ads and count visits. The game works the same either way.</p>
-      <div className={s.consentBtns}>
-        <button type="button" className="btn btn--outline" onClick={() => dispatch({ type: 'consent', value: 'no' })}>
-          Decline
-        </button>
-        <button type="button" className="btn btn--outline" onClick={() => dispatch({ type: 'consent', value: 'yes' })}>
-          Accept
-        </button>
+    <div role="region" aria-label="Cookie consent" className={s.consent}>
+      <div className={s.consentIn}>
+        <p>Cookies help us show ads and count visits. The game works the same either way.</p>
+        <div className={s.consentBtns}>
+          <button type="button" className="btn btn--outline" onClick={() => dispatch({ type: 'consent', value: 'no' })}>
+            Decline
+          </button>
+          <button type="button" className="btn btn--outline" onClick={() => dispatch({ type: 'consent', value: 'yes' })}>
+            Accept
+          </button>
+        </div>
       </div>
     </div>
   );

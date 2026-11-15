@@ -11,7 +11,7 @@ export const PAGES: Record<string, [title: string, paragraphs: string[]]> = {
     'About Leaderdle',
     [
       'Leaderdle is a daily guessing game about the people who have led countries: heads of state and heads of government, from 1900 to today.',
-      'There is one Classic puzzle a day, plus two short bonus rounds. Everyone gets the same puzzles, and new ones arrive at midnight, your time.',
+      'There are four short puzzles a day: Classic, Letters, Succession and Timeline. Everyone gets the same puzzles, and new ones arrive at midnight, your time.',
       'No account needed. Your streak and stats stay in your browser.',
     ],
   ],

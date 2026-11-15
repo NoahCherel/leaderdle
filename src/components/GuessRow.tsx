@@ -25,12 +25,12 @@ export function Tile({ tile, animate, index }: { tile: TileData; animate: boolea
       {tile.inOffice && <span className={s.inOffice}>In office</span>}
       {tile.state === 'correct' && (
         <span className={s.badge}>
-          <IconCheck size={12} weight={4.5} />
+          <IconCheck size={10} weight={4.5} />
         </span>
       )}
       {tile.state === 'close' && (
         <span className={s.badge}>
-          <IconWave size={12} />
+          <IconWave size={10} />
         </span>
       )}
     </div>

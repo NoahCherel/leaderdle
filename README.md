@@ -1,8 +1,8 @@
 # Leaderdle
 
-Jeu web quotidien : deviner un dirigeant politique (chef d'État ou de gouvernement, depuis 1900). Un jeu principal, Classic, et deux bonus, Succession et Timeline. Site 100 % statique, sans compte, progression enregistrée dans le navigateur.
+Jeu web quotidien : deviner un dirigeant politique (chef d'État ou de gouvernement, depuis 1900). Quatre jeux par jour : Classic (cinq indices), Letters (épeler le nom, façon Wordle), Succession et Timeline. Site 100 % statique, sans compte, progression enregistrée dans le navigateur.
 
-Cahier des charges : `leaderdle-passation/PASSATION.md`, maquettes et captures dans `leaderdle-passation/`.
+Cahier des charges d'origine : `leaderdle-passation/PASSATION.md`. Les règles en viennent toujours. L'apparence, elle, a été refaite depuis (voir « Apparence ») : les maquettes et captures du dossier ne correspondent plus au site.
 
 ## Lancer le projet
 
@@ -21,8 +21,17 @@ Premier lancement de Playwright : `npx playwright install chromium`.
 ## Scènes de capture (dev)
 
 Chaque état dessiné dans la passation s'affiche par l'adresse, comme dans le prototype :
-`http://localhost:5173/?scene=won&theme=light&colorblind=true`. Les scènes utilisent les 17 dirigeants d'exemple (`src/dev/`) et le puzzle n° 128.
-`npm run shoot` photographie toutes les scènes dans `test-results/scenes/` pour les comparer aux captures.
+`http://localhost:5173/?scene=won&theme=dark&colorblind=true`. Les scènes utilisent les 17 dirigeants d'exemple (`src/dev/`) et le puzzle n° 128.
+`npm run shoot` photographie toutes les scènes dans `test-results/scenes/`. `npm run walk` joue une vraie journée avec les vraies données (`node scripts/walk.mjs 360` ou `1280 dark`).
+
+## Apparence
+
+Un dossier imprimé : papier clair, encre noire, un seul rouge (tampons, logo). Thème clair par défaut, thème sombre dans les réglages.
+
+- Jetons et composants de base : `src/styles/base.css`.
+- Polices auto-hébergées : Barlow Condensed (titres en capitales), Public Sans (texte), IBM Plex Mono (étiquettes).
+- Tuiles : vert = exact, orange = proche ou lettre mal placée, gris = rien. Les mêmes couleurs dans les quatre jeux et dans le texte partagé.
+- Icônes et image de partage : `node scripts/make-icons.mjs`.
 
 ## Données
 

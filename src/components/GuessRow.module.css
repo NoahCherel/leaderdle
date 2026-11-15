@@ -70,13 +70,13 @@
 }
 .badge {
   position: absolute;
-  top: -8px;
-  right: -7px;
+  top: -7px;
+  right: -6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   background: var(--paper);
   color: var(--ink);
   border: 1px solid var(--line);

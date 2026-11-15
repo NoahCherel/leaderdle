@@ -64,8 +64,6 @@ body {
 }
 #root {
   min-height: 100vh;
-  /* Room for the cookie banner, so it never hides the end of the page. */
-  padding-bottom: var(--consent-h, 0px);
 }
 a {
   color: inherit;

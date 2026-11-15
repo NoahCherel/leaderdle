@@ -121,7 +121,7 @@ export function Letters() {
       {!st.done && (
         <p className={s.brief}>
           Spell the name of today's leader: <strong>{slots} letters</strong>
-          {words > 1 ? `, ${words} words` : ''}. Any letters will do, there is no list to pick from.
+          {words > 1 ? ', ' + words + ' words' : ''}. Type anything, there is no list.
         </p>
       )}
       <div className={s.board}>

@@ -86,6 +86,7 @@ export function App() {
   return (
     <>
       <Header />
+      <ConsentBanner />
       <NewDayBanner />
       <Switch>
         <Route path="/" component={Home} />
@@ -101,7 +102,6 @@ export function App() {
         <Route>{() => <ErrorScreen kind="404" />}</Route>
       </Switch>
       <Modals />
-      <ConsentBanner />
       <Toast />
     </>
   );

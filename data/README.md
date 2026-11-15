@@ -35,8 +35,9 @@ La base est construite automatiquement depuis Wikidata (licence CC0), puis corri
    - `open term after death` : vérifier la date de fin.
    - `odd age` : rois montés sur le trône enfants. C'est en général exact.
    - `term outside country dates` : le mandat tombe hors des dates de l'État sur Wikidata. Le plus souvent, l'État moderne a une date de création récente (Japon, Royaume-Uni, Iran) et le dirigeant est légitime. Reste quelques dirigeants de républiques fédérées yougoslaves d'avant 1991, à exclure au cas par cas.
-2. **Les réponses possibles** (`answerable=true` dans `review.csv`). Ce doivent être des dirigeants connus du grand public (PASSATION §5). Retirer ou ajouter avec `answerable.remove` et `answerable.add`.
-3. **Les choix sensibles déjà faits dans `overrides.json`, à confirmer** :
+2. **Les réponses possibles** (`answerable=true` dans `review.csv`). Ce doivent être des dirigeants connus du grand public (PASSATION §5). Le seuil automatique (90 liens Wikipedia) en laissait 326 ; 156 ont été retirés à la main dans `answerable.remove` (Kaja Kallas, Thomas Sankara, présidents honorifiques, monarques peu connus hors de leur pays…). Il en reste 170. Ce tri est un jugement : remettre un nom se fait en le retirant de `answerable.remove`.
+3. **Les noms du jeu Letters** : `data/letters.json` associe un dirigeant au nom à épeler (138 noms). C'est le nom d'usage, en capitales sans accents, 11 lettres au plus : `MERKEL`, `DE GAULLE`, `XI JINPING`. Un dirigeant absent de ce fichier n'est jamais tiré dans Letters : c'est voulu pour les papes, les monarques numérotés, les noms de 3 lettres et les translittérations qui varient (Zelenskyy). `check:data` vérifie que chaque nom figure bien dans le nom affiché du dirigeant.
+4. **Les choix sensibles déjà faits dans `overrides.json`, à confirmer** :
    - Exclus comme non reconnus ou non nationaux : républiques populaires de Donetsk et de Louhansk, Artsakh, Krajina serbe, Republika Srpska, Bavière, Bade, gouvernement de Canton, Médie-Perse.
    - Empire allemand, République de Weimar et Reich allemand fusionnés dans « Germany », **sans drapeau**. Aucun drapeau historique n'est jamais affiché, seuls les drapeaux ISO actuels existent dans le jeu.
    - Continents des pays à cheval sur deux continents : Russie et URSS en Europe, Turquie et Kazakhstan en Asie.
@@ -44,19 +45,21 @@ La base est construite automatiquement depuis Wikidata (licence CC0), puis corri
    - Tchang Kaï-chek rattaché à « Republic of China ». Les présidents d'après 1949 restent sous « Taiwan », le nom que donne Wikidata.
    - Corrigés à la main (`terms`, `blurbs`) : Pinochet depuis 1973, Salman roi depuis 2015.
    - Retirés des réponses : Goebbels (chancelier un jour), Van Rompuy, et les papes d'avant l'État du Vatican (1929) ou au pontificat très bref.
-4. **Un échantillon de fiches au hasard**, comparées à Wikipedia : dates, âge, pays, fonction.
+5. **Un échantillon de fiches au hasard**, comparées à Wikipedia : dates, âge, pays, fonction.
 
 Après chaque correction : `npm run data:leaders`, puis `npm run check:data`.
 
 ## Calendrier
 
 - `data/schedule.json` est le calendrier publié. Le script ne fait qu'ajouter des jours à la fin : un jour publié ne change jamais, même si la base évolue.
-- Pour imposer une réponse un jour donné : `data/schedule-forced.json`, par exemple `{ "42": { "classic": "Q567" } }`. Le champ `succession` attend l'id de la réponse, `timeline` cinq ids.
+- Pour imposer une réponse un jour donné : `data/schedule-forced.json`, par exemple `{ "42": { "classic": "Q567" } }`. Les champs `letters` et `succession` attendent l'id de la réponse, `timeline` cinq ids.
 - Si une réponse publiée devient non valide (dirigeant retiré de la base), `check:data` fait échouer le build. Il faut alors corriger le jour à la main dans `schedule.json`.
 - Une chaîne Succession n'est retenue que si les trois mandats se suivent sans trou ni chevauchement, et sans autre titulaire de la fonction pendant cette période (gouvernement en exil, présidence collective). La fonction doit être celle du pays de la réponse.
 - Règles :
-  - Classic : pas de réponse répétée avant 240 jours.
-  - Succession : pas de réponse répétée avant 150 jours.
+  - Classic : pas de réponse répétée avant 120 jours.
+  - Letters : pas de réponse répétée avant 90 jours.
+  - Succession : pas de réponse répétée avant 60 jours (86 réponses possibles seulement).
+  - Une réponse de Classic, Letters ou Succession ne sert pas de réponse à un autre jeu pendant 14 jours.
   - Timeline : une carte ne revient pas avant 14 jours.
   - Le même jour, aucun dirigeant n'apparaît dans deux modes.
 
