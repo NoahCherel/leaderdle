@@ -1,8 +1,8 @@
 export type Role = 'state' | 'gov' | 'both';
-export type Mode = 'classic' | 'succession' | 'timeline';
-export const MODES: readonly Mode[] = ['classic', 'succession', 'timeline'];
-export const MAX: Record<Mode, number> = { classic: 8, succession: 5, timeline: 3 };
-export const MODE_NAMES: Record<Mode, string> = { classic: 'Classic', succession: 'Succession', timeline: 'Timeline' };
+export type Mode = 'classic' | 'letters' | 'succession' | 'timeline';
+export const MODES: readonly Mode[] = ['classic', 'letters', 'succession', 'timeline'];
+export const MAX: Record<Mode, number> = { classic: 8, letters: 6, succession: 5, timeline: 3 };
+export const MODE_NAMES: Record<Mode, string> = { classic: 'Classic', letters: 'Letters', succession: 'Succession', timeline: 'Timeline' };
 
 /** One continuous stint in office. Dates are ISO `YYYY-MM-DD`; `end: null` means still in office. */
 export interface Term {

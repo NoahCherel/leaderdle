@@ -69,7 +69,6 @@ export function Succession() {
           tried={day.succession}
           search={search}
           onSubmit={submit}
-          color="var(--m2)"
           initialQuery={scene.q ?? ''}
           initialOpen={!!scene.open}
           scrollOnFocus={phone}
@@ -77,7 +76,7 @@ export function Succession() {
       )}
       <div className={s.stack} style={{ gap: 16 }}>
         <div className={s.stack} style={{ gap: 8 }}>
-          <strong>Clues</strong>
+          <strong className="eyebrow muted">Clues</strong>
           <div className={s.clues}>
             {clues.map(([label, value], i) => {
               const shown = st.done || i < missed.length;
@@ -92,7 +91,7 @@ export function Succession() {
         </div>
         {missed.length > 0 && (
           <div className={s.stack} style={{ gap: 8 }}>
-            <strong>Not the one</strong>
+            <strong className="eyebrow muted">Not the one</strong>
             <ul className={s.chips} style={{ margin: 0, padding: 0, listStyle: 'none' }}>
               {missed.map((id) => (
                 <li key={id} className={s.chip}>

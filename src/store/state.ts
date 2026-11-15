@@ -1,11 +1,12 @@
 import type { DayPuzzle } from '../data/schema';
 import { emptyStats, recordResult, recordStreak, type ModeStats, type Streak } from '../game/stats';
-import { classicStatus, successionStatus, timelineStatus } from '../game/status';
+import { fitsWord } from '../game/letters';
+import { classicStatus, lettersStatus, successionStatus, timelineStatus } from '../game/status';
 import { checkOrder } from '../game/timeline';
-import { MAX, type Mode } from '../game/types';
+import { MAX, MODES, type Mode } from '../game/types';
 
 export interface Settings {
-  light: boolean;
+  dark: boolean;
   cb: boolean;
   reduce: boolean;
 }
@@ -15,6 +16,8 @@ export interface DayRecord {
   puzzle: DayPuzzle;
   classic: string[];
   hint: boolean;
+  /** Letters guesses, each shaped like the word (same length, same spaces). */
+  letters: string[];
   succession: string[];
   order: string[];
   checks: number[][];
@@ -23,7 +26,7 @@ export interface DayRecord {
 }
 
 export interface GameState {
-  v: 2;
+  v: 3;
   settings: Settings;
   consent: 'yes' | 'no' | null;
   helpSeen: Partial<Record<Mode, boolean>>;
@@ -36,6 +39,7 @@ export interface GameState {
 export type Action =
   | { type: 'start'; puzzle: DayPuzzle }
   | { type: 'guess'; n: number; mode: 'classic' | 'succession'; id: string }
+  | { type: 'letters'; n: number; guess: string }
   | { type: 'hint'; n: number }
   | { type: 'order'; n: number; order: string[] }
   | { type: 'check'; n: number }
@@ -49,13 +53,13 @@ export type Action =
 /** Days kept in storage, today included. */
 const KEEP_DAYS = 7;
 
-const freshDay = (puzzle: DayPuzzle): DayRecord => ({ puzzle, classic: [], hint: false, succession: [], order: [...puzzle.timeline.start], checks: [] });
+const freshDay = (puzzle: DayPuzzle): DayRecord => ({ puzzle, classic: [], hint: false, letters: [], succession: [], order: [...puzzle.timeline.start], checks: [] });
 
-const freshStats = ():Record<Mode, ModeStats> => ({ classic: emptyStats(), succession: emptyStats(), timeline: emptyStats() });
+const freshStats = ():Record<Mode, ModeStats> => ({ classic: emptyStats(), letters: emptyStats(), succession: emptyStats(), timeline: emptyStats() });
 
 export const initialState = (): GameState => ({
-  v: 2,
-  settings: { light: false, cb: false, reduce: false },
+  v: 3,
+  settings: { dark: false, cb: false, reduce: false },
   consent: null,
   helpSeen: {},
   stats: freshStats(),
@@ -66,6 +70,7 @@ export const initialState = (): GameState => ({
 export function dayStatus(day: DayRecord) {
   return {
     classic: classicStatus(day.classic, day.puzzle.classic.answer),
+    letters: lettersStatus(day.letters, day.puzzle.letters.word),
     succession: successionStatus(day.succession, day.puzzle.succession.answer),
     timeline: timelineStatus(day.checks),
   };
@@ -76,12 +81,12 @@ function settle(state: GameState, n: number): GameState {
   const day = state.days[n]!;
   const st = dayStatus(day);
   let { stats, streak } = state;
-  for (const mode of ['classic', 'succession', 'timeline'] as const) {
+  for (const mode of MODES) {
     const s = st[mode];
     if (!s.done) continue;
     const next = recordResult(stats[mode], n, s.won, s.used);
     if (next !== stats[mode]) stats = { ...stats, [mode]: next };
-    if (mode === 'classic') streak = recordStreak(streak, n);
+    streak = recordStreak(streak, n);
   }
   return stats === state.stats && streak === state.streak ? state : { ...state, stats, streak };
 }
@@ -109,6 +114,11 @@ export function reducer(state: GameState, action: Action): GameState {
       const list = day[action.mode];
       if (dayStatus(day)[action.mode].done || list.includes(action.id)) return state;
       return withDay(state, action.n, { [action.mode]: [...list, action.id] });
+    }
+    case 'letters': {
+      const day = state.days[action.n];
+      if (!day || dayStatus(day).letters.done || !fitsWord(action.guess, day.puzzle.letters.word)) return state;
+      return withDay(state, action.n, { letters: [...day.letters, action.guess] });
     }
     case 'hint': {
       const day = state.days[action.n];

@@ -2,6 +2,7 @@
 // gaps in day numbers. Run by `npm run build` (prebuild) and `npm run check:data`.
 import { readdirSync, readFileSync } from 'node:fs';
 import { DayPuzzleSchema, LeaderFileSchema } from '../src/data/schema.ts';
+import { lettersWord } from '../src/game/letters.ts';
 
 const errors: string[] = [];
 const read = (p: string) => JSON.parse(readFileSync(p, 'utf8'));
@@ -28,11 +29,15 @@ for (const f of files) {
   }
   const d = parsed.data;
   if (`${d.n}.json` !== f) errors.push(`${f}: n is ${d.n}`);
-  const all = [d.classic.answer, d.succession.before, d.succession.answer, d.succession.after, ...d.timeline.order, ...d.timeline.start];
+  const all = [d.classic.answer, d.letters.answer, d.succession.before, d.succession.answer, d.succession.after, ...d.timeline.order, ...d.timeline.start];
   for (const id of all) if (!leaders.has(id)) errors.push(`${f}: unknown leader ${id}`);
-  for (const id of [d.classic.answer, d.succession.answer, ...d.timeline.order]) {
+  for (const id of [d.classic.answer, d.letters.answer, d.succession.answer, ...d.timeline.order]) {
     if (leaders.has(id) && !leaders.get(id)!.answerable) errors.push(`${f}: ${leaders.get(id)!.name} is not answerable`);
   }
+  // The word to spell must be part of the leader's name as shown, so the answer card explains it.
+  const lettersLeader = leaders.get(d.letters.answer);
+  if (lettersLeader && !` ${lettersWord(lettersLeader.name)} `.includes(` ${d.letters.word} `)) errors.push(`${f}: "${d.letters.word}" is not in the name ${lettersLeader.name}`);
+  if (d.letters.word.replace(/ /g, '').length > 11) errors.push(`${f}: "${d.letters.word}" is too long for a phone`);
   const years = d.timeline.order.map((id) => leaders.get(id)?.tookOffice ?? 0);
   if (years.some((y, i) => i > 0 && y <= years[i - 1]!)) errors.push(`${f}: Timeline order is not by year`);
 }

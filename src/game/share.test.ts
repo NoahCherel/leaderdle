@@ -1,4 +1,4 @@
-import { classicEmoji, shareClassic, shareDay, shareSuccession, shareTimeline } from './share';
+import { classicEmoji, shareClassic, shareDay, shareSuccession, shareTimeline, shareLetters } from './share';
 import type { Direction, TileState } from './types';
 
 const row = (spec: string) =>
@@ -17,7 +17,7 @@ describe('Classic share text (PASSATION §9)', () => {
 
   it('matches the documented example', () => {
     expect(shareClassic(128, rows, { won: true, used: 4 }, false)).toBe(
-      'Leaderdle #128 · Classic 4/8\n⬜🟩⬆️⬇️⬆️\n🟨🟩⬆️⬆️🟨\n⬜🟨⬆️⬆️⬇️\n🟩🟩🟩🟩🟩\nleaderdle.com',
+      'Leaderdle #128 · Classic 4/8\n⬜🟩⬆️⬇️⬆️\n🟧🟩⬆️⬆️🟧\n⬜🟧⬆️⬆️⬇️\n🟩🟩🟩🟩🟩\nleaderdle.com',
     );
   });
 
@@ -39,13 +39,19 @@ describe('bonus and day share text (brief §7)', () => {
       'Leaderdle #128 · Timeline 2/3\n🟩⬜🟩⬜🟩\n🟩🟩🟩🟩🟩\nleaderdle.com',
     );
   });
+  it('Letters: one square per letter, a space between words', () => {
+    expect(
+      shareLetters(128, [['absent', 'present', 'gap', 'correct'], ['correct', 'correct', 'gap', 'correct']], { won: true, used: 2 }),
+    ).toBe('Leaderdle #128 · Letters 2/6\n⬛🟧 🟩\n🟩🟩 🟩\nleaderdle.com');
+  });
   it('the day summary fits on one line', () => {
     expect(
       shareDay(128, {
         classic: { won: true, used: 4 },
+        letters: { won: true, used: 3 },
         succession: { won: true, used: 2 },
         timeline: { won: false, used: 3 },
       }),
-    ).toBe('Leaderdle #128\nClassic 4/8 · Succession 2/5 · Timeline X/3\nleaderdle.com');
+    ).toBe('Leaderdle #128\nClassic 4/8 · Letters 3/6 · Succession 2/5 · Timeline X/3\nleaderdle.com');
   });
 });

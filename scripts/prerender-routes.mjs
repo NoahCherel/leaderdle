@@ -6,6 +6,7 @@ import { join } from 'node:path';
 const dist = 'dist';
 const ROUTES = {
   classic: 'Classic · Leaderdle',
+  letters: 'Letters · Leaderdle',
   succession: 'Succession · Leaderdle',
   timeline: 'Timeline · Leaderdle',
   summary: 'Today’s summary · Leaderdle',

@@ -1,7 +1,7 @@
 import { useApp } from '../app/context';
 import { currentWinStreak } from '../game/stats';
 import { MAX, MODE_NAMES, MODES, type Mode } from '../game/types';
-import { MODE_COLOR, Modal, Toast } from './Chrome';
+import { Modal, Toast } from './Chrome';
 import { IconCheck, IconUp, IconWave } from './icons';
 import s from './ui.module.css';
 
@@ -59,6 +59,40 @@ function HelpBody({ mode }: { mode: Mode }) {
       </>
     );
   }
+  if (mode === 'letters') {
+    return (
+      <>
+        <p>Spell the name of today's leader in 6 tries. Type any letters, then press Enter.</p>
+        <div className={s.legend}>
+          <div className={s.legendRow}>
+            <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--g)' }}>
+              A
+            </span>
+            <span>
+              <strong>Green.</strong> The letter is in the name, in this place.
+            </span>
+          </div>
+          <div className={s.legendRow}>
+            <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--y)' }}>
+              B
+            </span>
+            <span>
+              <strong>Orange.</strong> The letter is in the name, in another place.
+            </span>
+          </div>
+          <div className={s.legendRow}>
+            <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--x)', color: 'var(--xt)' }}>
+              C
+            </span>
+            <span>
+              <strong>Grey.</strong> The letter is not in the name.
+            </span>
+          </div>
+        </div>
+        <p className="muted">The name is the one the leader is best known by, without accents. Clues unlock after 2 and 4 misses.</p>
+      </>
+    );
+  }
   if (mode === 'timeline') {
     return (
       <>
@@ -95,7 +129,6 @@ function StatsBody() {
             role="tab"
             aria-selected={m === tab}
             className={`${s.tab} ${m === tab ? s.tabOn : ''}`}
-            style={{ ['--mc' as string]: MODE_COLOR[m] }}
             onClick={() => setStatTab(m)}
           >
             {MODE_NAMES[m]}
@@ -146,9 +179,9 @@ function StatsBody() {
 function SettingsBody() {
   const { state, dispatch, flash } = useApp();
   const rows: Array<[keyof typeof state.settings, string, string]> = [
-    ['light', 'Light theme', 'A bright version of the same colors.'],
-    ['cb', 'Colorblind colors', 'Blue and orange instead of green and yellow.'],
-    ['reduce', 'Reduce motion', 'Turn off tile flips, shakes and confetti.'],
+    ['dark', 'Dark theme', 'Light text on a dark page.'],
+    ['cb', 'Colorblind colors', 'Blue instead of green, easier to tell from orange.'],
+    ['reduce', 'Reduce motion', 'Turn off tile flips, shakes and stamps.'],
   ];
   return (
     <>
@@ -188,7 +221,6 @@ function SettingsBody() {
 
 export function Modals() {
   const { modal, closeModal } = useApp();
-  const color = modal.kind === 'help' ? MODE_COLOR[modal.mode] : 'var(--m1)';
   const title = modal.kind === 'help' ? `How to play ${MODE_NAMES[modal.mode]}` : modal.kind === 'stats' ? 'Your stats' : 'Settings';
   const close = modal.kind === 'help' ? 'Got it' : modal.kind === 'stats' ? 'Close' : 'Done';
   return (
@@ -199,7 +231,7 @@ export function Modals() {
       {modal.kind === 'help' && <HelpBody mode={modal.mode} />}
       {modal.kind === 'stats' && <StatsBody />}
       {modal.kind === 'settings' && <SettingsBody />}
-      <button type="button" className="btn btn--md btn--block" style={{ ['--btn-bg' as string]: color }} onClick={closeModal}>
+      <button type="button" className="btn btn--md btn--block" onClick={closeModal}>
         {close}
       </button>
       <Toast inDialog />

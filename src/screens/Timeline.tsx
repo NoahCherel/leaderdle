@@ -151,7 +151,7 @@ export function Timeline() {
         </DndContext>
         {!st.done && (
           <>
-            <button type="button" className="btn btn--lg" style={{ ['--btn-bg' as string]: 'var(--m3)' }} onClick={check} disabled={unchanged} aria-describedby={unchanged ? 'check-hint' : undefined}>
+            <button type="button" className="btn btn--lg" onClick={check} disabled={unchanged} aria-describedby={unchanged ? 'check-hint' : undefined}>
               Check my order
             </button>
             {unchanged && (

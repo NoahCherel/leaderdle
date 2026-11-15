@@ -20,6 +20,9 @@ const guessStatus = (guesses: readonly string[], answer: string, max: number): S
 export const classicStatus = (guesses: readonly string[], answer: string) => guessStatus(guesses, answer, MAX.classic);
 export const successionStatus = (guesses: readonly string[], answer: string) => guessStatus(guesses, answer, MAX.succession);
 
+/** Letters is won by spelling the word exactly. */
+export const lettersStatus = (guesses: readonly string[], word: string) => guessStatus(guesses, word, MAX.letters);
+
 export function timelineStatus(checks: readonly (readonly number[])[]): TimelineStatus {
   const last = checks[checks.length - 1];
   const won = !!last && last.every(Boolean);

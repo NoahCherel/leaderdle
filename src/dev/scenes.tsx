@@ -1,5 +1,5 @@
 /**
- * Dev-only capture scenes: `?scene=<name>&theme=light&colorblind=true`.
+ * Dev-only capture scenes: `?scene=<name>&theme=dark&colorblind=true`.
  * Same names as the prototype (PASSATION §1), so each state can be compared with leaderdle-passation/captures/.
  * Nothing is saved and the countdown is frozen.
  */
@@ -15,6 +15,7 @@ const N = 128;
 const PUZZLE: DayPuzzle = {
   n: N,
   classic: { answer: 'mer' },
+  letters: { answer: 'oba', word: 'OBAMA' },
   succession: { before: 'sch', answer: 'mer', after: 'olz', years: '2005 – 2021', beforeYears: '1998 – 2005', afterYears: '2021 – 2025' },
   timeline: { order: ['lky', 'tha', 'man', 'mer', 'ard'], start: ['man', 'ard', 'lky', 'mer', 'tha'] },
 };
@@ -26,10 +27,11 @@ const mixed = ['lky', 'mer', 'man', 'tha', 'ard'];
 
 const c = (ids: string[]): Action[] => ids.map((id) => ({ type: 'guess', n: N, mode: 'classic', id }));
 const sg = (ids: string[]): Action[] => ids.map((id) => ({ type: 'guess', n: N, mode: 'succession', id }));
+const lg = (words: string[]): Action[] => words.map((guess) => ({ type: 'letters', n: N, guess }));
 const order = (o: string[]): Action => ({ type: 'order', n: N, order: o });
 const check: Action = { type: 'check', n: N };
 const tWon = [order(mixed), check, order(PUZZLE.timeline.order), check];
-const full = [...c(four), ...sg(['lky', 'mer']), ...tWon];
+const full = [...c(four), ...lg(['ABOUT', 'OBAMA']), ...sg(['lky', 'mer']), ...tWon];
 
 interface Scene {
   path: string;
@@ -55,6 +57,10 @@ const SCENES: Record<string, Scene> = {
   won: { path: '/classic', actions: c(four) },
   'won-hint': { path: '/classic', actions: [...c(three), { type: 'hint', n: N }, ...c(['mer'])] },
   lost: { path: '/classic', actions: c(['lky', 'tha', 'man', 'ard', 'chu', 'oba', 'bla', 'koh']) },
+  'l-empty': { path: '/letters' },
+  'l-progress': { path: '/letters', actions: lg(['STERN', 'ABOUT', 'MAMBO']) },
+  'l-won': { path: '/letters', actions: lg(['STERN', 'ABOUT', 'OBAMA']) },
+  'l-lost': { path: '/letters', actions: lg(['STERN', 'ABOUT', 'MAMBO', 'OMAHA', 'BAMBI', 'ALAMO']) },
   help: { path: '/classic', actions: c(three), ui: { modal: 'help' } },
   stats: { path: '/classic', actions: c(four), ui: { modal: 'stats' } },
   settings: { path: '/classic', actions: c(three), ui: { modal: 'settings' } },
@@ -82,9 +88,10 @@ export const SCENE_NAMES = Object.keys(SCENES);
 export async function renderScene(params: URLSearchParams) {
   const name = params.get('scene') ?? '';
   const scene = SCENES[name] ?? SCENES['home-first']!;
-  const settings = { light: params.get('theme') === 'light', cb: params.get('colorblind') === 'true', reduce: false };
+  const settings = { dark: params.get('theme') === 'dark', cb: params.get('colorblind') === 'true', reduce: false };
   const html = document.documentElement.classList;
-  html.toggle('th-light', settings.light);
+  html.toggle('th-dark', settings.dark);
+  html.toggle('th-light', !settings.dark);
   html.toggle('cb', settings.cb);
 
   window.history.replaceState(null, '', scene.path + window.location.search);
@@ -96,7 +103,7 @@ export async function renderScene(params: URLSearchParams) {
     ...initialState(),
     settings,
     consent: scene.consent ? null : 'no',
-    helpSeen: { classic: true, succession: true, timeline: true },
+    helpSeen: { classic: true },
   };
   state = [{ type: 'start', puzzle: PUZZLE } as Action, ...(scene.actions ?? [])].reduce(reducer, state);
 

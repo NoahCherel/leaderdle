@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" class="th-dark">
+<html lang="en" class="th-light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Leaderdle: guess the world leader</title>
-    <meta name="description" content="A daily guessing game about world leaders since 1900. One Classic puzzle and two bonus rounds a day, the same for everyone. No account needed." />
-    <meta name="theme-color" content="#1C1A2B" />
+    <meta name="description" content="A daily guessing game about world leaders since 1900. Four short puzzles a day, the same for everyone. No account needed." />
+    <meta name="theme-color" content="#F3EEE3" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/icon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/icon-180.png" />
@@ -26,7 +26,7 @@
       try {
         var s = JSON.parse(localStorage.getItem('leaderdle') || '{}').settings || {};
         var c = document.documentElement.classList;
-        if (s.light) { c.remove('th-dark'); c.add('th-light'); }
+        if (s.dark) { c.remove('th-light'); c.add('th-dark'); }
         if (s.cb) c.add('cb');
         if (s.reduce) c.add('reduce');
       } catch (e) {}

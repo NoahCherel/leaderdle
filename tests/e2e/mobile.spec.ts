@@ -74,8 +74,24 @@ test('the cookie banner never covers the game: content scrolls above it, it step
   const ad = await page.getByLabel('Advertisement').last().boundingBox();
   const bar = await banner.boundingBox();
   expect(ad!.y + ad!.height).toBeLessThanOrEqual(bar!.y);
-  await page.getByRole('link', { name: 'Play Classic' }).click();
+  await page.getByRole('link', { name: 'Play: Classic' }).click();
   await page.getByRole('button', { name: 'Got it' }).click();
   await page.getByRole('combobox').click();
   await expect(banner).toBeHidden();
+});
+
+test('Letters on a phone: the whole board and keyboard fit the screen width, keys are tappable', async ({ page }) => {
+  await openAt(page, '/letters');
+  await closeHelp(page);
+  for (const k of ['A', 'B', 'O', 'U', 'T']) await page.getByRole('button', { name: k, exact: true }).tap();
+  await page.getByRole('button', { name: 'Enter' }).tap();
+  await expect(page.getByText('5 guesses left')).toBeVisible();
+  const width = page.viewportSize()!.width;
+  for (const key of await page.getByRole('group', { name: 'Keyboard' }).getByRole('button').all()) {
+    const box = (await key.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(width);
+    expect(box.height).toBeGreaterThanOrEqual(44);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
 });

@@ -2,10 +2,11 @@ import { useEffect, type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { useApp } from '../app/context';
 import { useCountdown, useShare } from '../app/hooks';
-import { AdSlot, Flag, MODE_COLOR, ModePills } from '../components/Chrome';
+import { AdSlot, Flag, ModePills } from '../components/Chrome';
 import { IconBulb, IconShare } from '../components/icons';
 import { ROLE_LABEL } from '../game/compare';
 import { score } from '../game/share';
+import { currentStreak } from '../game/stats';
 import { isInOffice, termSpan, yearsInOffice } from '../game/tenure';
 import { MAX, MODE_NAMES, MODES, type Leader, type Mode } from '../game/types';
 import s from './game.module.css';
@@ -13,7 +14,8 @@ import s from './game.module.css';
 /** Two columns on desktop (game + 300 × 600 ad), one column below 1000 px. */
 export function GameLayout({ mode, children }: { mode: Mode; children: ReactNode }) {
   const { state, dispatch, openModal, frozen } = useApp();
-  const seen = !!state.helpSeen[mode];
+  // The rules open by themselves once, on the very first game. Each game states its own rule on the page.
+  const seen = Object.keys(state.helpSeen).length > 0;
   useEffect(() => {
     if (seen || frozen) return;
     dispatch({ type: 'helpSeen', mode });
@@ -66,26 +68,12 @@ export function ResumedBanner({ mode }: { mode: Mode }) {
   );
 }
 
-const CONFETTI_COLORS = ['var(--m1)', 'var(--m2)', 'var(--m3)', 'var(--g)', 'var(--y)', 'var(--text)'];
-
-function Confetti({ animate }: { animate: boolean }) {
-  const lefts = animate ? [4, 12, 21, 30, 38, 47, 55, 64, 72, 81, 89, 96] : [2, 6, 10, 14, 18, 22, 78, 82, 86, 90, 94, 97];
-  return (
-    <div aria-hidden="true" className={s.confetti}>
-      {lefts.map((left, i) => (
-        <span
-          key={i}
-          className={animate ? s.fall : undefined}
-          style={{
-            left: `${left}%`,
-            top: animate ? 0 : `${(i * 37) % 90}px`,
-            background: CONFETTI_COLORS[i % 6],
-            animationDelay: animate ? `${700 + ((i * 97) % 500)}ms` : undefined,
-          }}
-        />
-      ))}
-    </div>
-  );
+/** The word on the result stamp: how well it went, not only that it ended. */
+export function verdict(mode: Mode, won: boolean, used: number): string {
+  if (!won) return 'Missed';
+  if (used === 1) return 'First try';
+  if (used === MAX[mode]) return 'Just in time';
+  return used <= Math.ceil(MAX[mode] / 3) ? 'Brilliant' : 'Solved';
 }
 
 export function inOfficeLine(l: Leader, today: Date): string {
@@ -110,7 +98,7 @@ export function LeaderCard({ leader }: { leader: Leader }) {
   const today = new Date();
   return (
     <section aria-label="Today's leader" className={`card ${s.leader}`}>
-      <span className="eyebrow muted">Today's leader</span>
+      <span className="eyebrow muted">File · today's leader</span>
       <div className={s.leaderHead}>
         <Flag iso2={leader.iso2} country={leader.country} code={leader.countryCode} />
         <h3 className="title">{leader.name}</h3>
@@ -165,7 +153,7 @@ export function OrderCard({ ids }: { ids: readonly string[] }) {
 }
 
 export interface GridCell {
-  kind: 'g' | 'y' | 'x';
+  kind: 'g' | 'y' | 'x' | 'gap';
   arrow?: '↑' | '↓';
 }
 
@@ -184,17 +172,18 @@ interface ResultProps {
 
 export function Result({ mode, won, used, scoreLine, celebrate, grid, shareText, hint = false, children }: ResultProps) {
   const { status, frozen, state, n } = useApp();
+  const streak = currentStreak(state.streak, n);
   const share = useShare();
   const count = useCountdown();
   const next = MODES.find((m) => !status[m].done);
   const allDone = MODES.every((m) => status[m].done);
-  const showConfetti = won && !state.settings.reduce && (celebrate || frozen);
   return (
     <section aria-label="Result" className={s.result}>
       <div className={s.hero}>
-        {showConfetti && <Confetti animate={celebrate && !frozen} />}
-        <h2 className="title">{won ? (mode === 'timeline' ? 'All in order!' : 'You got it!') : 'So close!'}</h2>
+        <span className={`stamp ${won ? '' : s.stampLost} ${celebrate && !frozen && !state.settings.reduce ? s.stampIn : ''}`}>{verdict(mode, won, used)}</span>
+        <h2 className="title">{won ? (mode === 'timeline' ? 'All in order!' : 'You got it!') : 'Not this time'}</h2>
         <p className={s.score}>{scoreLine}</p>
+        {streak > 1 && <p className="eyebrow muted">{streak} days in a row</p>}
       </div>
       <div className={s.resultCols}>
         {children}
@@ -212,7 +201,7 @@ export function Result({ mode, won, used, scoreLine, celebrate, grid, shareText,
               {grid.map((row, i) => (
                 <div key={i} className={s.gridRow}>
                   {row.map((c, j) => (
-                    <span key={j} className={`${s.cell} ${c.kind === 'g' ? s.cellG : c.kind === 'y' ? s.cellY : ''}`}>
+                    <span key={j} className={`${s.cell} ${c.kind === 'g' ? s.cellG : c.kind === 'y' ? s.cellY : c.kind === 'gap' ? s.cellGap : ''}`}>
                       {c.arrow}
                     </span>
                   ))}
@@ -221,17 +210,17 @@ export function Result({ mode, won, used, scoreLine, celebrate, grid, shareText,
             </div>
             <span className={s.site}>leaderdle.com</span>
           </div>
-          <button type="button" className="btn btn--lg" style={{ ['--btn-bg' as string]: MODE_COLOR[mode] }} onClick={() => share(shareText)}>
+          <button type="button" className="btn btn--lg" onClick={() => share(shareText)}>
             <IconShare size={22} />
             Share result
           </button>
           {next && (
-            <Link href={`/${next}`} className="btn btn--md" style={{ ['--btn-bg' as string]: MODE_COLOR[next] }}>
+            <Link href={`/${next}`} className="btn btn--md">
               Next up: {MODE_NAMES[next]}
             </Link>
           )}
           {allDone && (
-            <Link href="/summary" className="btn btn--md" style={{ ['--btn-bg' as string]: 'var(--g)' }}>
+            <Link href="/summary" className="btn btn--md">
               See today's summary
             </Link>
           )}
@@ -250,7 +239,7 @@ export function HintOffer({ onReveal }: { onReveal: () => void }) {
       <span>
         <strong>Stuck?</strong> Reveal the leader's initials. It doesn't cost a guess, but it adds a light bulb to your shared result.
       </span>
-      <button type="button" className="btn" style={{ ['--btn-bg' as string]: 'var(--y)' }} onClick={onReveal}>
+      <button type="button" className="btn" onClick={onReveal}>
         <IconBulb size={20} />
         Reveal initials
       </button>

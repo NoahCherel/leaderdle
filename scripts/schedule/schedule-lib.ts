@@ -8,16 +8,20 @@ export interface ScheduleOptions {
   seed: number;
   /** Days before a Classic answer can come back. */
   classicGap: number;
+  /** Days before a Letters answer can come back. */
+  lettersGap: number;
   /** Days before a Succession answer can come back. */
   successionGap: number;
   /** Days before a Timeline card can come back. */
   timelineGap: number;
-  /** Days during which a Classic or Succession answer is not used as the other mode's answer. */
+  /** Days during which a Classic, Letters or Succession answer is not used as another mode's answer. */
   crossGap: number;
 }
 
 export interface Forced {
   classic?: string;
+  /** Letters answer; it needs a word in data/letters.json. */
+  letters?: string;
   /** Succession answer; the matching candidate is used. */
   succession?: string;
   /** Five leader ids for Timeline, in any order. */
@@ -110,6 +114,8 @@ export function extendSchedule(
   upTo: number,
   leaders: Leader[],
   offices: Record<string, OfficeOut>,
+  /** Leader id → the name to spell in Letters. */
+  words: Record<string, string>,
   forced: Record<number, Forced>,
   opts: ScheduleOptions,
 ): DayPuzzle[] {
@@ -128,7 +134,7 @@ export function extendSchedule(
 
     // Classic.
     const usedClassic = recent(n, opts.classicGap, (d) => [d.classic.answer]);
-    const usedCross = recent(n, opts.crossGap, (d) => [d.classic.answer, d.succession.answer]);
+    const usedCross = recent(n, opts.crossGap, (d) => [d.classic.answer, d.letters.answer, d.succession.answer]);
     const classic = f.classic ?? shuffle(answerable, rand).find((l) => !usedClassic.has(l.id) && !usedCross.has(l.id))?.id;
     if (!classic || !byId.has(classic)) throw fail('Classic');
 
@@ -140,8 +146,14 @@ export function extendSchedule(
     const succession = sucPool.find((s) => ![s.before, s.answer, s.after].includes(classic));
     if (!succession) throw fail('Succession');
 
+    // Letters: a leader with a word to spell, not one of today's other leaders.
+    const usedLet = recent(n, opts.lettersGap, (d) => [d.letters.answer]);
+    const taken = [classic, succession.before, succession.answer, succession.after];
+    const letters = f.letters ?? shuffle(answerable, rand).find((l) => words[l.id] && !usedLet.has(l.id) && !usedCross.has(l.id) && !taken.includes(l.id))?.id;
+    if (!letters || !words[letters]) throw fail('Letters');
+
     // Timeline: five cards, none of today's other leaders.
-    const today = new Set([classic, succession.before, succession.answer, succession.after]);
+    const today = new Set([...taken, letters]);
     const usedTim = recent(n, opts.timelineGap, (d) => d.timeline.order);
     const cards = f.timeline
       ? f.timeline.map((id) => byId.get(id)!)
@@ -149,7 +161,7 @@ export function extendSchedule(
     if (!cards || cards.length !== 5 || cards.some((c) => !c)) throw fail('Timeline');
     const order = cards.slice().sort((a, b) => a.tookOffice - b.tookOffice).map((l) => l.id);
 
-    days.push({ n, classic: { answer: classic }, succession, timeline: { order, start: derange(order, rand) } });
+    days.push({ n, classic: { answer: classic }, letters: { answer: letters, word: words[letters]! }, succession, timeline: { order, start: derange(order, rand) } });
   }
   return days;
 }

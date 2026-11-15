@@ -62,7 +62,7 @@ function ReportForm() {
         <label htmlFor="rep-text">What should we fix?</label>
         <textarea id="rep-text" rows={4} placeholder="The date, role or country that looks wrong, and where you checked" value={text} onChange={(e) => setText(e.target.value)} required />
       </div>
-      <button type="submit" className="btn btn--md" style={{ alignSelf: 'flex-start', ['--btn-bg' as string]: 'var(--m1)' }} disabled={!ready}>
+      <button type="submit" className="btn btn--md" style={{ alignSelf: 'flex-start' }} disabled={!ready}>
         Send report
       </button>
       {!ready && <p className="muted" style={{ fontSize: 13 }}>Reports open as soon as a contact address is set.</p>}
@@ -108,11 +108,11 @@ export function ErrorScreen({ kind, onAction }: { kind: ErrorKind; onAction?: ()
       <h1 className="title">{title}</h1>
       <p>{text}</p>
       {kind === '404' ? (
-        <Link href="/" className="btn btn--md" style={{ ['--btn-bg' as string]: 'var(--m1)' }}>
+        <Link href="/" className="btn btn--md">
           {cta}
         </Link>
       ) : (
-        <button type="button" className="btn btn--md" style={{ ['--btn-bg' as string]: 'var(--m1)' }} onClick={onAction ?? (() => window.location.reload())}>
+        <button type="button" className="btn btn--md" onClick={onAction ?? (() => window.location.reload())}>
           {cta}
         </button>
       )}

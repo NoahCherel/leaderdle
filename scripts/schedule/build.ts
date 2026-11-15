@@ -12,14 +12,16 @@ const upTo = Number(process.argv.find((a) => a.startsWith('--upto='))?.split('='
 const leaders: Leader[] = read<{ leaders: Leader[] }>('public/data/leaders.json').leaders;
 const offices: Record<string, OfficeOut> = read('data/offices.json');
 const existing: DayPuzzle[] = read('data/schedule.json', []);
+const words: Record<string, string> = read('data/letters.json');
 const forced: Record<number, Forced> = read('data/schedule-forced.json', {});
 
-const days = extendSchedule(existing, upTo, leaders, offices, forced, {
+const days = extendSchedule(existing, upTo, leaders, offices, words, forced, {
   seed: 20261115,
-  classicGap: 240,
-  successionGap: 150,
+  classicGap: 120,
+  lettersGap: 90,
+  successionGap: 60,
   timelineGap: 14,
-  crossGap: 45,
+  crossGap: 14,
 });
 
 writeFileSync('data/schedule.json', JSON.stringify(days, null, 0).replace(/},{"n"/g, '},\n{"n"') + '\n');
@@ -27,4 +29,5 @@ mkdirSync('public/data/days', { recursive: true });
 for (const d of days) writeFileSync(`public/data/days/${d.n}.json`, JSON.stringify(d) + '\n');
 
 console.log(`schedule: ${existing.length} kept, ${days.length - existing.length} added, ${days.length} days`);
+console.log(`letters: ${Object.keys(words).length} words`);
 console.log(`pool: ${leaders.filter((l) => l.answerable).length} answerable, ${successionCandidates(leaders, offices).length} Succession triples`);

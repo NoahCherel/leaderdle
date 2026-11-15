@@ -22,7 +22,7 @@ interface Props {
 }
 
 /** Name field with suggestions, shared by Classic and Succession (PASSATION §6). */
-export function NameInput({ label, tried, search, onSubmit, color = 'var(--m1)', help = DEFAULT_HELP, initialQuery = '', initialOpen = false, scrollOnFocus = false }: Props) {
+export function NameInput({ label, tried, search, onSubmit, help = DEFAULT_HELP, initialQuery = '', initialOpen = false, scrollOnFocus = false }: Props) {
   const id = useId();
   const listId = `${id}-list`;
   const [q, setQ] = useState(initialQuery);
@@ -126,7 +126,7 @@ export function NameInput({ label, tried, search, onSubmit, color = 'var(--m1)',
           onBlur={() => setOpen(false)}
           onKeyDown={onKeyDown}
         />
-        <button type="button" className="btn btn--md" style={{ ['--btn-bg' as string]: color }} onClick={tryGuess}>
+        <button type="button" className="btn btn--md" onClick={tryGuess}>
           Guess
         </button>
         {open && (

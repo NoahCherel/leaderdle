@@ -4,6 +4,7 @@ import type { DayPuzzle } from '../data/schema';
 const puzzle: DayPuzzle = {
   n: 128,
   classic: { answer: 'mer' },
+  letters: { answer: 'oba', word: 'OBAMA' },
   succession: { before: 'sch', answer: 'mer', after: 'olz', years: '2005 – 2021', beforeYears: '1998 – 2005', afterYears: '2021 – 2025' },
   timeline: { order: ['lky', 'tha', 'man', 'mer', 'ard'], start: ['man', 'ard', 'lky', 'mer', 'tha'] },
 };
@@ -53,10 +54,29 @@ describe('guess', () => {
     expect(s.stats.classic).toMatchObject({ played: 1, wins: 0 });
     expect(s.streak.n).toBe(1);
   });
-  it('bonus modes do not touch the streak', () => {
+  it('any finished game counts for the day streak, once a day', () => {
     const s = run(started(), guess('succession', 'mer'));
     expect(s.stats.succession).toMatchObject({ played: 1, wins: 1 });
-    expect(s.streak.n).toBe(0);
+    expect(s.streak.n).toBe(1);
+    expect(run(s, guess('classic', 'mer')).streak.n).toBe(1);
+  });
+});
+
+describe('letters', () => {
+  const spell = (guess: string) => ({ type: 'letters' as const, n: 128, guess });
+  it('keeps a full guess and wins on the exact word', () => {
+    const s = run(started(), spell('ABOUT'), spell('OBAMA'));
+    expect(s.days[128]!.letters).toEqual(['ABOUT', 'OBAMA']);
+    expect(s.stats.letters).toMatchObject({ played: 1, wins: 1, dist: { 2: 1 } });
+  });
+  it('ignores a guess that does not fit the word', () => {
+    const s = run(started(), spell('OBAM'), spell('obama'), spell('OB MA'));
+    expect(s.days[128]!.letters).toEqual([]);
+  });
+  it('is lost after six wrong guesses, and takes no more', () => {
+    const s = run(started(), ...Array.from({ length: 7 }, () => spell('ABOUT')));
+    expect(s.days[128]!.letters).toHaveLength(6);
+    expect(s.stats.letters).toMatchObject({ played: 1, wins: 0 });
   });
 });
 
@@ -96,16 +116,16 @@ describe('Timeline', () => {
 
 describe('replace (another tab saved)', () => {
   it('takes the other tab’s state and keeps today loaded', () => {
-    const other = reducer(initialState(), { type: 'setting', key: 'light', value: true });
+    const other = reducer(initialState(), { type: 'setting', key: 'dark', value: true });
     const s = reducer(run(started(), guess('classic', 'lky')), { type: 'replace', state: other, puzzle });
-    expect(s.settings.light).toBe(true);
+    expect(s.settings.dark).toBe(true);
     expect(s.days[128]).toMatchObject({ classic: [] });
   });
 });
 
 describe('settings and data', () => {
   it('toggles a setting', () => {
-    expect(reducer(initialState(), { type: 'setting', key: 'light', value: true }).settings.light).toBe(true);
+    expect(reducer(initialState(), { type: 'setting', key: 'dark', value: true }).settings.dark).toBe(true);
   });
   it('clear erases games, streak and stats but keeps preferences', () => {
     let s = run(started(), guess('classic', 'mer'), { type: 'setting', key: 'cb', value: true }, { type: 'consent', value: 'no' }, { type: 'helpSeen', mode: 'classic' });

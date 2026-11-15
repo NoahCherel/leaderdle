@@ -31,7 +31,7 @@ export function recordResult(stats: ModeStats, puzzle: number, won: boolean, use
   };
 }
 
-/** The header streak: consecutive days with Classic finished, won or lost (PASSATION §9). */
+/** The header streak: consecutive days with at least one game finished, won or lost. */
 export function recordStreak(streak: Streak, puzzle: number): Streak {
   if (streak.last === puzzle) return streak;
   return { n: (streak.last === puzzle - 1 ? streak.n : 0) + 1, last: puzzle };

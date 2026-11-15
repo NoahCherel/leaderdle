@@ -62,7 +62,6 @@ export function Classic() {
           tried={day.classic}
           search={search}
           onSubmit={submit}
-          color="var(--m1)"
           initialQuery={scene.q ?? ''}
           initialOpen={!!scene.open}
           scrollOnFocus={phone}

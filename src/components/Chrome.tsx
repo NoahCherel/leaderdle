@@ -3,10 +3,8 @@ import { Link, useLocation } from 'wouter';
 import { useApp } from '../app/context';
 import { currentStreak } from '../game/stats';
 import { MODE_NAMES, MODES, type Mode } from '../game/types';
-import { IconFlame, IconHelp, IconSettings, IconStats } from './icons';
+import { IconHelp, IconSettings, IconStats } from './icons';
 import s from './ui.module.css';
-
-export const MODE_COLOR: Record<Mode, string> = { classic: 'var(--m1)', succession: 'var(--m2)', timeline: 'var(--m3)' };
 
 /** Mode shown on the current route, or Classic elsewhere. */
 export function useRouteMode(): Mode {
@@ -21,13 +19,14 @@ export function Header() {
   const streak = currentStreak(state.streak, n);
   return (
     <header className={s.header}>
+      <div className={s.headerIn}>
       <Link href="/" className={s.logo} aria-label="Leaderdle home">
         Leader<span className={s.logoMark}>dle</span>
       </Link>
       <div className={s.spacer} />
-      <div role="img" aria-label={`Streak: ${streak} ${streak === 1 ? 'day' : 'days'}`} className={s.streak}>
-        <IconFlame />
-        {streak}
+      <div role="img" aria-label={`Streak: ${streak} ${streak === 1 ? 'day' : 'days'}`} className={`${s.streak} ${streak ? s.streakOn : ''}`}>
+        <span>Streak</span>
+        <strong>{streak}</strong>
       </div>
       <button type="button" className="icon-btn" aria-label="How to play" onClick={() => openModal('help', mode)}>
         <IconHelp />
@@ -38,6 +37,7 @@ export function Header() {
       <button type="button" className="icon-btn" aria-label="Settings" onClick={() => openModal('settings', mode)}>
         <IconSettings />
       </button>
+      </div>
     </header>
   );
 }
@@ -47,12 +47,12 @@ export function ModePills({ current }: { current: Mode }) {
   return (
     <nav aria-label="Game modes" className={s.pills}>
       {MODES.map((m) => {
-        const cls = [s.pill, m === current && s.pillOn, m !== current && status[m].done && s.pillDone].filter(Boolean).join(' ');
+        const cls = [s.pill, m === current && s.pillOn, status[m].won && s.pillWon, status[m].lost && s.pillLost].filter(Boolean).join(' ');
         return (
-          <Link key={m} href={`/${m}`} className={cls} style={{ ['--mc' as string]: MODE_COLOR[m] }} aria-current={m === current ? 'page' : undefined}>
+          <Link key={m} href={`/${m}`} className={cls} aria-current={m === current ? 'page' : undefined}>
             <span aria-hidden="true" className={s.pillDot} />
             {MODE_NAMES[m]}
-            {status[m].done && <span className="sr-only">, finished</span>}
+            {status[m].done && <span className="sr-only">, {status[m].won ? 'solved' : 'missed'}</span>}
           </Link>
         );
       })}

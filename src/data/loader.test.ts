@@ -6,6 +6,7 @@ import type { DayPuzzle } from './schema';
 const puzzle: DayPuzzle = {
   n: 128,
   classic: { answer: 'mer' },
+  letters: { answer: 'oba', word: 'OBAMA' },
   succession: { before: 'tha', answer: 'mer', after: 'ard', years: '2005 – 2021', beforeYears: '1979 – 1990', afterYears: '2017 – 2023' },
   timeline: { order: ['lky', 'tha', 'man', 'mer', 'ard'], start: ['man', 'ard', 'lky', 'mer', 'tha'] },
 };

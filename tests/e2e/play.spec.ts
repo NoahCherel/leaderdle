@@ -8,7 +8,7 @@ test('first visit: home invites to play Classic, help opens on first game visit'
   await expect(page.getByRole('region', { name: 'Cookie consent' })).toBeVisible();
   await page.getByRole('button', { name: 'Decline' }).click();
   await expect(page.getByRole('region', { name: 'Cookie consent' })).toBeHidden();
-  await page.getByRole('link', { name: 'Play Classic' }).click();
+  await page.getByRole('link', { name: 'Play: Classic' }).click();
   await expect(page).toHaveURL(/\/classic$/);
   await expect(page.getByRole('heading', { name: 'How to play Classic' })).toBeVisible();
   await closeHelp(page);
@@ -36,7 +36,7 @@ test('Classic: win, share, stats, reload keeps the result', async ({ page, conte
   await expect(page.getByText('Copied to clipboard')).toBeVisible();
   // The Windows clipboard turns line breaks into CRLF.
   const text = (await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, '\n');
-  expect(text).toBe('Leaderdle #128 · Classic 2/8\n🟨🟩⬆️⬆️🟨\n🟩🟩🟩🟩🟩\nleaderdle.com');
+  expect(text).toBe('Leaderdle #128 · Classic 2/8\n🟧🟩⬆️⬆️🟧\n🟩🟩🟩🟩🟩\nleaderdle.com');
 
   await page.reload();
   await expect(page.getByRole('heading', { name: 'You got it!' })).toBeVisible();
@@ -50,8 +50,8 @@ test('Classic: win, share, stats, reload keeps the result', async ({ page, conte
   await expect(stats).toBeHidden();
   await expect(page.getByRole('button', { name: 'Statistics' })).toBeFocused();
 
-  await page.getByRole('link', { name: 'Next up: Succession' }).click();
-  await expect(page).toHaveURL(/\/succession$/);
+  await page.getByRole('link', { name: 'Next up: Letters' }).click();
+  await expect(page).toHaveURL(/\/letters$/);
 });
 
 test('Classic: invalid entries explain themselves', async ({ page }) => {
@@ -71,7 +71,7 @@ test('Classic: hint after five misses, loss reveals the answer', async ({ page }
   await page.getByRole('button', { name: 'Reveal initials' }).click();
   await expect(page.getByText('Initials:')).toContainText('A. M.');
   for (const n of ['Obama', 'Blair', 'Kohl']) await guess(page, n);
-  await expect(page.getByRole('heading', { name: 'So close!' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Not this time' })).toBeVisible();
   await expect(page.getByText('Out of guesses. The answer was Angela Merkel.')).toBeVisible();
   await expect(page.getByRole('img', { name: 'Initials hint used' })).toBeVisible();
 });
@@ -108,15 +108,17 @@ test('Timeline: keyboard buttons, locked cards, three checks', async ({ page }) 
   await expect(page.getByRole('region', { name: 'The right order' })).toContainText('1959');
 });
 
-test('the day summary appears when all three are done', async ({ page }) => {
+test('the day summary appears when all four are done, and the rules open only once', async ({ page }) => {
   await openAt(page, '/classic');
   await closeHelp(page);
   await guess(page, 'Merkel');
+  await page.getByRole('link', { name: 'Next up: Letters' }).click();
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await page.keyboard.type('obama');
+  await page.keyboard.press('Enter');
   await page.getByRole('link', { name: 'Next up: Succession' }).click();
-  await closeHelp(page);
   await guess(page, 'Merkel', 'Who governed in between?');
   await page.getByRole('link', { name: 'Next up: Timeline' }).click();
-  await closeHelp(page);
   // Start: Mandela, Ardern, Lee Kuan Yew, Merkel, Thatcher. Each check needs a new order.
   const check = page.getByRole('button', { name: 'Check my order' });
   await check.click();
@@ -126,8 +128,8 @@ test('the day summary appears when all three are done', async ({ page }) => {
   await page.getByRole('button', { name: 'Move Jacinda Ardern down' }).click();
   await check.click();
   await page.getByRole('link', { name: "See today's summary" }).click();
-  await expect(page.getByRole('heading', { name: 'Day complete!' })).toBeVisible();
-  await expect(page.getByText('Classic 1/8 · Succession 1/5 · Timeline X/3')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Day complete' })).toBeVisible();
+  await expect(page.getByText('Classic 1/8 · Letters 1/6 · Succession 1/5 · Timeline X/3')).toBeVisible();
 });
 
 test('a game started before midnight stays on its day until reload', async ({ page }) => {
@@ -164,13 +166,13 @@ test('works without storage (private browsing)', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'You got it!' })).toBeVisible();
 });
 
-test('settings: light theme, colorblind colors, clear data', async ({ page }) => {
+test('settings: dark theme, colorblind colors, clear data', async ({ page }) => {
   await openAt(page, '/classic');
   await closeHelp(page);
   await guess(page, 'Merkel');
   await page.getByRole('button', { name: 'Settings' }).click();
-  await page.getByRole('switch', { name: 'Light theme' }).click();
-  await expect(page.locator('html')).toHaveClass(/th-light/);
+  await page.getByRole('switch', { name: 'Dark theme' }).click();
+  await expect(page.locator('html')).toHaveClass(/th-dark/);
   await page.getByRole('switch', { name: 'Colorblind colors' }).click();
   await expect(page.locator('html')).toHaveClass(/cb/);
   await page.getByRole('button', { name: 'Clear' }).click();
@@ -178,7 +180,7 @@ test('settings: light theme, colorblind colors, clear data', async ({ page }) =>
   await page.getByRole('button', { name: 'Done' }).click();
   await expect(page.getByRole('combobox')).toBeVisible();
   await page.reload();
-  await expect(page.locator('html')).toHaveClass(/th-light/);
+  await expect(page.locator('html')).toHaveClass(/th-dark/);
 });
 
 test('unknown pages show the 404 screen', async ({ page }) => {
@@ -188,16 +190,23 @@ test('unknown pages show the 404 screen', async ({ page }) => {
   await expect(page.getByRole('heading', { name: "Today's puzzles" })).toBeVisible();
 });
 
-for (const [name, path] of [['home', '/'], ['classic', '/classic'], ['timeline', '/timeline'], ['privacy', '/privacy']] as const) {
+for (const [name, path] of [['home', '/'], ['classic', '/classic'], ['letters', '/letters'], ['succession', '/succession'], ['timeline', '/timeline'], ['privacy', '/privacy']] as const) {
   for (const theme of ['dark', 'light'] as const) {
     test(`axe: ${name} (${theme}) has no violations`, async ({ page }) => {
       await useSampleData(page);
       await page.clock.install({ time: DAY_128 });
-      await page.addInitScript((light) => {
-        localStorage.setItem('leaderdle', JSON.stringify({ v: 2, settings: { light, cb: false, reduce: true }, consent: 'no', helpSeen: { classic: true, succession: true, timeline: true }, stats: {}, streak: { n: 0, last: 0 }, days: {} }));
-      }, theme === 'light');
+      await page.addInitScript((dark) => {
+        localStorage.setItem('leaderdle', JSON.stringify({ v: 3, settings: { dark, cb: false, reduce: true }, consent: 'no', helpSeen: { classic: true }, stats: {}, streak: { n: 0, last: 0 }, days: {} }));
+      }, theme === 'dark');
       await page.goto(path);
+      await expect(page.locator('html')).toHaveClass(theme === 'dark' ? /th-dark/ : /th-light/);
       if (path === '/classic') await guess(page, 'Thatcher');
+      if (path === '/succession') await guess(page, 'Kohl', 'Who governed in between?');
+      if (path === '/letters') {
+        await page.keyboard.type('about');
+        await page.keyboard.press('Enter');
+        await page.keyboard.type('ob');
+      }
       await expect(page.locator('main')).toBeVisible();
       const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
       expect(results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
@@ -249,11 +258,69 @@ test('the win celebration plays once, not again when coming back to the mode', a
   await openAt(page, '/classic');
   await closeHelp(page);
   await guess(page, 'Merkel');
-  await expect(page.locator('[class*="fall"]').first()).toBeAttached();
+  await expect(page.locator('[class*="stampIn"]')).toBeAttached();
   await page.getByRole('link', { name: 'Succession', exact: true }).click();
-  await closeHelp(page);
   await page.getByRole('link', { name: /^Classic/ }).click();
   await expect(page.getByRole('heading', { name: 'You got it!' })).toBeVisible();
-  await expect(page.locator('[class*="fall"]')).toHaveCount(0);
+  await expect(page.locator('[class*="stampIn"]')).toHaveCount(0);
   await expect(page.locator('[class*="flip"]')).toHaveCount(0);
+});
+
+test('Letters: type any letters, colors follow Wordle rules, win and share', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await openAt(page, '/letters');
+  await closeHelp(page);
+  await expect(page.getByText('5 letters')).toBeVisible();
+
+  // An unfinished row is refused and costs nothing.
+  await page.keyboard.type('ab');
+  await page.keyboard.press('Enter');
+  await expect(page.getByText('Fill all 5 letters first.')).toBeVisible();
+  await expect(page.getByText('6 guesses left')).toBeVisible();
+  await page.keyboard.press('Backspace');
+  await page.keyboard.press('Backspace');
+
+  // ABOUT against OBAMA: A and O are elsewhere, B is in place, U and T are not in the name.
+  await page.keyboard.type('about');
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('group', { name: 'Guess 1: A wrong place, B right place, O wrong place, U not in the name, T not in the name' })).toBeVisible();
+  await expect(page.getByText('5 guesses left')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'B, right place' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'U, not in the name' })).toBeVisible();
+
+  // The on-screen keyboard does the same as the real one.
+  for (const k of ['O', 'B', 'A', 'M', 'A']) await page.getByRole('button', { name: new RegExp('^' + k + '($|,)') }).click();
+  await page.getByRole('button', { name: 'Enter' }).click();
+  await expect(page.getByRole('heading', { name: 'You got it!' })).toBeVisible();
+  await expect(page.getByText('Spelled in 2 of 6 guesses')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Barack Obama', level: 3 })).toBeVisible();
+  await expect(page.getByRole('group', { name: 'Keyboard' })).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Share result' }).click();
+  const text = (await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, '\n');
+  expect(text).toBe('Leaderdle #128 · Letters 2/6\n🟧🟩🟧⬛⬛\n🟩🟩🟩🟩🟩\nleaderdle.com');
+
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'You got it!' })).toBeVisible();
+});
+
+test('Letters: clues unlock after two and four misses, a loss shows the name', async ({ page }) => {
+  await openAt(page, '/letters');
+  await closeHelp(page);
+  const miss = async () => {
+    await page.keyboard.type('stern');
+    await page.keyboard.press('Enter');
+  };
+  await miss();
+  await expect(page.getByText('Unlocks after miss 2')).toBeVisible();
+  await miss();
+  await expect(page.getByText('North America')).toBeVisible();
+  await expect(page.getByText('Unlocks after miss 4')).toBeVisible();
+  await miss();
+  await miss();
+  await expect(page.getByText('United States')).toBeVisible();
+  await miss();
+  await miss();
+  await expect(page.getByRole('heading', { name: 'Not this time' })).toBeVisible();
+  await expect(page.getByText('Out of guesses. The name was OBAMA.')).toBeVisible();
 });

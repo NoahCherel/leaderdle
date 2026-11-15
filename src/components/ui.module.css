@@ -1,89 +1,99 @@
-/* Header */
+/* Header: a masthead with a double rule. */
 .header {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+.headerIn {
   display: flex;
   align-items: center;
-  gap: 4px;
-  max-width: var(--max);
-  height: 68px;
-  margin: 0 auto;
-  padding: 0 12px;
+  gap: 2px;
+  height: 64px;
+  border-bottom: 4px double var(--line);
 }
 .logo {
   display: flex;
   align-items: center;
-  gap: 4px;
   height: 44px;
-  padding: 0 6px 0 0;
   color: var(--text);
   font-family: var(--font-title);
   font-weight: 700;
-  font-size: 28px;
+  font-size: 32px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   text-decoration: none;
 }
 .logoMark {
-  display: inline-block;
-  padding: 0 7px;
-  background: var(--m1);
-  color: var(--ink);
-  border: 2px solid var(--line);
-  border-radius: 10px;
-  box-shadow: var(--sh-sm);
-  transform: rotate(-4deg);
+  color: var(--accent);
 }
 .spacer {
   flex-grow: 1;
 }
 .streak {
   display: flex;
-  align-items: center;
-  gap: 5px;
-  height: 34px;
-  padding: 0 12px 0 9px;
-  background: var(--surf);
-  border: 2px solid var(--line);
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 15px;
+  align-items: baseline;
+  gap: 6px;
+  margin-right: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.streak strong {
+  font-family: var(--font-title);
+  font-size: 24px;
+  line-height: 1;
+  color: var(--text);
   font-variant-numeric: tabular-nums;
 }
+.streakOn strong {
+  color: var(--accent);
+}
 
-/* Mode pills */
+/* Game tabs: all four games and how each stands today. */
 .pills {
   display: flex;
+  gap: 4px 22px;
   flex-wrap: wrap;
-  gap: 10px;
+  border-bottom: 1px solid var(--line);
 }
 .pill {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   height: 44px;
-  padding: 0 20px;
-  background: var(--surf);
-  color: var(--text);
-  border: 2px solid var(--line);
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 15px;
+  margin-bottom: -1px;
+  color: var(--muted);
+  border-bottom: 4px solid transparent;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   text-decoration: none;
 }
+.pill:hover {
+  color: var(--text);
+}
 .pillOn {
-  background: var(--mc);
-  color: var(--ink);
-  box-shadow: var(--sh-sm);
+  color: var(--text);
+  border-bottom-color: var(--accent);
 }
 .pillDot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid var(--line);
-  background: var(--mc);
+  width: 12px;
+  height: 12px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
 }
-.pillOn .pillDot {
-  background: var(--ink);
+.pillWon .pillDot {
+  background: var(--g);
+  border-color: var(--line);
 }
-.pillDone .pillDot {
-  background: var(--paper);
+.pillLost .pillDot {
+  background: var(--text);
+  border-color: var(--text);
 }
 
 /* Modal */
@@ -94,15 +104,11 @@
   padding: 0;
   color: var(--text);
   background: var(--surf);
-  border: 2px solid var(--line);
-  border-radius: 20px;
-  box-shadow: 6px 6px 0 var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
 }
 .modal::backdrop {
-  background: rgba(10, 9, 18, 0.78);
-}
-:global(.th-light) .modal::backdrop {
-  background: rgba(28, 26, 43, 0.6);
+  background: var(--veil);
 }
 .modalBody {
   padding: 24px;
@@ -111,7 +117,7 @@
   gap: 14px;
 }
 .modalTitle {
-  font-size: 28px;
+  font-size: 34px;
 }
 
 /* Legend rows in help */
@@ -134,8 +140,8 @@
   height: 44px;
   background: var(--sw);
   color: var(--ink);
-  border: 2px solid var(--line);
-  border-radius: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
 }
 .mini {
   display: flex;
@@ -150,8 +156,8 @@
   height: 44px;
   background: var(--paper);
   color: var(--ink);
-  border: 2px solid var(--line);
-  border-radius: 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
   font-weight: 700;
   font-size: 18px;
 }
@@ -168,17 +174,20 @@
 }
 .tab {
   height: 44px;
-  padding: 0 16px;
-  background: var(--ground);
+  padding: 0 14px;
+  background: transparent;
   color: var(--text);
-  border: 2px solid var(--line);
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 .tabOn {
-  background: var(--mc);
-  color: var(--ink);
+  background: var(--text);
+  color: var(--ground);
 }
 .figures {
   display: grid;
@@ -191,7 +200,9 @@
   flex-direction: column;
 }
 .figure strong {
-  font-size: 28px;
+  font-family: var(--font-title);
+  font-size: 36px;
+  line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
 .figure span {
@@ -222,7 +233,7 @@
   padding: 0 8px;
   background: var(--x);
   color: var(--xt);
-  border-radius: 6px;
+  border-radius: var(--r);
   font-size: 13px;
 }
 .barOn {
@@ -249,8 +260,8 @@
   height: 44px;
   background: var(--ground);
   color: var(--text);
-  border: 2px solid var(--line);
-  border-radius: 999px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
   font-weight: 700;
   font-size: 15px;
 }
@@ -264,9 +275,8 @@
   padding: 0 16px;
   background: var(--paper);
   color: var(--ink);
-  border: 2px solid var(--line);
-  border-radius: 12px;
-  box-shadow: var(--sh-sm);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
   font-weight: 700;
   font-size: 15px;
 }
@@ -281,9 +291,8 @@
   padding: 12px 20px;
   background: var(--paper);
   color: var(--ink);
-  border: 2px solid var(--line);
-  border-radius: 999px;
-  box-shadow: var(--sh-md);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
   font-weight: 700;
   white-space: nowrap;
 }
@@ -307,8 +316,8 @@
   align-items: center;
   justify-content: center;
   max-width: 100%;
-  border: 2px dashed var(--muted);
-  border-radius: 8px;
+  border: 1px dashed var(--muted);
+  border-radius: var(--r);
   color: var(--muted);
   font-size: 13px;
 }
@@ -353,9 +362,8 @@
   padding: 14px 18px;
   color: var(--text);
   background: var(--surf);
-  border: 2px solid var(--line);
-  border-radius: 16px;
-  box-shadow: var(--sh-lg);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
 }
 .consent p {
   flex: 1 1 280px;
@@ -375,8 +383,8 @@
   width: 48px;
   height: 36px;
   overflow: hidden;
-  border: 2px solid var(--line);
-  border-radius: 5px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
   background: var(--x);
   object-fit: cover;
 }
@@ -406,9 +414,31 @@
 
 @media (max-width: 619.98px) {
   .logo {
-    font-size: 21px;
+    font-size: 26px;
   }
-  .header {
-    gap: 0;
+  .header :global(.icon-btn) {
+    width: 40px;
+  }
+  .streak {
+    margin-right: 2px;
+  }
+  /* Four tabs on one line: the state mark becomes a bar above the name. */
+  .pills {
+    justify-content: space-between;
+    column-gap: 8px;
+    flex-wrap: nowrap;
+  }
+  .pill {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    gap: 5px;
+    padding-bottom: 6px;
+    font-size: 17px;
+  }
+  .pillDot {
+    width: auto;
+    height: 5px;
+    border-radius: 0;
   }
 }

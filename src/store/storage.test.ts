@@ -25,7 +25,7 @@ describe('storage', () => {
   it('round-trips the state', () => {
     const backend = fakeStorage();
     const store = createStorage(backend);
-    const s = { ...initialState(), settings: { light: true, cb: false, reduce: true } };
+    const s = { ...initialState(), settings: { dark: true, cb: false, reduce: true } };
     store.save(s);
     expect(backend.data.has(STORAGE_KEY)).toBe(true);
     expect(createStorage(backend).load()).toEqual(s);

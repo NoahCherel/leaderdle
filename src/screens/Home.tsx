@@ -1,8 +1,7 @@
 import { Link } from 'wouter';
 import { useApp } from '../app/context';
 import { useCountdown } from '../app/hooks';
-import { AdSlot, Footer, MODE_COLOR } from '../components/Chrome';
-import { IconCheck, IconUp, IconWave } from '../components/icons';
+import { AdSlot, Footer } from '../components/Chrome';
 import { currentStreak } from '../game/stats';
 import type { Status } from '../game/status';
 import { MAX, MODE_NAMES, MODES, type Mode } from '../game/types';
@@ -14,169 +13,115 @@ export function stateLabel(mode: Mode, st: Status): string {
   return st.used ? `In progress · ${st.used}/${MAX[mode]}` : 'Not played yet';
 }
 
-const cta = (st: Status) => (st.done ? 'See result' : st.used ? 'Keep going' : 'Play');
+const RULE: Record<Mode, string> = {
+  classic: 'Name a leader. Five clues tell you how close you are.',
+  letters: 'Spell the name, letter by letter.',
+  succession: 'Who governed in between?',
+  timeline: 'Put five leaders in order.',
+};
+const TRIES: Record<Mode, string> = { classic: '8 tries', letters: '6 tries', succession: '5 tries', timeline: '3 checks' };
 
-function BonusCard({ mode, text, cells }: { mode: Mode; text: string; cells: Array<string | null> }) {
-  const { status } = useApp();
-  const st = status[mode];
-  return (
-    <section aria-label={MODE_NAMES[mode]} className={s.mode} style={{ ['--mc' as string]: MODE_COLOR[mode] }}>
-      <div className={s.modeTop}>
-        <span className="eyebrow">Bonus</span>
-        <span className="badge">{stateLabel(mode, st)}</span>
-      </div>
-      <h2 className="title">{MODE_NAMES[mode]}</h2>
-      <p>{text}</p>
-      <div aria-hidden="true" className={s.mini}>
-        {cells.map((c, i) => (
-          <span key={i} className={c === '?' ? s.dark : undefined}>
-            {c}
-          </span>
-        ))}
-      </div>
-      <Link href={`/${mode}`} className={`btn ${s.cta}`}>
-        {cta(st)}
-      </Link>
-    </section>
-  );
-}
+const dateline = (d: Date) => d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
 export function Home() {
-  const { status, state, n, openModal } = useApp();
+  const { status, state, n, openModal, byId } = useApp();
   const count = useCountdown();
-  const c = status.classic;
-  const allDone = MODES.every((m) => status[m].done);
+  const done = MODES.filter((m) => status[m].done).length;
+  const allDone = done === MODES.length;
   const perfect = MODES.every((m) => status[m].won);
-  const h = state.stats.classic;
+  const next = MODES.find((m) => !status[m].done);
+  const started = MODES.some((m) => status[m].used > 0);
   const streak = currentStreak(state.streak, n);
+  const played = MODES.reduce((sum, m) => sum + state.stats[m].played, 0);
+  const wins = MODES.reduce((sum, m) => sum + state.stats[m].wins, 0);
+  const yesterday = state.days[n - 1]?.puzzle.classic.answer;
 
   return (
     <div className={s.layout}>
       <main className={s.main}>
         <div className={s.intro}>
-          <div className={s.introRow}>
-            <h1 className="title">Today's puzzles</h1>
-            <span className={s.no}>#{n}</span>
-          </div>
-          <p className={s.lead}>Guess the world leader from five clues. Same puzzle for everyone, new ones at midnight.</p>
+          <p className={`eyebrow ${s.dateline}`}>
+            No. {n} · {dateline(new Date())}
+          </p>
+          <h1 className="title">Today's puzzles</h1>
+          <p className={s.lead}>Four short puzzles about world leaders since 1900. The same for everyone, new ones at midnight.</p>
         </div>
-        {allDone && (
-          <section aria-label="Day complete" className={`card ${s.complete}`}>
-            <div>
-              <strong>Day complete!</strong>
-              <br />
-              <span className="muted">All three puzzles are done. Come back after midnight.</span>
-            </div>
-            <Link href="/summary" className="btn" style={{ ['--btn-bg' as string]: 'var(--g)' }}>
+
+        <div className={s.go}>
+          {next ? (
+            <Link href={`/${next}`} className="btn btn--lg">
+              {status[next].used ? 'Keep going' : started ? 'Next' : 'Play'}: {MODE_NAMES[next]}
+            </Link>
+          ) : (
+            <Link href="/summary" className="btn btn--lg">
               See today's summary
             </Link>
-          </section>
-        )}
-        <section aria-label="Classic" className={`${s.mode} ${s.classic}`} style={{ ['--mc' as string]: 'var(--m1)' }}>
-          <div className={s.modeTop}>
-            <span className="eyebrow">Main game</span>
-            <span className={`badge ${s.badge}`}>{stateLabel('classic', c)}</span>
-          </div>
-          <h2 className="title">Classic</h2>
-          <p>Name a leader. Five tiles tell you how close you are. You get 8 tries.</p>
-          <div aria-hidden="true" className={s.qs}>
-            {[0, 1, 2, 3, 4].map((i) => (
-              <span key={i}>?</span>
-            ))}
-          </div>
-          <p className={s.cols}>Country · Role · Took office · Years in office · Age at start</p>
-          <Link href="/classic" className={`btn btn--lg ${s.cta}`}>
-            {c.done ? 'See result' : c.used ? 'Keep guessing' : 'Play Classic'}
-          </Link>
-        </section>
-        <div className={s.bonus}>
-          <BonusCard mode="succession" text="Who governed in between? 5 tries." cells={[null, '?', null]} />
-          <BonusCard mode="timeline" text="Put 5 leaders in order. 3 checks." cells={['3', '1', '5', '2', '4']} />
+          )}
+          <p aria-live="polite" className={s.progress}>
+            <span aria-hidden="true" className={s.pips}>
+              {MODES.map((m) => (
+                <span key={m} className={status[m].won ? s.pipWon : status[m].lost ? s.pipLost : undefined} />
+              ))}
+            </span>
+            {allDone ? (perfect ? 'Perfect day: four out of four.' : 'Day complete. Come back after midnight.') : `${done} of ${MODES.length} done`}
+          </p>
         </div>
-        <section aria-label="How it works" className={`card ${s.how}`}>
-          <div className={s.howHead}>
-            <h2 className="title">How it works</h2>
-            <button type="button" className="btn btn--outline" onClick={() => openModal('help', 'classic')}>
-              Full rules
-            </button>
-          </div>
-          <div className={s.howGrid}>
-            <div className={s.howItem}>
-              <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--g)' }}>
-                <IconCheck size={20} />
-              </span>
-              <span>
-                <strong>Correct</strong>
-                <br />
-                <span className="muted">An exact match with the answer.</span>
-              </span>
-            </div>
-            <div className={s.howItem}>
-              <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--y)' }}>
-                <IconWave size={20} />
-              </span>
-              <span>
-                <strong>Close</strong>
-                <br />
-                <span className="muted">Same continent, a shared role, or a near miss.</span>
-              </span>
-            </div>
-            <div className={s.howItem}>
-              <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--x)', color: 'var(--xt)' }}>
-                <IconUp size={20} weight={4} />
-              </span>
-              <span>
-                <strong>No match</strong>
-                <br />
-                <span className="muted">Arrows point toward the answer.</span>
-              </span>
-            </div>
-          </div>
-        </section>
-        <Footer />
+
+        <ol className={s.docket}>
+          {MODES.map((m, i) => {
+            const st = status[m];
+            return (
+              <li key={m}>
+                <Link href={`/${m}`} className={s.row}>
+                  <span aria-hidden="true" className={`eyebrow ${s.idx}`}>
+                    0{i + 1}
+                  </span>
+                  <span className={s.what}>
+                    <strong className="title">{MODE_NAMES[m]}</strong>
+                    <span className={s.rule}>{RULE[m]}</span>
+                  </span>
+                  <span className={`eyebrow ${s.state} ${st.won ? s.won : st.lost ? s.lost : ''}`}>{st.used || st.done ? stateLabel(m, st) : TRIES[m]}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ol>
       </main>
       <aside className={s.aside}>
-        <section aria-label="Today" className={`card ${s.side}`}>
-          <h2 className="title">Today</h2>
-          {MODES.map((m) => (
-            <div key={m} className={s.today}>
-              <span aria-hidden="true" className="dot" style={{ ['--dot' as string]: MODE_COLOR[m] }} />
-              <strong>{MODE_NAMES[m]}</strong>
-              <span>{stateLabel(m, status[m])}</span>
-            </div>
-          ))}
-          <p className={s.small}>{perfect ? 'Perfect day! All three solved.' : 'Solve all three in one day to earn the Perfect day badge.'}</p>
-        </section>
-        <section aria-label="Your stats" className={`card ${s.side}`} style={{ gap: 12 }}>
-          <h2 className="title">Your Classic stats</h2>
-          <div className={s.figs}>
+        <section aria-label="Your record" className={s.side}>
+          <h2 className="eyebrow">Your record</h2>
+          <dl className={s.figs}>
             <div>
-              <strong>{h.played}</strong>
-              <span>Played</span>
+              <dt>Day streak</dt>
+              <dd>{streak}</dd>
             </div>
             <div>
-              <strong>{h.played ? `${Math.round((100 * h.wins) / h.played)}%` : '0%'}</strong>
-              <span>Win rate</span>
+              <dt>Games played</dt>
+              <dd>{played}</dd>
             </div>
             <div>
-              <strong>{streak}</strong>
-              <span>Day streak</span>
+              <dt>Solved</dt>
+              <dd>{played ? `${Math.round((100 * wins) / played)}%` : '–'}</dd>
             </div>
-            <div>
-              <strong>{h.best}</strong>
-              <span>Best win streak</span>
-            </div>
-          </div>
+          </dl>
           <button type="button" className="btn btn--outline" onClick={() => openModal('stats', 'classic')}>
             See all stats
           </button>
         </section>
-        <div className={`card ${s.count}`}>
-          <span>Next puzzles in</span>
-          <strong>{count}</strong>
-        </div>
+        <section aria-label="Next puzzles" className={s.side}>
+          <h2 className="eyebrow">Next puzzles in</h2>
+          <strong className={s.count}>{count}</strong>
+          {yesterday && (
+            <p className={s.small}>
+              Yesterday's Classic was <strong>{byId(yesterday).name}</strong>.
+            </p>
+          )}
+        </section>
         <AdSlot kind="box" />
       </aside>
+      <div className={s.foot}>
+        <Footer />
+      </div>
     </div>
   );
 }

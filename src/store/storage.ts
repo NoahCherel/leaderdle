@@ -14,7 +14,7 @@ export interface Store {
 }
 
 const valid = (d: unknown): d is GameState =>
-  !!d && typeof d === 'object' && (d as GameState).v === 2 && typeof (d as GameState).days === 'object' && !!(d as GameState).stats;
+  !!d && typeof d === 'object' && (d as GameState).v === 3 && typeof (d as GameState).days === 'object' && !!(d as GameState).stats;
 
 /**
  * Saves the game in the browser. When storage is blocked (private browsing, disabled cookies)

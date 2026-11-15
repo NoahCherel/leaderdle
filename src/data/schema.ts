@@ -36,6 +36,11 @@ const five = z.array(z.string()).length(5);
 export const DayPuzzleSchema = z.object({
   n: z.number().int().min(1),
   classic: z.object({ answer: z.string() }),
+  letters: z.object({
+    answer: z.string(),
+    /** The name to spell: capital letters, single spaces between words. */
+    word: z.string().regex(/^[A-Z]+( [A-Z]+)*$/),
+  }),
   succession: z.object({
     before: z.string(),
     answer: z.string(),

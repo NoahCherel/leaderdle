@@ -20,8 +20,10 @@ const OFFICES: Record<string, OfficeOut> = Object.fromEntries(
     },
   ]),
 );
-const OPTS: ScheduleOptions = { seed: 7, classicGap: 60, successionGap: 40, timelineGap: 5, crossGap: 10 };
-const make = (upTo: number, existing = [], forced = {}) => extendSchedule(existing, upTo, LEADERS, OFFICES, forced, OPTS);
+// A word for half of the answerable leaders.
+const WORDS: Record<string, string> = Object.fromEntries(LEADERS.filter((l, i) => l.answerable && i % 2 === 0).map((l) => [l.id, `NAME ${'ABCDEFGHIJ'[Number(l.id.slice(1)) % 10]}`]));
+const OPTS: ScheduleOptions = { seed: 7, classicGap: 60, lettersGap: 30, successionGap: 40, timelineGap: 5, crossGap: 10 };
+const make = (upTo: number, existing = [], forced = {}) => extendSchedule(existing, upTo, LEADERS, OFFICES, WORDS, forced, OPTS);
 const byId = new Map(LEADERS.map((l) => [l.id, l]));
 
 describe('successionCandidates', () => {
@@ -121,12 +123,22 @@ describe('extendSchedule', () => {
     for (const d of days) expect(keys.has(`${d.succession.before}>${d.succession.answer}>${d.succession.after}`)).toBe(true);
   });
 
+  it('Letters: a leader with a word, different from every other leader of the day, not repeated within the gap', () => {
+    days.forEach((d, i) => {
+      expect(d.letters.word).toBe(WORDS[d.letters.answer]);
+      const others = [d.classic.answer, d.succession.before, d.succession.answer, d.succession.after, ...d.timeline.order];
+      expect(others).not.toContain(d.letters.answer);
+      const recent = days.slice(Math.max(0, i - OPTS.lettersGap), i).map((x) => x.letters.answer);
+      expect(recent).not.toContain(d.letters.answer);
+    });
+  });
+
   it('applies forced picks', () => {
     const forced = { 3: { classic: 'Q42' } };
     expect(make(5, [], forced)[2]!.classic.answer).toBe('Q42');
   });
 
   it('fails clearly when the pool is too small', () => {
-    expect(() => extendSchedule([], 30, LEADERS.slice(0, 12), OFFICES, {}, OPTS)).toThrow(/day 1|not enough/i);
+    expect(() => extendSchedule([], 30, LEADERS.slice(0, 12), OFFICES, WORDS, {}, OPTS)).toThrow(/day 1|not enough/i);
   });
 });

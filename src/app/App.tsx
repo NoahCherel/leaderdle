@@ -4,6 +4,7 @@ import { ConsentBanner, Header, Toast } from '../components/Chrome';
 import { Modals } from '../components/Modals';
 import { Classic } from '../screens/Classic';
 import { Home } from '../screens/Home';
+import { Letters } from '../screens/Letters';
 import { ErrorScreen, Page } from '../screens/Pages';
 import { Succession } from '../screens/Succession';
 import { Summary } from '../screens/Summary';
@@ -38,7 +39,7 @@ function NewDayBanner() {
     <div className="page" style={{ paddingTop: 0, paddingBottom: 0 }}>
       <p role="status" className="card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, padding: '12px 16px', boxShadow: 'var(--sh-sm)', fontWeight: 700 }}>
         New puzzles are ready.
-        <button type="button" className="btn" style={{ ['--btn-bg' as string]: 'var(--g)', height: 44 }} onClick={() => window.location.reload()}>
+        <button type="button" className="btn" style={{ height: 44 }} onClick={() => window.location.reload()}>
           Load them
         </button>
       </p>
@@ -49,6 +50,7 @@ function NewDayBanner() {
 const TITLES: Record<string, string> = {
   '/': 'Leaderdle: guess the world leader',
   '/classic': 'Classic · Leaderdle',
+  '/letters': 'Letters · Leaderdle',
   '/succession': 'Succession · Leaderdle',
   '/timeline': 'Timeline · Leaderdle',
   '/summary': 'Today’s summary · Leaderdle',
@@ -59,15 +61,15 @@ const TITLES: Record<string, string> = {
 };
 
 /** Applies theme, colorblind and reduced-motion classes to <html>. */
-export function useThemeClasses(settings: { light: boolean; cb: boolean; reduce: boolean }) {
+export function useThemeClasses(settings: { dark: boolean; cb: boolean; reduce: boolean }) {
   useEffect(() => {
     const c = document.documentElement.classList;
-    c.toggle('th-light', settings.light);
-    c.toggle('th-dark', !settings.light);
+    c.toggle('th-dark', settings.dark);
+    c.toggle('th-light', !settings.dark);
     c.toggle('cb', settings.cb);
     c.toggle('reduce', settings.reduce);
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', settings.light ? '#FBF3E4' : '#1C1A2B');
-  }, [settings.light, settings.cb, settings.reduce]);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', settings.dark ? '#171613' : '#F3EEE3');
+  }, [settings.dark, settings.cb, settings.reduce]);
 }
 
 export function App() {
@@ -88,6 +90,7 @@ export function App() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/classic" component={Classic} />
+        <Route path="/letters" component={Letters} />
         <Route path="/succession" component={Succession} />
         <Route path="/timeline" component={Timeline} />
         <Route path="/summary" component={Summary} />
