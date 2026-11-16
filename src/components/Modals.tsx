@@ -109,8 +109,8 @@ function HelpBody({ mode }: { mode: Topic }) {
   if (mode === 'timeline') {
     return (
       <>
-        <p>Put five leaders in order, from the earliest to take office to the most recent.</p>
-        <Mini cells={['3', '1', '5', '2', '4']} />
+        <p>Order five leaders by the year they first took office, from oldest at the top (1) to most recent at the bottom (5).</p>
+        <Mini cells={['1959', '1979', '1994', '2005', '2017']} />
         <p>Drag the cards, or use the arrows on each card. Then check your order: cards in the right place lock in.</p>
         <p className="muted">You get 3 checks. The years appear at the end.</p>
       </>

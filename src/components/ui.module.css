@@ -467,6 +467,65 @@
   color: var(--xt);
 }
 
+/* Archival leader portrait */
+.photo {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--x);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+.photo_xs {
+  width: 28px;
+  height: 32px;
+}
+.photo_sm {
+  width: 36px;
+  height: 44px;
+}
+.photo_md {
+  width: 46px;
+  height: 56px;
+}
+.photo_lg {
+  width: 72px;
+  height: 88px;
+}
+.photoFallback {
+  width: 68%;
+  height: 68%;
+  fill: var(--muted);
+  opacity: 0.45;
+}
+.photoImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  opacity: 0;
+  filter: contrast(1.04) sepia(0.08);
+  transition: opacity 160ms ease;
+}
+.photoLoaded {
+  opacity: 1;
+}
+@media (max-width: 619.98px) {
+  .photo_lg {
+    width: 56px;
+    height: 68px;
+  }
+  .photo_md {
+    width: 40px;
+    height: 48px;
+  }
+}
+
 /* Footer */
 .footer {
   display: flex;

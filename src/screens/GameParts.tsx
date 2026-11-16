@@ -4,6 +4,7 @@ import { useApp } from '../app/context';
 import { useCountdown, useShare } from '../app/hooks';
 import { AdSlot, Flag, Footer, ModePills } from '../components/Chrome';
 import { IconBulb, IconShare } from '../components/icons';
+import { LeaderPhoto } from '../components/LeaderPhoto';
 import { ROLE_LABEL } from '../game/compare';
 import { score } from '../game/share';
 import { currentStreak } from '../game/stats';
@@ -105,8 +106,11 @@ export function LeaderCard({ leader }: { leader: Leader }) {
     <section aria-label="Today's leader" className={`card ${s.leader}`}>
       <span className="eyebrow muted">File · today's leader</span>
       <div className={s.leaderHead}>
-        <Flag iso2={leader.iso2} country={leader.country} code={leader.countryCode} />
-        <h3 className="title">{leader.name}</h3>
+        <LeaderPhoto leader={leader} size="lg" />
+        <div className={s.leaderTitle}>
+          <Flag iso2={leader.iso2} country={leader.country} code={leader.countryCode} />
+          <h3 className="title">{leader.name}</h3>
+        </div>
       </div>
       <dl className={s.facts}>
         <dt>Country</dt>
@@ -141,6 +145,7 @@ export function OrderCard({ ids }: { ids: readonly string[] }) {
           const l = byId(id);
           return (
             <li key={id}>
+              <LeaderPhoto leader={l} size="sm" />
               <strong>{l.tookOffice}</strong>
               <span className={s.orderName}>{l.name}</span>
               <span className={`muted ${s.orderCountry}`}>{l.country}</span>

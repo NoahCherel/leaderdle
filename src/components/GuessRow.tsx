@@ -1,5 +1,6 @@
 import type { Leader, Tile as TileData } from '../game/types';
 import { IconCheck, IconDown, IconUp, IconWave } from './icons';
+import { LeaderPhoto } from './LeaderPhoto';
 import s from './GuessRow.module.css';
 
 export function ColumnHeads() {
@@ -41,6 +42,7 @@ export function GuessRow({ leader, tiles, animate }: { leader: Leader; tiles: Ti
   return (
     <div className={s.row}>
       <div className={s.who}>
+        <LeaderPhoto leader={leader} size="xs" />
         <strong className={s.name}>{leader.name}</strong>
         <span className={s.country}>{leader.country}</span>
       </div>

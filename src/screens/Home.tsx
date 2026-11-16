@@ -17,7 +17,7 @@ const RULE: Record<Mode, string> = {
   classic: 'Name a leader. Five clues tell you how close you are.',
   letters: 'Spell the name, letter by letter.',
   succession: 'Who governed in between?',
-  timeline: 'Put five leaders in order.',
+  timeline: 'Put five leaders in chronological order, from oldest to most recent.',
 };
 const TRIES: Record<Mode, string> = { classic: '8 tries', letters: '6 tries', succession: '5 tries', timeline: '3 checks' };
 

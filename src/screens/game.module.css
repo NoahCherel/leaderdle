@@ -169,7 +169,14 @@
 .leaderHead {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+}
+.leaderTitle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  min-width: 0;
 }
 .leaderHead h3 {
   font-size: 34px;
@@ -848,6 +855,10 @@
 .slotWho {
   flex: 1;
   min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
   overflow-wrap: anywhere;
 }
 .slotBtn {
@@ -863,14 +874,21 @@
 .match {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   padding: 16px 18px;
 }
 .matchHead {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.matchTitleGroup {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 12px;
 }
 .matchHead h2 {
   font-size: 28px;
@@ -889,6 +907,280 @@
   background: var(--x);
   color: var(--xt);
 }
+
+/* Duel Arena (Worlds Mayhem style clash stage) */
+.arena {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: var(--ground);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--line);
+  border-radius: var(--r);
+}
+.arenaBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.arenaTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+.deciderBadge {
+  padding: 1px 6px;
+  background: var(--y);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+.arenaControls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ctrlBtn {
+  min-width: 44px;
+  height: 38px;
+  padding: 0 12px;
+  background: var(--surf);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ctrlBtn:hover {
+  background: var(--x);
+}
+.crisisBanner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  background: var(--surf);
+  border: 1px dashed var(--muted);
+  border-radius: var(--r);
+  text-align: center;
+  animation: lreveal 220ms ease-out both;
+}
+.crisisBanner strong {
+  font-family: var(--font-title);
+  font-size: 21px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.faceoff {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: 10px;
+}
+.fighter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  background: var(--surf);
+  border: 1px solid var(--soft);
+  border-radius: var(--r);
+  transition: border-color 180ms ease, background-color 180ms ease, opacity 180ms ease, transform 180ms ease;
+}
+.fighterMine {
+  align-items: flex-start;
+  animation: lslideLeft 240ms ease-out both;
+}
+.fighterTheirs {
+  align-items: flex-end;
+  text-align: right;
+  animation: lslideRight 240ms ease-out both;
+}
+.fighterActive {
+  border-color: var(--line);
+}
+.fighterWon {
+  border: 2px solid var(--line);
+  background: var(--surf);
+  transform: translateY(-2px);
+}
+.fighterLost {
+  border-style: dashed;
+  border-color: var(--muted);
+  background: var(--surf);
+}
+.fighterPortraitRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.fighterTheirs .fighterPortraitRow {
+  flex-direction: row-reverse;
+}
+.fighterName {
+  font-size: 22px;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+.fighterMeta {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.vsCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 44px;
+}
+.vsBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--text);
+  color: var(--ground);
+  border-radius: 50%;
+  font-size: 18px;
+}
+.duelStamp {
+  padding: 2px 7px;
+  border: 2px solid var(--line);
+  border-radius: 3px;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transform: rotate(-5deg);
+  animation: lstamp 320ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.duelStampWon {
+  background: var(--g);
+  color: var(--ink);
+}
+.duelStampLost {
+  background: var(--x);
+  color: var(--xt);
+}
+
+/* Tug-of-war suspense bar */
+.tugWrap {
+  padding: 2px 0;
+}
+.tugTrack {
+  position: relative;
+  height: 10px;
+  background: var(--x);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.tugFill {
+  height: 100%;
+  background: var(--text);
+  transition: width 360ms cubic-bezier(0.22, 1, 0.36, 1), background-color 200ms ease;
+}
+.tugOscillate .tugFill {
+  animation: ltug 620ms ease-in-out infinite alternate;
+}
+.tugFillWon {
+  background: var(--g);
+}
+.tugFillLost {
+  background: var(--muted);
+}
+
+/* Actions feed */
+.actionsFeed {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.actionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 10px;
+  background: var(--surf);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  font-size: 13.5px;
+  line-height: 1.35;
+}
+.actionCardTheirs {
+  text-align: right;
+}
+.actionPending {
+  border-style: dashed;
+  border-color: var(--muted);
+  color: var(--muted);
+}
+.actionVisible {
+  animation: lreveal 200ms ease-out both;
+}
+.climaxBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  animation: lpop 180ms ease-out both;
+}
+.climaxWon {
+  background: var(--g);
+  color: var(--ink);
+}
+.climaxLost {
+  background: var(--x);
+  color: var(--xt);
+}
+
+@keyframes lslideLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes lslideRight {
+  0% {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes ltug {
+  0% {
+    width: 34%;
+  }
+  100% {
+    width: 66%;
+  }
+}
+
 .duels {
   margin: 0;
   padding: 0;
@@ -899,20 +1191,33 @@
   grid-template-columns: 40px minmax(0, 1fr) 26px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
-  min-height: 40px;
-  padding: 4px 0;
+  min-height: 44px;
+  padding: 5px 4px;
   border-top: 1px dotted var(--muted);
   font-size: 15px;
+  cursor: pointer;
+}
+.duelActive {
+  background: var(--ground);
 }
 .duelName {
   color: var(--muted);
 }
 .duelMine {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-weight: 700;
+  min-width: 0;
   overflow-wrap: anywhere;
 }
 .duelTheirs {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
   text-align: right;
+  min-width: 0;
   overflow-wrap: anywhere;
 }
 .duelMark {
@@ -967,5 +1272,17 @@
   }
   .facts {
     grid-template-columns: 96px minmax(0, 1fr);
+  }
+  .actionsFeed {
+    grid-template-columns: 1fr;
+  }
+  .actionCardTheirs {
+    text-align: left;
+  }
+  .fighterPortraitRow {
+    flex-wrap: wrap;
+  }
+  .fighterName {
+    font-size: 18px;
   }
 }

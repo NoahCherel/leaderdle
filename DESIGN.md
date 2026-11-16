@@ -219,7 +219,7 @@ Leaderdle is **flat-by-default and rule-driven**. Depth is communicated through 
 - **Do** honor `.reduce` and `@media (prefers-reduced-motion: reduce)` by disabling all flips, shakes, pops, and stamp animations immediately.
 
 ### Don't:
-- **Don't** display photos, portraits, silhouettes, or caricatures of political leaders anywhere in the interface; use only text facts and current ISO country flags (`flag-icons`).
+- **Don't** display partisan caricatures of political leaders anywhere in the interface; use only archival Wikipedia portraits, text facts, and current ISO country flags (`flag-icons`).
 - **Don't** use red (`--accent`) for error messages, missed guesses, or partisan opposition; reserve `--accent` for brand marks, streaks, and victory stamps.
 - **Don't** use `box-shadow`, glass blur, gradients, or thick colored `border-left` stripes on cards; rely on `--surf` contrast and `1px` / `3px` ink rules.
 - **Don't** place advertisements before gameplay, between the input field and guesses, or without pre-reserved dimensions (`300 × 600`, `300 × 250`, `320 × 100`).

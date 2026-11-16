@@ -39,7 +39,7 @@ Unlike single-mechanic trivia or geography clones, Leaderdle pairs four distinct
 
 - **Identity and voice:** Leaderdle (`leaderdle.com`). All player-facing UI copy is written in concise, warm, matter-of-fact English.
 - **Strict political neutrality:** Every leader receives identical visual and structural treatment regardless of ideology, regime, or reputation. Daily modes present checkable facts only (country, role, dates) with no quotes, ratings, or partisan color coding (never red for error or red-versus-blue opposition). Leader Mayhem duels are explicitly framed in *How we pick and describe leaders* as editorial judgments of historical weight and effectiveness—never shown as numerical scores or moral endorsements.
-- **No imagery of real people:** Never display photos, portraits, silhouettes, or caricatures of leaders. Only current ISO country flags (`flag-icons`) are used; historical or regime flags that differ from current ISO flags are omitted (e.g., historical German regimes merged under `Germany` display no flag).
+- **Archival portraits and flags:** Leaders are accompanied by archival portraits sourced from Wikipedia/Wikimedia Commons (with a neutral silhouette fallback when offline) and current ISO country flags (`flag-icons`); historical or regime flags that differ from current ISO flags are omitted (e.g., historical German regimes merged under `Germany` display no flag).
 - **Celebrate the player, never the subject:** Victory animations and copy ("You got it!") celebrate the player's deduction, never the historical figure, and avoid humor about the leaders.
 
 ## Evidence on Hand

@@ -20,13 +20,14 @@ async function draft(page: Page) {
 async function playOut(page: Page) {
   for (let round = 0; round < 3; round++) {
     await page.getByRole('button', { name: /^Play the / }).click();
-    // The five duels show one by one, then either the next round or the end.
-    await expect(page.getByRole('button', { name: /^Play the / }).or(page.getByRole('heading', { name: END }))).toBeVisible({ timeout: 15_000 });
+    // The five duels play through the arena one by one, then either the next round or the end appears.
+    await expect(page.getByRole('button', { name: /^Play the / }).or(page.getByRole('heading', { name: END }))).toBeVisible({ timeout: 25_000 });
     if (await page.getByRole('heading', { name: END }).isVisible()) return;
   }
 }
 
 test('Leader Mayhem: draft five leaders, play the tournament, see the ratings, share', async ({ page, context }) => {
+  test.setTimeout(60_000);
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await openAt(page, '/');
   await page.getByRole('button', { name: 'Decline' }).click();
@@ -162,4 +163,17 @@ test('Leader Mayhem: after a pick, the keyboard focus moves to the new draw', as
   await page.getByRole('button', { name: /^Give / }).first().click();
   await expect(page.getByText('Pick 2 of 5')).toBeVisible();
   await expect(page.getByRole('group', { name: 'Leaders in office' }).getByRole('button').first()).toBeFocused();
+});
+
+test('Leader Mayhem: duel arena shows crisis, opposing ministers, actions, and supports Skip', async ({ page }) => {
+  await openAt(page, '/mayhem?seed=5');
+  await page.getByRole('button', { name: 'Form a government' }).click();
+  await draft(page);
+  await page.getByRole('button', { name: 'Play the quarter-final' }).click();
+  const qf = page.getByRole('region', { name: 'Quarter-final' });
+  await expect(qf.getByText('Crisis brief')).toBeVisible();
+  await expect(qf.getByText('Your Minister')).toBeVisible();
+  await expect(qf.getByText('Rival Minister')).toBeVisible();
+  await qf.getByRole('button', { name: 'Skip' }).click();
+  await expect(qf).toContainText(/Won \d–\d|Lost \d–\d/);
 });

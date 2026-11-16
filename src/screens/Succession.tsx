@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { useApp } from '../app/context';
 import { usePhone } from '../app/hooks';
 import { IconCross } from '../components/icons';
+import { LeaderPhoto, prefetchLeaderPhotos } from '../components/LeaderPhoto';
 import { NameInput } from '../components/NameInput';
 import { ROLE_LABEL } from '../game/compare';
 import { shareSuccession } from '../game/share';
@@ -14,6 +16,9 @@ export function Succession() {
   const answer = byId(p.answer);
   const before = byId(p.before);
   const after = byId(p.after);
+  useEffect(() => {
+    prefetchLeaderPhotos([before, after, answer]);
+  }, [before, after, answer]);
   const missed = day.succession.filter((id) => id !== answer.id);
   const flip = st.won && fresh?.mode === 'succession' && fresh.id === answer.id && !frozen && !state.settings.reduce;
 
@@ -49,16 +54,19 @@ export function Succession() {
       <div className={s.chain}>
         <div className={`card ${s.link}`}>
           <span className="eyebrow muted">Before</span>
+          <LeaderPhoto leader={before} size="sm" />
           <strong>{before.name}</strong>
           <span>{st.done ? p.beforeYears : ''}</span>
         </div>
         <div aria-live="polite" className={[s.link, s.mystery, st.done && s.solved, st.won && s.mysteryWon, flip && s.flipIn].filter(Boolean).join(' ')}>
           <span className="eyebrow">In between</span>
+          {st.done && <LeaderPhoto leader={answer} size="sm" />}
           <strong>{st.done ? answer.name : '?'}</strong>
           <span>{st.done ? p.years : ''}</span>
         </div>
         <div className={`card ${s.link}`}>
           <span className="eyebrow muted">After</span>
+          <LeaderPhoto leader={after} size="sm" />
           <strong>{after.name}</strong>
           <span>{st.done ? p.afterYears : ''}</span>
         </div>

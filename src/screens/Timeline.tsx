@@ -1,9 +1,10 @@
 import { DndContext, KeyboardSensor, PointerSensor, closestCenter, useSensor, useSensors, type Announcements, type DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, useSortable, type SortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useApp } from '../app/context';
 import { IconCheck, IconDown, IconGrip, IconUp } from '../components/icons';
+import { LeaderPhoto, prefetchLeaderPhotos } from '../components/LeaderPhoto';
 import { shareTimeline } from '../game/share';
 import { checkOrder, moveFree, swap, target } from '../game/timeline';
 import type { Leader } from '../game/types';
@@ -35,6 +36,7 @@ function Card({ leader, pos, locked, good, done, upTo, downTo, onMove }: CardPro
           </span>
         </button>
       )}
+      <LeaderPhoto leader={leader} size="sm" />
       <span className={s.who}>
         <strong>{leader.name}</strong>
         <span>{done ? `${leader.country} · ${leader.tookOffice}` : leader.country}</span>
@@ -64,6 +66,9 @@ export function Timeline() {
   const order = day.order;
   const locked = st.locked;
   const sorted = day.puzzle.timeline.order;
+  useEffect(() => {
+    prefetchLeaderPhotos(order.map((id) => byId(id)));
+  }, [order, byId]);
   // The order already checked would cost a check for nothing.
   const unchanged = day.checked?.join() === order.join();
 
@@ -129,8 +134,12 @@ export function Timeline() {
       )}
       <ResumedBanner mode="timeline" />
       <div className={s.stack}>
-        {!st.done && <p>Put these five leaders in order, from the earliest to take office to the most recent. Drag the cards or use the arrows.</p>}
-        {!st.done && <span aria-hidden="true" className={`eyebrow ${s.axisLabel}`}>↑ Earliest to take office</span>}
+        {!st.done && (
+          <p className={s.brief}>
+            Order these five leaders by the year they took office: <strong>oldest at the top (1)</strong>, <strong>most recent at the bottom (5)</strong>. Drag the cards or use the arrows.
+          </p>
+        )}
+        {!st.done && <span aria-hidden="true" className={`eyebrow ${s.axisLabel}`}>↑ 1 · Oldest (took office longest ago)</span>}
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd} accessibility={{ announcements }}>
           <SortableContext items={order} strategy={strategy}>
             <ol className={s.cards} aria-label="Leaders to order">
@@ -150,7 +159,7 @@ export function Timeline() {
             </ol>
           </SortableContext>
         </DndContext>
-        {!st.done && <span aria-hidden="true" className={`eyebrow ${s.axisLabel}`}>↓ Most recent to take office</span>}
+        {!st.done && <span aria-hidden="true" className={`eyebrow ${s.axisLabel}`}>↓ 5 · Newest (took office most recently)</span>}
         {!st.done && (
           <>
             <button type="button" className="btn btn--lg" onClick={check} disabled={unchanged} aria-describedby={unchanged ? 'check-hint' : undefined}>
