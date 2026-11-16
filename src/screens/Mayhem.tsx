@@ -5,6 +5,7 @@ import { useShare } from '../app/hooks';
 import { Flag } from '../components/Chrome';
 import { IconCheck, IconCross, IconShare } from '../components/icons';
 import type { MayhemResult } from '../data/loader';
+import { ROLE_LABEL } from '../game/compare';
 import {
   OUTCOME_TEXT,
   PORTFOLIOS,
@@ -24,6 +25,7 @@ import {
   type MayhemData,
   type MayhemRun,
   type Outcome,
+  type Ratings,
 } from '../game/mayhem';
 import { shareMayhem } from '../game/share';
 import { GameLayout, gameStyles as s } from './GameParts';
@@ -136,7 +138,7 @@ function Game({ data }: { data: MayhemData }) {
     return (
       <>
         <p className={s.mNote}>Our list of leaders was updated since this government was formed, so it cannot go on. Start a new one: it only takes a minute.</p>
-        <button type="button" className="btn btn--lg" style={{ alignSelf: 'flex-start' }} onClick={start}>
+        <button type="button" className={`btn btn--lg ${s.mStartBtn}`} onClick={start}>
           Form a new government
         </button>
       </>
@@ -156,7 +158,7 @@ function Game({ data }: { data: MayhemData }) {
             <Link href="/how-we-pick">How we pick</Link>
           </p>
         </div>
-        <button type="button" className="btn btn--lg" style={{ alignSelf: 'flex-start' }} onClick={start}>
+        <button type="button" className={`btn btn--lg ${s.mStartBtn}`} onClick={start}>
           Form a government
         </button>
         <StatsLine stats={stats} />
@@ -225,8 +227,11 @@ function Game({ data }: { data: MayhemData }) {
               const l = byId(id);
               return (
                 <button key={id} type="button" aria-pressed={chosen === id} className={`${s.offerBtn} ${chosen === id ? s.offerOn : ''}`} onClick={() => setChosen(chosen === id ? null : id)}>
-                  <strong>{l.name}</strong>
-                  <span className="num">{yy(shownYear(l, run.cell!.decade))}</span>
+                  <span className={s.offerMeta}>
+                    <strong>{l.name}</strong>
+                    <span className={s.offerRole}>{ROLE_LABEL[l.role][0]}</span>
+                  </span>
+                  <span className={`num ${s.offerYear}`}>{yy(shownYear(l, run.cell!.decade))}</span>
                 </button>
               );
             })}
@@ -234,8 +239,11 @@ function Game({ data }: { data: MayhemData }) {
         </>
       )}
 
-      <div className={s.stack} style={{ gap: 8 }}>
-        <strong className="eyebrow muted">Your government</strong>
+      <div className={s.stackTight}>
+        <div className={s.sheetHead}>
+          <strong className="eyebrow muted">Your government</strong>
+          <span className="eyebrow muted">{drafting ? `${filled} of 5 seated` : 'Cabinet complete'}</span>
+        </div>
         <ol aria-label="Your government" className={s.sheet}>
           {PORTFOLIOS.map((p, i) => {
             const id = run.team[i];
@@ -261,10 +269,33 @@ function Game({ data }: { data: MayhemData }) {
             );
           })}
         </ol>
+        {filled > 0 && !ended && !revealing && (
+          <button type="button" className={`link-btn ${s.mStartBtn}`} onClick={start}>
+            Start over
+          </button>
+        )}
       </div>
 
+      {!drafting && (
+        <div aria-label="Tournament stages" className={s.stages}>
+          {ROUNDS.map((r, i) => {
+            const m = run.matches[i];
+            const isLive = live?.index === i;
+            const done = !!m && !isLive;
+            const current = isLive || (!m && !run.done && i === run.matches.length);
+            const cls = [s.stage, done && (m.won ? s.stageWon : s.stageLost), current && s.stageCurrent].filter(Boolean).join(' ');
+            return (
+              <div key={r} className={cls}>
+                <span className="eyebrow">0{i + 1}</span>
+                <strong>{r}</strong>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {run.matches.map((m, i) => (
-        <MatchCard key={i} title={ROUNDS[i]!} match={m} team={run.team as string[]} shown={live?.index === i ? live.shown : PORTFOLIOS.length} />
+        <MatchCard key={i} title={ROUNDS[i]!} match={m} team={run.team as string[]} shown={live?.index === i ? live.shown : PORTFOLIOS.length} ratings={data.ratings} />
       ))}
 
       {!drafting && !run.done && !revealing && (
@@ -295,31 +326,41 @@ function Game({ data }: { data: MayhemData }) {
   );
 }
 
-function MatchCard({ title, match, team, shown }: { title: string; match: Match; team: string[]; shown: number }) {
+function MatchCard({ title, match, team, shown, ratings }: { title: string; match: Match; team: string[]; shown: number; ratings: Ratings }) {
   const { byId } = useApp();
   const complete = shown >= PORTFOLIOS.length;
   const wins = match.duels.filter(Boolean).length;
+  const seenWins = match.duels.slice(0, shown).filter(Boolean).length;
   return (
     <section aria-label={title} className={`card ${s.match}`}>
       <div className={s.matchHead}>
         <h2 className="title">{title}</h2>
         <strong aria-live="polite" className={`eyebrow ${complete ? (match.won ? s.matchWon : s.matchLost) : 'muted'}`}>
-          {complete ? `${match.won ? 'Won' : 'Lost'} ${wins}–${PORTFOLIOS.length - wins}` : 'In play…'}
+          {complete ? `${match.won ? 'Won' : 'Lost'} ${wins}–${PORTFOLIOS.length - wins}` : shown > 0 ? `In play · ${seenWins}–${shown - seenWins}` : 'In play…'}
         </strong>
       </div>
       <ol className={s.duels}>
         {PORTFOLIOS.map((p, i) => {
           const seen = i < shown;
           const won = match.duels[i]!;
+          const myW = ratings[team[i]!]?.[i] ?? 0;
+          const theirW = ratings[match.opponent[i]!]?.[i] ?? 0;
+          const upset = seen && ((won && myW < theirW) || (!won && theirW < myW));
           return (
             <li key={p} className={`${s.duel} ${seen ? (won ? s.duelWon : s.duelLost) : ''}`}>
               <span className={`eyebrow ${s.duelName}`}>{PORTFOLIO_SHORT[p]}</span>
-              <span className={s.duelMine}>{byId(team[i]!).name}</span>
+              <span className={s.duelMine}>
+                {byId(team[i]!).name}
+                {upset && won && <span className={`eyebrow ${s.upset}`}>Upset</span>}
+              </span>
               <span className={s.duelMark}>
                 {seen ? won ? <IconCheck size={16} /> : <IconCross size={14} /> : null}
-                <span className="sr-only">{seen ? (won ? 'beats' : 'loses to') : 'against'}</span>
+                <span className="sr-only">{seen ? (won ? `beats${upset ? ', upset,' : ''}` : `loses to${upset ? ', upset,' : ''}`) : 'against'}</span>
               </span>
-              <span className={s.duelTheirs}>{byId(match.opponent[i]!).name}</span>
+              <span className={s.duelTheirs}>
+                {upset && !won && <span className={`eyebrow ${s.upset}`}>Upset</span>}
+                {byId(match.opponent[i]!).name}
+              </span>
             </li>
           );
         })}

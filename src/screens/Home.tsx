@@ -83,7 +83,7 @@ export function Home() {
                     <strong className="title">{MODE_NAMES[m]}</strong>
                     <span className={s.rule}>{RULE[m]}</span>
                   </span>
-                  <span className={`eyebrow ${s.state} ${st.won ? s.won : st.lost ? s.lost : ''}`}>{st.used || st.done ? stateLabel(m, st) : TRIES[m]}</span>
+                  <span className={`eyebrow ${s.state} ${st.won ? s.won : st.lost ? s.lost : st.used ? s.inProgress : ''}`}>{st.used || st.done ? stateLabel(m, st) : TRIES[m]}</span>
                 </Link>
               </li>
             );

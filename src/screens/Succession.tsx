@@ -74,8 +74,8 @@ export function Succession() {
           scrollOnFocus={phone}
         />
       )}
-      <div className={s.stack} style={{ gap: 16 }}>
-        <div className={s.stack} style={{ gap: 8 }}>
+      <div className={s.stackMid}>
+        <div className={s.stackTight}>
           <strong className="eyebrow muted">Clues</strong>
           <div className={s.clues}>
             {clues.map(([label, value], i) => {
@@ -90,9 +90,9 @@ export function Succession() {
           </div>
         </div>
         {missed.length > 0 && (
-          <div className={s.stack} style={{ gap: 8 }}>
+          <div className={s.stackTight}>
             <strong className="eyebrow muted">Not the one</strong>
-            <ul className={s.chips} style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+            <ul className={s.chips}>
               {missed.map((id) => (
                 <li key={id} className={s.chip}>
                   <IconCross size={14} />

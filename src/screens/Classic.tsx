@@ -78,6 +78,7 @@ export function Classic() {
                 <GuessRow key={r.leader.id} leader={r.leader} tiles={r.tiles} animate={freshId === r.leader.id && i === played.length - 1} />
               ))
               .reverse()}
+            <p className={s.closeNote}>Close (~): same continent, shared role, or within 10 yrs · 2 yrs · 5 yrs.</p>
           </>
         ) : (
           <div className={s.empty}>

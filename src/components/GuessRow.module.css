@@ -96,7 +96,14 @@
 @media (max-width: 619.98px) {
   .heads,
   .grid {
-    gap: 8px;
+    gap: 6px;
+  }
+  .heads {
+    font-size: 12px;
+  }
+  .tile {
+    padding: 6px 3px;
+    font-size: 13px;
   }
   .numeric {
     font-size: 17px;
@@ -108,7 +115,7 @@
     display: inline;
   }
   .inOffice {
-    font-size: 9px;
-    letter-spacing: 0;
+    font-size: 10px;
+    letter-spacing: 0.2px;
   }
 }

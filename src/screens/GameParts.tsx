@@ -2,7 +2,7 @@ import { useEffect, type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { useApp } from '../app/context';
 import { useCountdown, useShare } from '../app/hooks';
-import { AdSlot, Flag, ModePills } from '../components/Chrome';
+import { AdSlot, Flag, Footer, ModePills } from '../components/Chrome';
 import { IconBulb, IconShare } from '../components/icons';
 import { ROLE_LABEL } from '../game/compare';
 import { score } from '../game/share';
@@ -32,6 +32,9 @@ export function GameLayout({ mode, children }: { mode: Topic; children: ReactNod
       </main>
       <div className={s.rail}>
         <AdSlot kind="rail" />
+      </div>
+      <div className={s.foot}>
+        <Footer />
       </div>
     </div>
   );
@@ -120,7 +123,7 @@ export function LeaderCard({ leader }: { leader: Leader }) {
         <a href={wiki(leader)} target="_blank" rel="noopener noreferrer">
           Read more on Wikipedia
         </a>
-        <Link href={reportHref(leader.name)} className="link-btn" style={{ display: 'inline-flex', alignItems: 'center' }}>
+        <Link href={reportHref(leader.name)} className="link-btn">
           Report an error
         </Link>
       </div>
@@ -139,15 +142,13 @@ export function OrderCard({ ids }: { ids: readonly string[] }) {
           return (
             <li key={id}>
               <strong>{l.tookOffice}</strong>
-              <span style={{ fontWeight: 700 }}>{l.name}</span>
-              <span className="muted" style={{ fontSize: 13 }}>
-                {l.country}
-              </span>
+              <span className={s.orderName}>{l.name}</span>
+              <span className={`muted ${s.orderCountry}`}>{l.country}</span>
             </li>
           );
         })}
       </ol>
-      <Link href={reportHref(ids.map((id) => byId(id).name).join(', '))} className="link-btn" style={{ alignSelf: 'flex-start', display: 'inline-flex', alignItems: 'center' }}>
+      <Link href={reportHref(ids.map((id) => byId(id).name).join(', '))} className={`link-btn ${s.orderReport}`}>
         Report an error
       </Link>
     </section>
@@ -217,16 +218,16 @@ export function Result({ mode, won, used, scoreLine, celebrate, grid, shareText,
             Share result
           </button>
           {next && (
-            <Link href={`/${next}`} className="btn btn--md">
+            <Link href={`/${next}`} className="btn btn--md btn--outline">
               Next up: {MODE_NAMES[next]}
             </Link>
           )}
           {allDone && (
-            <Link href="/summary" className="btn btn--md">
+            <Link href="/summary" className="btn btn--md btn--outline">
               See today's summary
             </Link>
           )}
-          <p style={{ textAlign: 'center' }}>
+          <p className={s.nextNote}>
             Next {MODE_NAMES[mode]} in <strong className="num">{count}</strong>
           </p>
         </section>

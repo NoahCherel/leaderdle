@@ -96,7 +96,7 @@ export function Letters() {
     return () => window.removeEventListener('keydown', onKey);
   }, [modal.kind, press, back, enter]);
 
-  const columns = [...word].map((c) => (c === ' ' ? '10px' : 'minmax(0, 54px)')).join(' ');
+  const columns = [...word].map((c) => (c === ' ' ? '12px' : 'minmax(0, 54px)')).join(' ');
   const rowStyle = { gridTemplateColumns: columns, ['--n' as string]: word.length };
   const misses = guesses.filter((g) => g !== word).length;
   const clues: Array<[string, string]> = [
@@ -151,7 +151,7 @@ export function Letters() {
               style={rowStyle}
             >
               {chars.map((c, k) => {
-                if (word[k] === ' ') return <span key={k} aria-hidden="true" />;
+                if (word[k] === ' ') return <span key={k} aria-hidden="true" className={s.lspace}>·</span>;
                 const cls = [s.lcell, states ? s[`l_${states[k]}`] : c ? s.lfilled : '', turn ? s.lturn : '', current && c && k === lastTypedIndex(word, typed.length) ? s.lpop : ''];
                 return (
                   <span key={k} aria-hidden="true" className={cls.filter(Boolean).join(' ')} style={turn ? { animationDelay: `${letterIndex(word, k) * STEP}ms` } : undefined}>
@@ -189,7 +189,7 @@ export function Letters() {
           ))}
         </div>
       )}
-      <div className={s.stack} style={{ gap: 8 }}>
+      <div className={s.stackTight}>
         <strong className="eyebrow muted">Clues</strong>
         <div className={s.clues + ' ' + s.clues3}>
           {clues.map(([label, value], i) => {

@@ -55,6 +55,7 @@ function ReportForm() {
   };
   return (
     <form className={`card ${s.form}`} onSubmit={submit}>
+      {!ready && <p className={`muted ${s.formNotice}`}>Reports open as soon as a contact address is set.</p>}
       <div className={s.field}>
         <label htmlFor="rep-leader">Which leader?</label>
         <input id="rep-leader" type="text" placeholder="Name" value={leader} onChange={(e) => setLeader(e.target.value)} required />
@@ -63,10 +64,9 @@ function ReportForm() {
         <label htmlFor="rep-text">What should we fix?</label>
         <textarea id="rep-text" rows={4} placeholder="The date, role or country that looks wrong, and where you checked" value={text} onChange={(e) => setText(e.target.value)} required />
       </div>
-      <button type="submit" className="btn btn--md" style={{ alignSelf: 'flex-start' }} disabled={!ready}>
+      <button type="submit" className={`btn btn--md ${s.submitBtn}`} disabled={!ready}>
         Send report
       </button>
-      {!ready && <p className="muted" style={{ fontSize: 13 }}>Reports open as soon as a contact address is set.</p>}
     </form>
   );
 }
@@ -76,7 +76,7 @@ export function Page({ slug }: { slug: keyof typeof PAGES }) {
   return (
     <main className="page page--narrow">
       <div className={s.page}>
-        <Link href="/" className="btn btn--outline" style={{ alignSelf: 'flex-start' }}>
+        <Link href="/" className={`btn btn--outline ${s.backBtn}`}>
           <IconBack size={18} />
           Back to puzzles
         </Link>
@@ -117,6 +117,9 @@ export function ErrorScreen({ kind, onAction }: { kind: ErrorKind; onAction?: ()
           {cta}
         </button>
       )}
+      <div className={s.errorFoot}>
+        <Footer />
+      </div>
     </main>
   );
 }

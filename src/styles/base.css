@@ -61,18 +61,27 @@ body {
   font-size: 16px;
   line-height: 1.45;
   -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--soft) var(--ground);
+  scrollbar-width: thin;
+}
+::selection {
+  background: var(--y);
+  color: var(--ink);
 }
 #root {
   min-height: 100vh;
 }
 a {
   color: inherit;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 button,
 input,
 textarea {
   font-family: inherit;
   font-size: inherit;
+  caret-color: var(--accent);
 }
 button {
   cursor: pointer;
@@ -98,6 +107,11 @@ h2,
 h3,
 p {
   margin: 0;
+}
+h1,
+h2,
+h3 {
+  text-wrap: balance;
 }
 .sr-only {
   position: absolute;
@@ -159,6 +173,10 @@ p {
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.btn:hover:not(:disabled) {
+  opacity: 0.92;
 }
 .btn:disabled {
   opacity: 1;
@@ -182,10 +200,16 @@ p {
   color: var(--text);
   font-size: 17px;
 }
+.btn--outline:hover:not(:disabled) {
+  opacity: 1;
+  background: var(--surf);
+}
 .btn--block {
   width: 100%;
 }
 .link-btn {
+  display: inline-flex;
+  align-items: center;
   height: 44px;
   padding: 0;
   background: transparent;
@@ -193,6 +217,12 @@ p {
   color: var(--muted);
   font-size: 13px;
   text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 120ms ease;
+}
+.link-btn:hover {
+  color: var(--text);
 }
 .icon-btn {
   display: inline-flex;
@@ -203,7 +233,12 @@ p {
   padding: 0;
   background: transparent;
   border: 0;
+  border-radius: var(--r);
   color: var(--text);
+  transition: background-color 120ms ease;
+}
+.icon-btn:hover {
+  background: var(--surf);
 }
 
 /* A rubber stamp: result marks. */
@@ -287,6 +322,16 @@ p {
   100% {
     transform: rotate(-4deg) scale(1);
     opacity: 1;
+  }
+}
+@keyframes lreveal {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 .reduce *,

@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-16T12:02:00+01:00",
+  "title": "Design System: Leaderdle",
+  "extensions": {
+    "colorMeta": {
+      "stamp-crimson": {
+        "role": "primary",
+        "displayName": "Stamp Crimson",
+        "canonical": "#b92d18",
+        "tonalRamp": ["#2a0803", "#4c1008", "#73190d", "#962213", "#b92d18", "#dc5842", "#ef8f7e", "#fbe3de"]
+      },
+      "match-sage": {
+        "role": "secondary",
+        "displayName": "Match Sage",
+        "canonical": "#6fbf8b",
+        "tonalRamp": ["#0f2918", "#1d472c", "#2d6943", "#499464", "#6fbf8b", "#94d2aa", "#bce4ca", "#e6f6ec"]
+      },
+      "close-amber": {
+        "role": "secondary",
+        "displayName": "Close Amber",
+        "canonical": "#f0a44b",
+        "tonalRamp": ["#301c05", "#59350b", "#875214", "#bc7828", "#f0a44b", "#f5be7c", "#f9d7ad", "#fdf1e2"]
+      },
+      "manila-ground": {
+        "role": "neutral",
+        "displayName": "Manila Ground",
+        "canonical": "#f3eee3",
+        "tonalRamp": ["#171613", "#2e2b25", "#4b473e", "#6e685c", "#989182", "#c4bdb0", "#e2dcd0", "#f3eee3"]
+      },
+      "index-paper": {
+        "role": "neutral",
+        "displayName": "Index Paper",
+        "canonical": "#fbf8f1",
+        "tonalRamp": ["#201f1b", "#3a3832", "#5f5a50", "#8a8376", "#b5ae9f", "#d9d3c5", "#efeae0", "#fbf8f1"]
+      },
+      "carbon-ink": {
+        "role": "neutral",
+        "displayName": "Carbon Ink",
+        "canonical": "#1a1916",
+        "tonalRamp": ["#1a1916", "#2d2b26", "#45423b", "#5f5a50", "#827c70", "#a8a294", "#cfc8b8", "#f0ebe0"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Home hero title and Mayhem draw decade." },
+      "headline": { "displayName": "Headline", "purpose": "Mode screen titles and post-game Result hero headings." },
+      "title": { "displayName": "Title", "purpose": "Docket game titles, modal headings, leader card names, and buttons." },
+      "body": { "displayName": "Body", "purpose": "Game rules, historical leader blurbs, combobox items, and editorial pages." },
+      "label": { "displayName": "Label / Eyebrow", "purpose": "Stamped monospace metadata: docket numbers, counters, clues, and portfolio codes." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "tile-flip", "value": "lflip 380ms ease both", "purpose": "Staggered 3D X-axis flip on Classic and Letters evaluation tiles." },
+      { "name": "rubber-stamp", "value": "lstamp 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 250ms both", "purpose": "Physical scale-down impact of the rotated -4deg victory stamp." },
+      { "name": "invalid-shake", "value": "lshake 360ms ease", "purpose": "Horizontal shake feedback on invalid or duplicate submissions." },
+      { "name": "result-reveal", "value": "lreveal 260ms ease-out both", "purpose": "Subtle upward entrance of the post-game dossier summary." },
+      { "name": "cell-pop", "value": "lpop 160ms ease-out", "purpose": "Tactile pop on newly unlocked clues and revealed Mayhem duel marks." }
+    ],
+    "breakpoints": [
+      { "name": "phone", "value": "620px" },
+      { "name": "desktop", "value": "1000px" },
+      { "name": "container-max", "value": "1080px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Reversed carbon-ink CTA for primary actions (Play, Guess, Check my order, Share result).",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Play: Classic</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 22px; background: var(--text, #1a1916); color: var(--ground, #f3eee3); border: 1px solid var(--text, #1a1916); border-radius: 3px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 19px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: opacity 120ms ease; } .ds-btn-primary:hover { opacity: 0.92; } .ds-btn-primary:focus-visible { outline: 3px solid var(--focus, #1f4fd8); outline-offset: 2px; } .ds-btn-primary:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary framed action for mode transitions, rerolls, and stats triggers.",
+      "html": "<button class=\"ds-btn-outline\" type=\"button\">Next up: Letters</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 16px; background: transparent; color: var(--text, #1a1916); border: 1px solid var(--text, #1a1916); border-radius: 3px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: background-color 120ms ease; } .ds-btn-outline:hover { background: var(--surf, #fbf8f1); } .ds-btn-outline:focus-visible { outline: 3px solid var(--focus, #1f4fd8); outline-offset: 2px; }"
+    },
+    {
+      "name": "Leader Combobox Input",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Alias- and homonym-aware search input paired with primary Guess button.",
+      "html": "<div class=\"ds-input-box\"><input class=\"ds-input-search\" type=\"text\" placeholder=\"Start typing a leader...\" /><button class=\"ds-btn-guess\" type=\"button\">Guess</button></div>",
+      "css": ".ds-input-box { display: flex; gap: 10px; } .ds-input-search { flex: 1; height: 52px; padding: 0 16px; background: var(--surf, #fbf8f1); color: var(--text, #1a1916); border: 1px solid var(--text, #1a1916); border-radius: 3px; font-family: 'Public Sans', sans-serif; font-size: 17px; caret-color: var(--accent, #b92d18); } .ds-input-search:focus-visible { outline: 3px solid var(--focus, #1f4fd8); outline-offset: 2px; } .ds-btn-guess { height: 52px; padding: 0 28px; background: var(--text, #1a1916); color: var(--ground, #f3eee3); border: 1px solid var(--text, #1a1916); border-radius: 3px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 19px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; }"
+    },
+    {
+      "name": "Mode Navigation PillBar",
+      "kind": "nav",
+      "refersTo": "button-outline",
+      "description": "Five-mode tab bar with redundant square/bar status indicators.",
+      "html": "<nav class=\"ds-pills\"><a class=\"ds-pill ds-pill-won\" href=\"#classic\"><span class=\"ds-dot\"></span>Classic</a><a class=\"ds-pill ds-pill-on\" href=\"#letters\"><span class=\"ds-dot\"></span>Letters</a><a class=\"ds-pill ds-pill-lost\" href=\"#succession\"><span class=\"ds-dot\"></span>Succession</a></nav>",
+      "css": ".ds-pills { display: flex; gap: 22px; border-bottom: 1px solid var(--line, #1a1916); } .ds-pill { display: flex; align-items: center; gap: 7px; height: 44px; margin-bottom: -1px; color: var(--muted, #5f5a50); border-bottom: 4px solid transparent; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 19px; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; } .ds-pill:hover, .ds-pill-on { color: var(--text, #1a1916); } .ds-pill-on { border-bottom-color: var(--accent, #b92d18); } .ds-dot { width: 12px; height: 12px; border: 1px solid currentColor; border-radius: 2px; } .ds-pill-won .ds-dot { background: var(--g, #6fbf8b); border-color: var(--line, #1a1916); } .ds-pill-lost .ds-dot { background: var(--x, #d9d3c5); border-color: var(--line, #1a1916); background-image: linear-gradient(135deg, transparent 42%, var(--line, #1a1916) 43%, var(--line, #1a1916) 57%, transparent 58%); }"
+    },
+    {
+      "name": "Evaluation Tile & Rubber Stamp",
+      "kind": "custom",
+      "refersTo": "card-dossier",
+      "description": "Signature non-color-only attribute tile and rotated -4deg victory rubber stamp.",
+      "html": "<div class=\"ds-sig\"><span class=\"ds-stamp\">Brilliant</span><div class=\"ds-tile-correct\"><span>Head of government</span><span class=\"ds-badge\"><svg width=\"10\" height=\"10\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12.5l4.5 4.5L19 7.5\"/></svg></span></div></div>",
+      "css": ".ds-sig { display: flex; align-items: center; gap: 20px; } .ds-stamp { display: inline-block; padding: 4px 12px 3px; border: 3px solid currentColor; border-radius: 4px; color: var(--accent, #b92d18); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; transform: rotate(-4deg); } .ds-tile-correct { position: relative; min-height: 68px; width: 132px; padding: 6px 8px; display: flex; align-items: center; justify-content: center; text-align: center; background: var(--g, #6fbf8b); color: var(--ink, #1a1916); border: 1px solid var(--line, #1a1916); border-radius: 3px; font-family: 'Public Sans', sans-serif; font-weight: 700; font-size: 14px; line-height: 1.2; } .ds-badge { position: absolute; top: -7px; right: -6px; display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: var(--paper, #fbf8f1); color: var(--ink, #1a1916); border: 1px solid var(--line, #1a1916); border-radius: 50%; }"
+    },
+    {
+      "name": "Leader Dossier Card",
+      "kind": "card",
+      "refersTo": "card-dossier",
+      "description": "Post-game archival fact sheet with tabular tenure metadata and neutral blurb.",
+      "html": "<section class=\"ds-dossier\"><span class=\"ds-eyebrow\">File · today's leader</span><h3 class=\"ds-dossier-title\">Angela Merkel</h3><dl class=\"ds-facts\"><dt>Country</dt><dd>Germany</dd><dt>Role</dt><dd>Head of government</dd><dt>In office</dt><dd>2005 – 2021 · 16 years</dd></dl></section>",
+      "css": ".ds-dossier { display: flex; flex-direction: column; gap: 10px; padding: 22px; background: var(--surf, #fbf8f1); color: var(--text, #1a1916); border: 1px solid var(--line, #1a1916); border-radius: 3px; } .ds-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted, #5f5a50); } .ds-dossier-title { margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 34px; line-height: 1; text-transform: uppercase; } .ds-facts { display: grid; grid-template-columns: 110px 1fr; gap: 6px 10px; margin: 0; font-family: 'Public Sans', sans-serif; font-size: 15px; } .ds-facts dt { color: var(--muted, #5f5a50); } .ds-facts dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Printed Daily Dossier",
+    "overview": "Leaderdle treats every daily puzzle session as a freshly issued archival briefing folder: warm manila paper, crisp carbon ink, hair-thin structural rules, typewriter-stamped metadata labels, and a single authoritative rubber-stamp crimson reserved for masthead marks and victory verdicts. Because the historical roster spans democratic leaders, monarchs, and twentieth-century dictators alike, the visual language stays matter-of-fact and documentary—celebrating the player's deduction while refusing portraits, caricatures, or partisan spectacle.\n\nLight mode (th-light) is the default experience, evoking physical index stock read in daylight, while dark mode (th-dark) translates the same archival hierarchy onto warm charcoal carbon paper without inverting the physical evaluation tiles. Density is disciplined and scannable: rules, numbered docket rows, and tabular figures do the structural work that lesser interfaces outsource to drop shadows and nested cards.",
+    "keyCharacteristics": [
+      "Editorial rule hierarchy: 4px double masthead rules, 3px solid section dividers, 1px solid index cards, and 1px dotted statistical ledgers replace decorative shadows.",
+      "Tri-voice typography: Condensed uppercase headlines (Barlow Condensed), high-legibility humanist body copy (Public Sans), and stamped monospace field labels (IBM Plex Mono).",
+      "Non-partisan semantic color: Evaluation tiles use sage green (#6fbf8b or colorblind sky blue #7fb2f0), warm amber (#f0a44b), and neutral stone (#d9d3c5 / #3a3832)—never partisan red-versus-blue opposition and never red for player errors.",
+      "Redundant state encoding: Every game tile, mode pill, and progress pip pairs color with iconography (✓, ~, ↑, ↓, diagonal strike) and complete screen-reader descriptions."
+    ],
+    "rules": [
+      {
+        "name": "The Non-Partisan Palette Rule",
+        "body": "Never use red for an incorrect guess or pit red against blue. Crimson (--accent) marks editorial identity and victory stamps only; misses and losses always use Miss Stone (--x) with Carbon Ink / Parchment Text (--xt).",
+        "section": "colors"
+      },
+      {
+        "name": "The Fixed Ink-on-Tile Rule",
+        "body": "Evaluation tiles (--g and --y) and physical paper badges (--paper) keep Carbon Ink (#1a1916, --ink) foreground text in both light and dark themes, guaranteeing ≥7.9:1 WCAG AAA contrast without muddy dark-mode desaturation.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every year, tenure duration, age, countdown timer, streak counter, and score ratio uses font-variant-numeric: tabular-nums (.num) or IBM Plex Mono so vertical columns of numbers never jitter.",
+        "section": "typography"
+      },
+      {
+        "name": "The Meaning-First Eyebrow Rule",
+        "body": "Monospace eyebrows (.eyebrow) are used strictly for functional metadata (dates, docket status badges, clue slot labels, portfolio codes)—never as decorative marketing kickers above self-explanatory headings.",
+        "section": "typography"
+      },
+      {
+        "name": "The Zero-Shadow Dossier Rule",
+        "body": "Cards, tiles, buttons, and modals use crisp 1px solid var(--line) borders and 3px top rules instead of box-shadow. Only the native <dialog> modal uses a flat translucent backdrop veil (--veil) to separate the top layer from the page.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do pair every status color (--g, --y, --x) with a redundant shape, icon (✓, ~, ↑, ↓, diagonal strike), or text label so colorblind and monochrome users have identical information.",
+      "Do keep interactive hit targets at or above 44 × 44px on all viewports (including header icon buttons, timeline reorder arrows, and modal switches).",
+      "Do use btn--lg (solid fill) for the single primary action in a group (e.g., Share result) and btn--md btn--outline for the secondary progression action (e.g., Next up: Letters).",
+      "Do honor .reduce and @media (prefers-reduced-motion: reduce) by disabling all flips, shakes, pops, and stamp animations immediately."
+    ],
+    "donts": [
+      "Don't display photos, portraits, silhouettes, or caricatures of political leaders anywhere in the interface; use only text facts and current ISO country flags (flag-icons).",
+      "Don't use red (--accent) for error messages, missed guesses, or partisan opposition; reserve --accent for brand marks, streaks, and victory stamps.",
+      "Don't use box-shadow, glass blur, gradients, or thick colored border-left stripes on cards; rely on --surf contrast and 1px / 3px ink rules.",
+      "Don't place advertisements before gameplay, between the input field and guesses, or without pre-reserved dimensions (300 × 600, 300 × 250, 320 × 100)."
+    ]
+  }
+}

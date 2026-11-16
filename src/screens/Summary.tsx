@@ -1,7 +1,7 @@
 import { Link, Redirect } from 'wouter';
 import { useApp } from '../app/context';
 import { useCountdown, usePhone, useShare } from '../app/hooks';
-import { AdSlot } from '../components/Chrome';
+import { AdSlot, Footer } from '../components/Chrome';
 import { IconShare } from '../components/icons';
 import { dayLine, score, shareDay } from '../game/share';
 import { currentStreak } from '../game/stats';
@@ -17,6 +17,7 @@ export function Summary() {
   const solved = MODES.filter((m) => status[m].won).length;
   const perfect = solved === MODES.length;
   const streak = currentStreak(state.streak, n);
+  const mayhem = state.mayhem.stats;
   if (!allDone && !frozen) return <Redirect to="/" />;
 
   return (
@@ -25,7 +26,7 @@ export function Summary() {
         <div className={s.sumHead}>
           <p className="eyebrow muted">No. {n} · closed</p>
           <h1 className="title">Day complete</h1>
-          {perfect && <span className="stamp">Perfect day</span>}
+          <span className={`stamp ${perfect ? '' : s.stampSub}`}>{perfect ? 'Perfect day' : `${solved} / ${MODES.length} solved`}</span>
           <p className={s.lead}>
             {perfect ? 'Four out of four.' : `${solved} of ${MODES.length} solved.`} {streak > 1 ? `That makes ${streak} days in a row. ` : ''}A fresh set arrives at midnight.
           </p>
@@ -53,11 +54,26 @@ export function Summary() {
           <IconShare size={22} />
           Share my day
         </button>
+        <section aria-label="Bonus" className={s.bonus}>
+          <Link href="/mayhem" className={s.row}>
+            <span aria-hidden="true" className={`eyebrow ${s.idx}`}>
+              +
+            </span>
+            <span className={s.what}>
+              <strong className="title">Leader Mayhem</strong>
+              <span className={s.rule}>Want to keep playing? Draft a government of five and take it through a tournament.</span>
+            </span>
+            <span className={`eyebrow ${s.state}`}>{mayhem.titles ? `${mayhem.titles} ${mayhem.titles === 1 ? 'title' : 'titles'}` : 'Bonus'}</span>
+          </Link>
+        </section>
         <div className={s.nextBar}>
           <span className="eyebrow muted">Next puzzles in</span>
           <strong>{count}</strong>
         </div>
         <AdSlot kind="box" />
+        <div className={s.foot}>
+          <Footer />
+        </div>
       </div>
     </main>
   );

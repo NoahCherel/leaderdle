@@ -37,7 +37,7 @@ function Card({ leader, pos, locked, good, done, upTo, downTo, onMove }: CardPro
       )}
       <span className={s.who}>
         <strong>{leader.name}</strong>
-        <span>{leader.country}</span>
+        <span>{done ? `${leader.country} · ${leader.tookOffice}` : leader.country}</span>
       </span>
       {locked ? (
         <span className={s.lock}>
@@ -130,6 +130,7 @@ export function Timeline() {
       <ResumedBanner mode="timeline" />
       <div className={s.stack}>
         {!st.done && <p>Put these five leaders in order, from the earliest to take office to the most recent. Drag the cards or use the arrows.</p>}
+        {!st.done && <span aria-hidden="true" className={`eyebrow ${s.axisLabel}`}>↑ Earliest to take office</span>}
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd} accessibility={{ announcements }}>
           <SortableContext items={order} strategy={strategy}>
             <ol className={s.cards} aria-label="Leaders to order">
@@ -149,13 +150,14 @@ export function Timeline() {
             </ol>
           </SortableContext>
         </DndContext>
+        {!st.done && <span aria-hidden="true" className={`eyebrow ${s.axisLabel}`}>↓ Most recent to take office</span>}
         {!st.done && (
           <>
             <button type="button" className="btn btn--lg" onClick={check} disabled={unchanged} aria-describedby={unchanged ? 'check-hint' : undefined}>
               Check my order
             </button>
             {unchanged && (
-              <p id="check-hint" className="muted" style={{ textAlign: 'center', fontSize: 13 }}>
+              <p id="check-hint" className={`muted ${s.checkHint}`}>
                 Move a card to check again.
               </p>
             )}

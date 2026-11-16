@@ -9,7 +9,7 @@ function Legend() {
   return (
     <div className={s.legend}>
       <div className={s.legendRow}>
-        <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--g)' }}>
+        <span aria-hidden="true" className={`${s.swatch} ${s.swatchG}`}>
           <IconCheck size={20} />
         </span>
         <span>
@@ -17,7 +17,7 @@ function Legend() {
         </span>
       </div>
       <div className={s.legendRow}>
-        <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--y)' }}>
+        <span aria-hidden="true" className={`${s.swatch} ${s.swatchY}`}>
           <IconWave size={20} />
         </span>
         <span>
@@ -25,7 +25,7 @@ function Legend() {
         </span>
       </div>
       <div className={s.legendRow}>
-        <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--x)', color: 'var(--xt)' }}>
+        <span aria-hidden="true" className={`${s.swatch} ${s.swatchX}`}>
           <IconUp size={20} weight={4} />
         </span>
         <span>
@@ -49,6 +49,7 @@ function Mini({ cells }: { cells: Array<string | null> }) {
 }
 
 function HelpBody({ mode }: { mode: Topic }) {
+  const { state } = useApp();
   if (mode === 'mayhem') {
     return (
       <>
@@ -77,15 +78,15 @@ function HelpBody({ mode }: { mode: Topic }) {
         <p>Spell the name of today's leader in 6 tries. Type any letters, then press Enter.</p>
         <div className={s.legend}>
           <div className={s.legendRow}>
-            <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--g)' }}>
+            <span aria-hidden="true" className={`${s.swatch} ${s.swatchG}`}>
               A
             </span>
             <span>
-              <strong>Green.</strong> The letter is in the name, in this place.
+              <strong>{state.settings.cb ? 'Blue.' : 'Green.'}</strong> The letter is in the name, in this place.
             </span>
           </div>
           <div className={s.legendRow}>
-            <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--y)' }}>
+            <span aria-hidden="true" className={`${s.swatch} ${s.swatchY}`}>
               B
             </span>
             <span>
@@ -93,7 +94,7 @@ function HelpBody({ mode }: { mode: Topic }) {
             </span>
           </div>
           <div className={s.legendRow}>
-            <span aria-hidden="true" className={s.swatch} style={{ ['--sw' as string]: 'var(--x)', color: 'var(--xt)' }}>
+            <span aria-hidden="true" className={`${s.swatch} ${s.swatchX}`}>
               C
             </span>
             <span>
@@ -147,7 +148,7 @@ function StatsBody() {
           </button>
         ))}
       </div>
-      <div role="tabpanel" aria-label={`${MODE_NAMES[tab]} stats`} className={s.modalBody} style={{ padding: 0 }}>
+      <div role="tabpanel" aria-label={`${MODE_NAMES[tab]} stats`} className={s.tabPanel}>
         <div className={s.figures}>
           <div className={s.figure}>
             <strong>{h.played}</strong>
@@ -181,7 +182,15 @@ function StatsBody() {
           })}
         </div>
       </div>
-      <p style={{ fontSize: 13 }} className="muted">
+      {state.mayhem.stats.played > 0 && (
+        <div className={s.mayhemStat}>
+          <strong>Leader Mayhem</strong>
+          <span className="num muted">
+            {state.mayhem.stats.played} played · {state.mayhem.stats.titles} {state.mayhem.stats.titles === 1 ? 'title' : 'titles'}
+          </span>
+        </div>
+      )}
+      <p className={`muted ${s.statsNote}`}>
         Your stats are saved on this device only.
       </p>
     </>

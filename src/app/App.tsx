@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Route, Switch, useLocation } from 'wouter';
 import { ConsentBanner, Header, Toast } from '../components/Chrome';
 import { Modals } from '../components/Modals';
+import ui from '../components/ui.module.css';
 import { Classic } from '../screens/Classic';
 import { Home } from '../screens/Home';
 import { Letters } from '../screens/Letters';
@@ -37,10 +38,10 @@ function NewDayBanner() {
   }, [n, frozen]);
   if (!ready) return null;
   return (
-    <div className="page" style={{ paddingTop: 0, paddingBottom: 0 }}>
-      <p role="status" className="card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, padding: '12px 16px', boxShadow: 'var(--sh-sm)', fontWeight: 700 }}>
+    <div className={ui.newDay}>
+      <p role="status" className={ui.newDayIn}>
         New puzzles are ready.
-        <button type="button" className="btn" style={{ height: 44 }} onClick={() => window.location.reload()}>
+        <button type="button" className={`btn ${ui.newDayBtn}`} onClick={() => window.location.reload()}>
           Load them
         </button>
       </p>
