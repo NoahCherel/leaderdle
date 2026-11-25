@@ -55,9 +55,16 @@ Win all four daily modes for a **Perfect day**. Your streak grows each day you f
   </tr>
   <tr>
     <td><img src="docs/screenshots/home.png" alt="Home screen showing today's docket"><br><sub><b>Home</b>: today's docket</sub></td>
-    <td align="center"><img src="docs/screenshots/mobile-dark.png" alt="Classic on a phone in dark theme" width="220"><br><sub><b>Mobile</b>, dark theme</sub></td>
+    <td><img src="docs/screenshots/summary.png" alt="Day complete summary with a Perfect day stamp"><br><sub><b>Summary</b>: a Perfect day</sub></td>
   </tr>
 </table>
+
+<p align="center">
+  <img src="docs/screenshots/mobile-home.png" alt="Home screen on a phone, dark theme" width="260">
+  <img src="docs/screenshots/mobile-classic.png" alt="Solved Classic puzzle on a phone, dark theme" width="260">
+  <img src="docs/screenshots/mobile-mayhem.png" alt="Leader Mayhem draft on a phone, dark theme" width="260">
+  <br><sub>On a phone, in the dark theme</sub>
+</p>
 
 ## Quick start
 
